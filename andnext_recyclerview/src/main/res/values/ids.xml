@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <item name="anc_item_drag_previous_elevation" type="id"/>
+    <item name="anc_item_swipe_previous_alpha" type="id"/>
+
+</resources>
