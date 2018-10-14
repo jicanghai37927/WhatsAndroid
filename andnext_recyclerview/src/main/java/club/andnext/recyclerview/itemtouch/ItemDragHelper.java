@@ -34,7 +34,7 @@ public class ItemDragHelper {
         this.dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN;
         this.longPressDragEnable = false;
 
-        this.elevation = 12.f;
+        this.elevation = 6.f;
 
         this.itemTouchHelper = new ItemTouchHelper(itemTouchCallback);
         this.itemDragDelegate = new ItemDragDelegate(this);
