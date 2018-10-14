@@ -7,6 +7,7 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
 
 import club.andnext.recyclerview.R;
+import club.andnext.recyclerview.overscroll.OverScrollHelper;
 
 public class ItemSwipeHelper {
 
@@ -18,7 +19,15 @@ public class ItemSwipeHelper {
     ItemTouchHelper itemTouchHelper;
     ItemSwipeDelegate itemSwipeDelegate;
 
+    OverScrollHelper overScrollHelper;
+
     public ItemSwipeHelper() {
+        this(null);
+    }
+
+    public ItemSwipeHelper(OverScrollHelper overScrollHelper) {
+        this.overScrollHelper = overScrollHelper;
+
         this.enable = true;
         this.swipeFlags = ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT;
 
@@ -104,7 +113,7 @@ public class ItemSwipeHelper {
                 view.setTag(R.id.anc_item_swipe_previous_alpha, null);
             }
 
-            if (itemSwipeDelegate != null) {
+            {
 
             }
         }
@@ -115,7 +124,7 @@ public class ItemSwipeHelper {
                 return 0;
             }
 
-            if (itemSwipeDelegate != null) {
+            {
                 if (!itemSwipeDelegate.isEnable(viewHolder)) {
                     return 0;
                 }
@@ -128,7 +137,15 @@ public class ItemSwipeHelper {
         public void onSelectedChanged(RecyclerView.ViewHolder viewHolder, int actionState) {
             super.onSelectedChanged(viewHolder, actionState);
 
-            if (itemSwipeDelegate != null) {
+            if (overScrollHelper != null) {
+                if (viewHolder == null) {
+                    overScrollHelper.attach();
+                } else {
+                    overScrollHelper.detach();
+                }
+            }
+
+            {
 
             }
 
@@ -160,10 +177,17 @@ public class ItemSwipeHelper {
 
                     float max = this.getSwipeThreshold(viewHolder) * view.getWidth();
                     if (Math.abs(dX) > max) {
-                        float value = max - Math.abs(dX);
-                        value = (value < 0) ? 0 : value;
+                        float value = Math.abs(dX) - max;
+                        if (view.getWidth() > max) {
 
-                        value /= view.getWidth();
+                            value /= (view.getWidth() - max);
+                            value = (1 - value);
+                            value = (value < 0) ? 0 : value;
+
+                        } else {
+                            value = 0;
+                        }
+
                         alpha *= value;
                     }
 
@@ -184,7 +208,7 @@ public class ItemSwipeHelper {
 
         @Override
         public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-            if (itemSwipeDelegate != null) {
+            {
                 itemSwipeDelegate.onSwiped(viewHolder, direction);
             }
         }

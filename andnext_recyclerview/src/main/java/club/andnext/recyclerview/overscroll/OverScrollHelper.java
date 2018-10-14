@@ -1,82 +1,93 @@
 package club.andnext.recyclerview.overscroll;
 
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.helper.ItemTouchHelper;
-import android.util.Log;
-import android.view.View;
-
-import club.andnext.recyclerview.swipe.SwipeActionHelper;
+import me.everything.android.ui.overscroll.IOverScrollDecor;
+import me.everything.android.ui.overscroll.IOverScrollStateListener;
+import me.everything.android.ui.overscroll.IOverScrollUpdateListener;
 import me.everything.android.ui.overscroll.VerticalOverScrollBounceEffectDecorator;
 import me.everything.android.ui.overscroll.adapters.IOverScrollDecoratorAdapter;
 import me.everything.android.ui.overscroll.adapters.RecyclerViewOverScrollDecorAdapter;
 
-/**
- *
- */
-public class OverScrollHelper extends VerticalOverScrollBounceEffectDecorator {
+import java.util.ArrayList;
 
-    SwipeActionHelper helper;
+public class OverScrollHelper extends VerticalOverScrollBounceEffectDecorator implements IOverScrollStateListener, IOverScrollUpdateListener{
 
-    public static final OverScrollHelper attach(RecyclerView view) {
+    ArrayList<IOverScrollStateListener> stateListeners;
+    ArrayList<IOverScrollUpdateListener> updateListeners;
 
-        RecyclerViewOverScrollDecorAdapter adapter = new RecyclerViewOverScrollDecorAdapter(view);
-        OverScrollHelper decor = new OverScrollHelper(adapter, null);
-
-        return decor;
+    public static OverScrollHelper attach(RecyclerView recyclerView) {
+        RecyclerViewOverScrollDecorAdapter adapter = new RecyclerViewOverScrollDecorAdapter(recyclerView);
+        OverScrollHelper helper = new OverScrollHelper(adapter);
+        return helper;
     }
 
-    public static final OverScrollHelper attach(RecyclerView view, SwipeActionHelper helper) {
-
-        RecyclerViewOverScrollDecorAdapter adapter = new RecyclerViewOverScrollDecorAdapter(view);
-        OverScrollHelper decor = new OverScrollHelper(adapter, helper);
-
-        return decor;
-    }
-
-    public static final OverScrollHelper attach(RecyclerView view, ItemTouchHelper.Callback callback) {
-
-        RecyclerViewOverScrollDecorAdapter adapter = new RecyclerViewOverScrollDecorAdapter(view, callback);
-        OverScrollHelper decor = new OverScrollHelper(adapter, null);
-
-        return decor;
-    }
-
-
-    OverScrollHelper(IOverScrollDecoratorAdapter viewAdapter, SwipeActionHelper helper) {
+    public OverScrollHelper(IOverScrollDecoratorAdapter viewAdapter) {
         super(viewAdapter);
 
-        this.helper = helper;
+        super.setOverScrollStateListener(this);
+        super.setOverScrollUpdateListener(this);
     }
 
     @Override
     public void attach() {
-        if (helper != null) {
+        super.attach();
 
-            helper.setOnTouchListener(this);
-            getView().setOverScrollMode(View.OVER_SCROLL_NEVER);
-
-        } else {
-
-            super.attach();
-
-        }
     }
 
     @Override
     public void detach() {
-        if (helper != null) {
+        super.detach();
+    }
 
-            if (mCurrentState != mIdleState) {
-                Log.w(TAG, "Decorator detached while over-scroll is in effect. You might want to add a precondition of that getCurrentState()==STATE_IDLE, first.");
+    @Override
+    public void setOverScrollStateListener(IOverScrollStateListener listener) {
+        this.addOverScrollStateListener(listener);
+    }
+
+    @Override
+    public void setOverScrollUpdateListener(IOverScrollUpdateListener listener) {
+        this.addOverScrollUpdateListener(listener);
+    }
+
+    public void addOverScrollStateListener(IOverScrollStateListener listener) {
+        if (listener == null) {
+            return;
+        }
+
+        if (stateListeners == null) {
+            stateListeners = new ArrayList<>();
+        }
+
+        stateListeners.add(listener);
+    }
+
+    public void addOverScrollUpdateListener(IOverScrollUpdateListener listener) {
+        if (listener == null) {
+            return;
+        }
+
+        if (updateListeners == null) {
+            updateListeners = new ArrayList<>();
+        }
+
+        updateListeners.add(listener);
+    }
+
+    @Override
+    public void onOverScrollStateChange(IOverScrollDecor decor, int oldState, int newState) {
+        if (stateListeners != null) {
+            for (IOverScrollStateListener listener: stateListeners) {
+                listener.onOverScrollStateChange(decor, oldState, newState);
             }
-            helper.setOnTouchListener(null);
-            getView().setOverScrollMode(View.OVER_SCROLL_ALWAYS);
-
-        } else {
-
-            super.detach();
-
         }
     }
 
+    @Override
+    public void onOverScrollUpdate(IOverScrollDecor decor, int state, float offset) {
+        if (updateListeners != null) {
+            for (IOverScrollUpdateListener listener: updateListeners) {
+                listener.onOverScrollUpdate(decor, state, offset);
+            }
+        }
+    }
 }

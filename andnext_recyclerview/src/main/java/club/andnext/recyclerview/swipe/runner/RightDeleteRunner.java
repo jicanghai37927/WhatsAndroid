@@ -163,7 +163,7 @@ public class RightDeleteRunner extends SwipeRunner {
 
             } else {
 
-                if (tx < -max / 2) {
+                if (tx < -getWidth() / 2) {
                     showAction = true;
                 }
 

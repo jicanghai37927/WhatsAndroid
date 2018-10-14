@@ -3,7 +3,7 @@ package club.andnext.recyclerview.swipe;
 import android.animation.Animator;
 import android.animation.ValueAnimator;
 import android.graphics.Canvas;
-import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 
 import java.util.ArrayList;
@@ -179,6 +179,7 @@ public abstract class SwipeRunner {
             }
 
         } else if (this.direction == DIRECTION_RTL) {
+
             if (value < 0) {
                 if (value < -max) {
                     float offset = (value + max);
@@ -187,6 +188,7 @@ public abstract class SwipeRunner {
             } else if (value > 0) {
                 value = value / getFriction(value, max);
             }
+
         }
 
         return value;
@@ -199,15 +201,19 @@ public abstract class SwipeRunner {
     protected float getFinalX() {
         float value = this.getTranslationX();
 
+        float max = swipeView.getWidth();
+
         if (this.direction == DIRECTION_LTR) {
             value += scrollOffset;
-        } else if (this.direction == DIRECTION_RTL) {
-            value -= scrollOffset;
-        }
 
-        float max = swipeView.getWidth();
-        value = (value > max)? max: value;
-        value = (value < -max)? -max: value;
+            value = (value > max)? max: value;
+
+        } else if (this.direction == DIRECTION_RTL) {
+
+            value -= scrollOffset;
+
+            value = (value < -max)? -max: value;
+        }
 
         return value;
     }

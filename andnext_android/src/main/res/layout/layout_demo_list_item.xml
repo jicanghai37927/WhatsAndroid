@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:minHeight="?listPreferredItemHeight"
+              android:orientation="horizontal"
+              android:paddingLeft="?listPreferredItemPaddingLeft"
+              android:paddingRight="?listPreferredItemPaddingRight"
+              android:background="?selectableItemBackground"
+              android:gravity="center_vertical"
+              android:clickable="true">
+
+    <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+        <TextView
+                android:id="@+id/tv_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:singleLine="true"/>
+
+        <TextView
+                android:id="@+id/tv_desc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:layout_marginTop="2dp"
+                android:singleLine="true"/>
+    </LinearLayout>
+
+    <ImageView
+            android:id="@+id/iv_help"
+            android:layout_width="wrap_content"
+            android:paddingLeft="4dp"
+            android:paddingRight="4dp"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_help_outline_white_24dp"
+            android:tint="#000000"
+            />
+</LinearLayout>

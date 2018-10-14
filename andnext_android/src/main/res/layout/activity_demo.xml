@@ -5,11 +5,13 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".MainActivity">
+        tools:context=".DemoActivity">
 
-    <fragment
-            android:tag="swipe"
+    <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_list_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:name="com.haiyunshan.demo.recyclerview.SimpleDragDemoFragment"/>
+            android:layout_height="match_parent">
+
+    </android.support.v7.widget.RecyclerView>
+
 </android.support.design.widget.CoordinatorLayout>

@@ -1,0 +1,43 @@
+{
+  "name": "RecyclerView实战",
+
+  "list": [
+    {
+      "name": "左滑删除",
+      "desc": "仿Pages 文稿左滑删除标签，删除文稿",
+      "help": "",
+      "fragment": "com.haiyunshan.demo.recyclerview.SwipeDeleteDemoFragment"
+    },
+    {
+      "name": "左滑重新定义",
+      "desc": "仿Pages 文稿左滑重新定义段落样式",
+      "help": "",
+      "fragment": "com.haiyunshan.demo.recyclerview.SwipeRedefineDemoFragment"
+    },
+    {
+      "name": "右滑置顶，左滑菜单",
+      "desc": "仿备忘录右滑置顶，左滑锁定、移动、删除",
+      "help": "",
+      "fragment": "com.haiyunshan.demo.recyclerview.SwipePinMenuDemoFragment"
+    },
+    {
+      "name": "左滑菜单及删除",
+      "desc": "仿语音备忘录左滑显示菜单及删除",
+      "help": "",
+      "fragment": "com.haiyunshan.demo.recyclerview.SwipeMenuDeleteDemoFragment"
+    },
+    {
+      "name": "滑动删除",
+      "desc": "ItemTouchHelper的滑动删除",
+      "help": "",
+      "fragment": "com.haiyunshan.demo.recyclerview.SimpleDeleteDemoFragment"
+    },
+    {
+      "name": "拖拽排序",
+      "desc": "ItemTouchHelper的拖拽排序，长按拖拽或者点击拖拽",
+      "help": "",
+      "fragment": "com.haiyunshan.demo.recyclerview.SimpleDragDemoFragment"
+    }
+
+  ]
+}

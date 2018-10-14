@@ -8,6 +8,7 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
 
 import club.andnext.recyclerview.R;
+import club.andnext.recyclerview.overscroll.OverScrollHelper;
 
 public class ItemDragHelper {
 
@@ -20,7 +21,14 @@ public class ItemDragHelper {
     ItemTouchHelper itemTouchHelper;
     ItemDragDelegate itemDragDelegate;
 
+    OverScrollHelper overScrollHelper;
+
     public ItemDragHelper() {
+        this(null);
+    }
+
+    public ItemDragHelper(OverScrollHelper overScrollHelper) {
+        this.overScrollHelper = overScrollHelper;
 
         this.enable = true;
         this.dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN;
@@ -108,10 +116,7 @@ public class ItemDragHelper {
         @Override
         public void clearView(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
 
-            {
-                super.clearView(recyclerView, viewHolder);
-            }
-
+            // order attention
             {
                 View view = viewHolder.itemView;
 
@@ -119,10 +124,15 @@ public class ItemDragHelper {
                 if (tag != null && tag instanceof Float) {
                     ViewCompat.setElevation(view, (Float) tag);
                 }
+
                 view.setTag(R.id.anc_item_drag_previous_elevation, null);
             }
 
-            if (itemDragDelegate != null) {
+            {
+                super.clearView(recyclerView, viewHolder);
+            }
+
+            {
                 itemDragDelegate.onEnd(viewHolder);
             }
         }
@@ -133,7 +143,7 @@ public class ItemDragHelper {
                 return 0;
             }
 
-            if (itemDragDelegate != null) {
+            {
                 if (!itemDragDelegate.isEnable(viewHolder)) {
                     return 0;
                 }
@@ -151,21 +161,20 @@ public class ItemDragHelper {
         public boolean onMove(RecyclerView recyclerView,
                               RecyclerView.ViewHolder viewHolder,
                               RecyclerView.ViewHolder target) {
-            if (itemDragDelegate != null) {
-                return itemDragDelegate.onMove(viewHolder, target);
-            }
 
-            return false;
+            return itemDragDelegate.onMove(viewHolder, target);
+
         }
 
         @Override
         public void onChildDraw(Canvas c, RecyclerView recyclerView,
                                 RecyclerView.ViewHolder viewHolder, float dX, float dY,
                                 int actionState, boolean isCurrentlyActive) {
+
+            // order attention
             {
                 super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
             }
-
 
             if (isCurrentlyActive) {
                 View view = viewHolder.itemView;
@@ -181,6 +190,7 @@ public class ItemDragHelper {
                 }
             }
 
+
         }
 
         @Override
@@ -192,7 +202,15 @@ public class ItemDragHelper {
         public void onSelectedChanged(RecyclerView.ViewHolder viewHolder, int actionState) {
             super.onSelectedChanged(viewHolder, actionState);
 
-            if (itemDragDelegate != null && viewHolder != null) {
+            if (overScrollHelper != null) {
+                if (viewHolder == null) {
+                    overScrollHelper.attach();
+                } else {
+                    overScrollHelper.detach();
+                }
+            }
+
+            if (viewHolder != null) {
                 itemDragDelegate.onBegin(viewHolder);
             }
         }

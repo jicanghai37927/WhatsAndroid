@@ -3,7 +3,7 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:orientation="vertical"
-              tools:context="com.haiyunshan.recyclerview.BaseRecyclerViewDemoFragment">
+              tools:context="com.haiyunshan.demo.recyclerview.BaseRVDemoFragment">
 
     <LinearLayout
             android:id="@+id/action_layout"

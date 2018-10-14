@@ -1,0 +1,14 @@
+{
+  "name": "安卓实战手册",
+
+  "list": [
+    {
+      "name": "RecyclerView篇",
+      "desc": "必须掌握的RecyclerView实战技巧",
+      "help": "",
+      "target": "recyclerview_ds.json",
+      "fragment": ""
+    }
+
+  ]
+}

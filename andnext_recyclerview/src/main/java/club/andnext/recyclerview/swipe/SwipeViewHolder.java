@@ -5,8 +5,9 @@ import android.support.annotation.NonNull;
 import android.view.View;
 
 import club.andnext.recyclerview.bridge.BridgeHolder;
+import club.andnext.recyclerview.decoration.MarginDividerDecoration;
 
-public abstract class SwipeViewHolder<T> extends BridgeHolder<T> implements SwipeActionHelper.Adapter {
+public abstract class SwipeViewHolder<T> extends BridgeHolder<T> implements SwipeActionHelper.Adapter, MarginDividerDecoration.Adapter {
 
     SwipeHolder swipeHolder;
 
@@ -119,5 +120,19 @@ public abstract class SwipeViewHolder<T> extends BridgeHolder<T> implements Swip
         if (swipeHolder != null) {
             swipeHolder.onDrawOver(canvas);
         }
+    }
+
+    @Override
+    public void onClear(SwipeActionHelper helper, int direction) {
+
+    }
+
+    @Override
+    public float getTranslation(MarginDividerDecoration decoration) {
+        if (swipeHolder != null) {
+            return swipeHolder.getTranslationX();
+        }
+
+        return 0;
     }
 }

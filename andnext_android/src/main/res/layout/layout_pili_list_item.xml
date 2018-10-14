@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:id="@+id/content_layout"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              android:paddingLeft="?listPreferredItemPaddingLeft"
+              android:paddingRight="?listPreferredItemPaddingRight"
+              android:background="#ffffff"
+              android:foreground="?selectableItemBackground"
+              android:gravity="center_vertical"
+              android:clickable="true">
+
+    <TextView
+            android:id="@+id/tv_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:singleLine="true"/>
+
+    <TextView
+            android:id="@+id/tv_poem"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:layout_marginTop="2dp"
+            android:singleLine="true"/>
+
+</LinearLayout>

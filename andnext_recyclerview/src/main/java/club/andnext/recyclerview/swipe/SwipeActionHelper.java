@@ -3,13 +3,16 @@ package club.andnext.recyclerview.swipe;
 import android.graphics.Canvas;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
 import android.view.View;
+import club.andnext.recyclerview.overscroll.OverScrollHelper;
+import me.everything.android.ui.overscroll.IOverScrollDecor;
+import me.everything.android.ui.overscroll.IOverScrollState;
+import me.everything.android.ui.overscroll.IOverScrollStateListener;
 
-public class SwipeActionHelper extends RecyclerView.ItemDecoration implements View.OnTouchListener {
+public class SwipeActionHelper extends RecyclerView.ItemDecoration {
 
     public static final int DIRECTION_LTR = ItemTouchHelper.RIGHT;
     public static final int DIRECTION_RTL = ItemTouchHelper.LEFT;
@@ -31,12 +34,17 @@ public class SwipeActionHelper extends RecyclerView.ItemDecoration implements Vi
     OnSwipeActionListener onSwipeActionListener;
     View.OnTouchListener onTouchListener;
 
-    VelocityHelper velocityHelper;
+    OverScrollHelper overScrollHelper;
 
     boolean isSwiped;
     SwipeActionDelegate swipeActionDelegate;
 
     public SwipeActionHelper() {
+        this(null);
+    }
+
+    public SwipeActionHelper(OverScrollHelper overScrollHelper) {
+        this.overScrollHelper = overScrollHelper;
         this.enable = true;
 
         this.itemTouchCallback = new SwipeTouchCallback();
@@ -46,10 +54,12 @@ public class SwipeActionHelper extends RecyclerView.ItemDecoration implements Vi
         this.onItemTouchListener = new SwipeItemTouchListener();
         this.scrollListener = new SwipeScrollListener();
 
-        this.velocityHelper = new VelocityHelper();
-
         this.isSwiped = false;
         this.swipeActionDelegate = new SwipeActionDelegate(this);
+
+        if (overScrollHelper != null) {
+            overScrollHelper.setOverScrollStateListener(new OverScrollStateListener());
+        }
     }
 
     public ItemTouchHelper.Callback getCallback() {
@@ -59,8 +69,9 @@ public class SwipeActionHelper extends RecyclerView.ItemDecoration implements Vi
     public void attachToRecyclerView(@Nullable RecyclerView recyclerView) {
         this.recyclerView = recyclerView;
 
+        // be first please
         {
-            recyclerView.setOnTouchListener(this);
+            itemTouchHelper.attachToRecyclerView(recyclerView);
         }
 
         {
@@ -68,10 +79,6 @@ public class SwipeActionHelper extends RecyclerView.ItemDecoration implements Vi
             recyclerView.addOnItemTouchListener(forbidTouchListener);
             recyclerView.addOnItemTouchListener(onItemTouchListener);
             recyclerView.addOnScrollListener(scrollListener);
-        }
-
-        {
-            itemTouchHelper.attachToRecyclerView(recyclerView);
         }
     }
 
@@ -94,13 +101,11 @@ public class SwipeActionHelper extends RecyclerView.ItemDecoration implements Vi
     }
 
     public void clear() {
-        RecyclerView.ViewHolder viewHolder = swipeActionDelegate.getActive(recyclerView);
-        if (viewHolder != null) {
-            swipeActionDelegate.clear(viewHolder);
+        swipeActionDelegate.clear(recyclerView);
 
-            itemTouchCallback.selected = null;
-            onItemTouchListener.active = null;
-        }
+        itemTouchCallback.selected = null;
+        onItemTouchListener.active = null;
+
     }
 
     public void invalidate() {
@@ -127,7 +132,7 @@ public class SwipeActionHelper extends RecyclerView.ItemDecoration implements Vi
         this.enable = value;
     }
 
-    void clear(RecyclerView.ViewHolder viewHolder) {
+    void clear(RecyclerView.ViewHolder viewHolder, int direction) {
 
         if (itemTouchCallback.selected == viewHolder) {
             itemTouchCallback.selected = null;
@@ -135,6 +140,10 @@ public class SwipeActionHelper extends RecyclerView.ItemDecoration implements Vi
 
         if (onItemTouchListener.active == viewHolder) {
             onItemTouchListener.active = null;
+        }
+
+        {
+            swipeActionDelegate.onClear(viewHolder, direction);
         }
 
         this.notifySwipeChanged();
@@ -194,19 +203,6 @@ public class SwipeActionHelper extends RecyclerView.ItemDecoration implements Vi
 
     }
 
-    @Override
-    public boolean onTouch(View v, MotionEvent event) {
-
-        velocityHelper.onTouch(v, event);
-
-        if (onTouchListener == null) {
-            return false;
-        }
-
-        return onTouchListener.onTouch(v, event);
-
-    }
-
     /**
      *
      */
@@ -221,17 +217,17 @@ public class SwipeActionHelper extends RecyclerView.ItemDecoration implements Vi
 
         @Override
         public float getSwipeThreshold(RecyclerView.ViewHolder viewHolder) {
-            return 1000000.f;
+            return Float.MAX_VALUE;
         }
 
         @Override
         public float getSwipeEscapeVelocity(float defaultValue) {
-            return 1000000.f;
+            return Float.MAX_VALUE;
         }
 
         @Override
         public float getSwipeVelocityThreshold(float defaultValue) {
-            return 1000000.f;
+            return Float.MAX_VALUE;
         }
 
         @Override
@@ -258,7 +254,11 @@ public class SwipeActionHelper extends RecyclerView.ItemDecoration implements Vi
         public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
             int swipeFlags = 0;
             if (enable) {
-                swipeFlags = swipeActionDelegate.getDirection(viewHolder);
+                if (swipeActionDelegate.getActive(recyclerView) == viewHolder) {
+                    swipeFlags = ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT;
+                } else {
+                    swipeFlags = swipeActionDelegate.getDirection(viewHolder);
+                }
             }
 
             return makeMovementFlags(0, swipeFlags);
@@ -267,9 +267,21 @@ public class SwipeActionHelper extends RecyclerView.ItemDecoration implements Vi
         @Override
         public void onSelectedChanged(RecyclerView.ViewHolder viewHolder, int actionState) {
 
+            if (overScrollHelper != null) {
+                if (viewHolder == null) {
+                    overScrollHelper.attach();
+                } else {
+                    overScrollHelper.detach();
+                }
+            }
+
             // we don't need it
             {
 //                super.onSelectedChanged(viewHolder, actionState);
+            }
+
+            if (this.selected != null && viewHolder != null && selected != viewHolder) {
+                swipeActionDelegate.clear(recyclerView);
             }
 
             {
@@ -277,7 +289,9 @@ public class SwipeActionHelper extends RecyclerView.ItemDecoration implements Vi
                     swipeActionDelegate.onBegin(viewHolder);
                 } else {
                     if (selected != null) {
-                        swipeActionDelegate.onEnd(selected, velocityHelper.getXVelocity());
+                        float velocityX = itemTouchHelper.mVelocityX;
+
+                        swipeActionDelegate.onEnd(selected, velocityX);
                     }
                 }
             }
@@ -363,21 +377,25 @@ public class SwipeActionHelper extends RecyclerView.ItemDecoration implements Vi
                     rv.removeOnItemTouchListener(this);
 
                     View view = rv.findChildViewUnder(e.getX(), e.getY());
-                    RecyclerView.ViewHolder viewHolder = swipeActionDelegate.getActive(rv);
+                    RecyclerView.ViewHolder activeHolder = swipeActionDelegate.getActive(rv);
 
-                    if (viewHolder != null) {
+                    if (activeHolder != null) {
+
                         if (view == null) {
-                            swipeActionDelegate.clear(viewHolder);
-                        } else {
-                            RecyclerView.ViewHolder underHolder = rv.findContainingViewHolder(view);
-                            if (viewHolder != underHolder) {
 
-                                swipeActionDelegate.clear(viewHolder);
+                            swipeActionDelegate.clear(recyclerView);
+
+                        } else {
+
+                            RecyclerView.ViewHolder underHolder = rv.findContainingViewHolder(view);
+                            if (activeHolder != underHolder) {
+
+                                swipeActionDelegate.clear(recyclerView);
 
                             } else {
 
-                                view = viewHolder.itemView;
-                                View swipeView = swipeActionDelegate.getSwipeView(viewHolder);
+                                view = activeHolder.itemView;
+                                View swipeView = swipeActionDelegate.getSwipeView(activeHolder);
                                 if (swipeView == null) {
                                     result = false;
                                 } else {
@@ -386,8 +404,9 @@ public class SwipeActionHelper extends RecyclerView.ItemDecoration implements Vi
                                             view.getTop() + swipeView.getTranslationY());
                                 }
 
-                                this.active = viewHolder;
+                                this.active = activeHolder;
                             }
+
                         }
                     }
 
@@ -399,13 +418,10 @@ public class SwipeActionHelper extends RecyclerView.ItemDecoration implements Vi
 
             } else if (action == MotionEvent.ACTION_UP) {
                 if (active != null) {
-                    RecyclerView.ViewHolder viewHolder = swipeActionDelegate.getActive(recyclerView);
-                    if (viewHolder != null) {
-                        swipeActionDelegate.clear(viewHolder);
-                    }
-
-                    active = null;
+                    swipeActionDelegate.clear(recyclerView);
                 }
+
+                active = null;
             }
 
             return false;
@@ -433,10 +449,8 @@ public class SwipeActionHelper extends RecyclerView.ItemDecoration implements Vi
 
             if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
                 if (onItemTouchListener.active != null) {
-                    RecyclerView.ViewHolder viewHolder = swipeActionDelegate.getActive(recyclerView);
-                    if (viewHolder != null) {
-                        swipeActionDelegate.clear(viewHolder);
-                    }
+
+                    swipeActionDelegate.clear(recyclerView);
 
                     onItemTouchListener.active = null;
                 }
@@ -452,10 +466,28 @@ public class SwipeActionHelper extends RecyclerView.ItemDecoration implements Vi
     /**
      *
      */
+    private class OverScrollStateListener implements IOverScrollStateListener {
+
+        @Override
+        public void onOverScrollStateChange(IOverScrollDecor decor, int oldState, int newState) {
+            if (oldState == IOverScrollState.STATE_IDLE && newState != IOverScrollState.STATE_IDLE) {
+                clear();
+            }
+        }
+    }
+
+    /**
+     *
+     */
     private static class ForbidTouchListener implements RecyclerView.OnItemTouchListener {
 
         boolean forbidden;
         long expire;
+
+        ForbidTouchListener() {
+            this.forbidden = false;
+            this.expire = -1;
+        }
 
         void setForbidden(boolean value) {
             this.forbidden = value;
@@ -499,96 +531,6 @@ public class SwipeActionHelper extends RecyclerView.ItemDecoration implements Vi
     }
 
     /**
-     * 检测移动速度
-     *
-     */
-    private static class VelocityHelper implements View.OnTouchListener {
-
-        private static final int INVALID_POINTER = -1;
-
-        private int mScrollPointerId = INVALID_POINTER;
-
-        private VelocityTracker mVelocityTracker;
-
-        float xVelocity;
-        float yVelocity;
-
-        public VelocityHelper() {
-            this.xVelocity = 0;
-            this.yVelocity = 0;
-        }
-
-        public float getXVelocity() {
-            return xVelocity;
-        }
-
-        public float getYVelocity() {
-            return yVelocity;
-        }
-
-        @Override
-        public boolean onTouch(View v, MotionEvent e) {
-
-            if (mVelocityTracker == null) {
-                mVelocityTracker = VelocityTracker.obtain();
-            }
-            mVelocityTracker.addMovement(e);
-
-            int action = e.getActionMasked();
-            int actionIndex = e.getActionIndex();
-
-            switch (action) {
-
-                case MotionEvent.ACTION_DOWN: {
-                    mScrollPointerId = e.getPointerId(0);
-
-                    break;
-                }
-
-                case MotionEvent.ACTION_UP: {
-                    mVelocityTracker.addMovement(e);
-
-                    mVelocityTracker.computeCurrentVelocity(1000, Float.MAX_VALUE);
-                    this.xVelocity = mVelocityTracker.getXVelocity(mScrollPointerId);
-                    this.yVelocity = mVelocityTracker.getYVelocity(mScrollPointerId);
-
-                    mVelocityTracker.clear();
-
-                    break;
-                }
-
-                case MotionEvent.ACTION_CANCEL: {
-
-                    mVelocityTracker.clear();
-
-                    break;
-                }
-
-                case MotionEvent.ACTION_POINTER_DOWN: {
-
-                    mScrollPointerId = e.getPointerId(actionIndex);
-                    break;
-
-                }
-
-                case MotionEvent.ACTION_POINTER_UP: {
-
-                    actionIndex = e.getActionIndex();
-                    if (e.getPointerId(actionIndex) == mScrollPointerId) {
-                        // Pick a new pointer to pick up the slack.
-                        final int newIndex = actionIndex == 0 ? 1 : 0;
-                        mScrollPointerId = e.getPointerId(newIndex);
-                    }
-
-                    break;
-                }
-            }
-
-            return false;
-        }
-    }
-
-    /**
      *
      */
     private static class SwipeActionDelegate {
@@ -599,6 +541,19 @@ public class SwipeActionHelper extends RecyclerView.ItemDecoration implements Vi
 
         SwipeActionDelegate(SwipeActionHelper helper) {
             this.helper = helper;
+        }
+
+        public void clear(RecyclerView recyclerView) {
+            for (int i = 0, count = recyclerView.getChildCount(); i < count; i++) {
+                View view = recyclerView.getChildAt(i);
+                RecyclerView.ViewHolder holder = recyclerView.findContainingViewHolder(view);
+                Adapter adapter = this.getAdapter(holder);
+                if (adapter != null) {
+                    adapter.clear(helper);
+                }
+            }
+
+
         }
 
         public boolean isSwiped(RecyclerView recyclerView) {
@@ -708,6 +663,13 @@ public class SwipeActionHelper extends RecyclerView.ItemDecoration implements Vi
             }
         }
 
+        void onClear(RecyclerView.ViewHolder viewHolder, int direction) {
+            Adapter adapter = this.getAdapter(viewHolder);
+            if (adapter != null) {
+                adapter.onClear(helper, direction);
+            }
+        }
+
         Adapter getAdapter(RecyclerView.ViewHolder viewHolder) {
             if (viewHolder instanceof Adapter) {
                 return (Adapter)viewHolder;
@@ -762,6 +724,8 @@ public class SwipeActionHelper extends RecyclerView.ItemDecoration implements Vi
         void onActionBegin(SwipeActionHelper helper, int action);
 
         void onActionEnd(SwipeActionHelper helper, int action);
+
+        void onClear(SwipeActionHelper helper, int direction);
     }
 
 }

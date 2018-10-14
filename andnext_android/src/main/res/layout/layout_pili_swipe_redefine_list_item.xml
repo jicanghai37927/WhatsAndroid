@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:minHeight="?listPreferredItemHeight"
+
+             android:background="#ffffff">
+
+    <FrameLayout
+            android:id="@+id/action_redefine"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:foreground="?selectableItemBackground"
+            android:background="#ed8c01">
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="?listPreferredItemPaddingLeft"
+                android:paddingRight="?listPreferredItemPaddingRight"
+                android:text="重新定义"
+                android:textColor="#ffffff"
+                android:layout_gravity="left|center_vertical"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
+    </FrameLayout>
+
+    <include
+            layout="@layout/layout_pili_list_item"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+</FrameLayout>

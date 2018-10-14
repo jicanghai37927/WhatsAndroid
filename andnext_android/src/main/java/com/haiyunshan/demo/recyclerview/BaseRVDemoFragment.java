@@ -1,10 +1,11 @@
-package com.haiyunshan.recyclerview;
+package com.haiyunshan.demo.recyclerview;
 
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,14 +17,14 @@ import com.haiyunshan.whatsandroid.R;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class BaseRecyclerViewDemoFragment extends Fragment {
+public class BaseRVDemoFragment extends Fragment {
 
-    RecyclerView recyclerView;
+    protected RecyclerView recyclerView;
 
-    View actionLayout;
-    TextView editBtn;
+    protected View actionLayout;
+    protected TextView editBtn;
 
-    public BaseRecyclerViewDemoFragment() {
+    public BaseRVDemoFragment() {
 
     }
 
@@ -38,9 +39,14 @@ public class BaseRecyclerViewDemoFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         {
-            this.recyclerView = view.findViewById(R.id.recycler_list_view);
             this.actionLayout = view.findViewById(R.id.action_layout);
             this.editBtn = view.findViewById(R.id.btn_edit);
+        }
+
+        {
+            this.recyclerView = view.findViewById(R.id.recycler_list_view);
+            LinearLayoutManager layout = new LinearLayoutManager(getActivity());
+            recyclerView.setLayoutManager(layout);
         }
     }
 }

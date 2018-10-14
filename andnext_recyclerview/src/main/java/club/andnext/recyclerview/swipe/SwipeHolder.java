@@ -175,7 +175,7 @@ public class SwipeHolder {
         }
 
         if (!this.isSwiped()) {
-            helper.clear(this.getViewHolder());
+            helper.clear(this.getViewHolder(), runner.direction);
         }
     }
 
