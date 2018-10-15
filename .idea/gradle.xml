@@ -8,7 +8,7 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
-            <option value="$PROJECT_DIR$/andnext_android" />
+            <option value="$PROJECT_DIR$/andnext_app_whatsandroid" />
             <option value="$PROJECT_DIR$/andnext_dataset" />
             <option value="$PROJECT_DIR$/andnext_recyclerview" />
             <option value="$PROJECT_DIR$/andnext_utils" />

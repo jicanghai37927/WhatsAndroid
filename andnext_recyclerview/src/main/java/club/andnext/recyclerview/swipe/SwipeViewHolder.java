@@ -1,7 +1,7 @@
 package club.andnext.recyclerview.swipe;
 
 import android.graphics.Canvas;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.view.View;
 
 import club.andnext.recyclerview.bridge.BridgeHolder;

@@ -17,9 +17,9 @@ package club.andnext.recyclerview.swipe;
  */
 
 import android.graphics.Canvas;
-import android.support.v4.view.ViewCompat;
-import android.support.v7.recyclerview.R;
-import android.support.v7.widget.RecyclerView;
+import androidx.core.view.ViewCompat;
+import androidx.recyclerview.R;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 
 /**

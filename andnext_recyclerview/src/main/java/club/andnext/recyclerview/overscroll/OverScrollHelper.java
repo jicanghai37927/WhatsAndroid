@@ -1,12 +1,11 @@
 package club.andnext.recyclerview.overscroll;
 
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView;
 import me.everything.android.ui.overscroll.IOverScrollDecor;
 import me.everything.android.ui.overscroll.IOverScrollStateListener;
 import me.everything.android.ui.overscroll.IOverScrollUpdateListener;
 import me.everything.android.ui.overscroll.VerticalOverScrollBounceEffectDecorator;
 import me.everything.android.ui.overscroll.adapters.IOverScrollDecoratorAdapter;
-import me.everything.android.ui.overscroll.adapters.RecyclerViewOverScrollDecorAdapter;
 
 import java.util.ArrayList;
 

@@ -1,7 +1,7 @@
 package club.andnext.recyclerview.decoration;
 
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class SectionDividerDecoration extends MarginDividerDecoration {
 
