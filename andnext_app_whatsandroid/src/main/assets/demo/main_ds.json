@@ -7,6 +7,15 @@
       "desc": "必须掌握的RecyclerView实战技巧",
       "help": "",
       "target": "recyclerview_ds.json",
+      "activity": "",
+      "fragment": ""
+    },
+    {
+      "name": "帮助手册",
+      "desc": "关键代码解析",
+      "help": "",
+      "target": "help_ds.json",
+      "activity": "",
       "fragment": ""
     }
 

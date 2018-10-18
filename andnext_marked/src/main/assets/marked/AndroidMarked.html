@@ -1,0 +1,27 @@
+<!doctype html>
+<html>
+	
+	<head>
+		<meta charset="utf-8" />
+		
+		<script type='text/javascript' src='./0.5/marked.min.js'>
+		</script>
+		
+		<script type="text/javascript">
+			function setText(text) {
+				var result = marked(text);
+
+				var element = document.getElementById('marked');
+				element.innerHTML = result;
+			}
+		</script>
+		
+	</head>
+	
+	<body>
+		<div style="text-align: left;">
+			<span id='marked'></span>
+		</div>
+	</body>
+
+</html>

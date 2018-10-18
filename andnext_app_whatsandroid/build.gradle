@@ -48,4 +48,7 @@ dependencies {
     implementation project(':andnext_utils')
     implementation 'com.google.code.gson:gson:2.8.5'
     implementation 'com.google.android.material:material:1.0.0'
+    implementation project(':andnext_navigation')
+    implementation project(':andnext_theme')
+    implementation project(':andnext_marked')
 }

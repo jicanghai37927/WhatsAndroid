@@ -27,6 +27,9 @@ public class DemoDataset extends BaseDataset<DemoDataset.DemoEntity> {
         @SerializedName("target")
         String target;
 
+        @SerializedName("activity")
+        String activity;
+
         @SerializedName("fragment")
         String fragment;
 
@@ -44,6 +47,10 @@ public class DemoDataset extends BaseDataset<DemoDataset.DemoEntity> {
 
         public String getTarget() {
             return target;
+        }
+
+        public String getActivity() {
+            return activity;
         }
 
         public String getFragment() {

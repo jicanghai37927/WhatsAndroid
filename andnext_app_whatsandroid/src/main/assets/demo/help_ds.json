@@ -1,0 +1,27 @@
+{
+  "name": "帮助手册",
+
+  "list": [
+    {
+      "name": "简化RecyclerView的使用",
+      "desc": "",
+      "help": "RecyclerViewAdapter.md"
+    },
+    {
+      "name": "RecyclerView左右滑动支持",
+      "desc": "ItemTouchHelper实战",
+      "help": "SwipeRecyclerView.md"
+    },
+    {
+      "name": "ViewDragHelper用法解析",
+      "desc": "实现ViewGroup子控件拖动",
+      "help": "ViewDragHelper.md"
+    },
+    {
+      "name": "右滑返回上一个Activity",
+      "desc": "ViewDragHelper、ActivityLifeCycles实战",
+      "help": "NavigationBack.md"
+    }
+
+  ]
+}

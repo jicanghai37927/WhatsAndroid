@@ -8,6 +8,7 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import club.andnext.navigation.NavigationHelper;
 
 public class DemoFragmentActivity extends AppCompatActivity {
 
@@ -25,7 +26,7 @@ public class DemoFragmentActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_demo_fragment);
+        NavigationHelper.setContentView(this, R.layout.activity_demo_fragment);
 
         {
             Intent intent = this.getIntent();

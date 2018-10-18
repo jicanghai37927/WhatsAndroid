@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
+import club.andnext.navigation.NavigationHelper;
 import club.andnext.recyclerview.bridge.BridgeAdapter;
 import club.andnext.recyclerview.bridge.BridgeAdapterProvider;
 import club.andnext.recyclerview.bridge.BridgeBuilder;
@@ -36,7 +37,7 @@ public class DemoActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_demo);
+        NavigationHelper.setContentView(this, R.layout.activity_demo);
 
         {
             Intent intent = this.getIntent();
@@ -88,6 +89,16 @@ public class DemoActivity extends AppCompatActivity {
         }
     }
 
+    void startActivity(String name) {
+        try {
+            Class clz = Class.forName(name);
+
+            Intent intent = new Intent(this, clz);
+            this.startActivity(intent);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
 
     /**
      *
@@ -130,7 +141,7 @@ public class DemoActivity extends AppCompatActivity {
             descView.setText(item.getDesc());
 
             {
-                int visible = (TextUtils.isEmpty(item.getHelp()))? View.INVISIBLE: View.VISIBLE;
+                int visible = (isHelpVisible(item))? View.VISIBLE: View.INVISIBLE;
                 helpView.setVisibility(visible);
             }
         }
@@ -139,14 +150,36 @@ public class DemoActivity extends AppCompatActivity {
         public void onClick(View v) {
             if (v == itemView) {
                 DemoDataset.DemoEntity entity = getEntity();
+
                 if (!TextUtils.isEmpty(entity.getTarget())) {
                     DemoActivity.start(parent, entity.getTarget());
                 } else if (!TextUtils.isEmpty(entity.getFragment())) {
                     DemoFragmentActivity.start(parent, entity.getName(), entity.getFragment());
+                } else if (!TextUtils.isEmpty(entity.getActivity())) {
+                    parent.startActivity(entity.getActivity());
+                } else if (!TextUtils.isEmpty(entity.getHelp())) {
+                    HelpActivity.start(parent, entity.getName(), entity.getHelp());
                 }
-            } else if (v == helpView) {
 
+            } else if (v == helpView) {
+                DemoDataset.DemoEntity entity = getEntity();
+
+                HelpActivity.start(parent, entity.getName(), entity.getHelp());
             }
+        }
+
+        boolean isHelpVisible(DemoDataset.DemoEntity entity) {
+            if (TextUtils.isEmpty(entity.getHelp())) {
+                return false;
+            }
+
+            if (TextUtils.isEmpty(entity.getTarget())
+                    && TextUtils.isEmpty(entity.getFragment())
+                    && TextUtils.isEmpty(entity.getActivity())) {
+                return false;
+            }
+
+            return true;
         }
 
         DemoDataset.DemoEntity getEntity() {
