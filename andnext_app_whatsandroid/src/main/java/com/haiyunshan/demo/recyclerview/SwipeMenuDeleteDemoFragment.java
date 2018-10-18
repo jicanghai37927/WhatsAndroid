@@ -66,7 +66,7 @@ public class SwipeMenuDeleteDemoFragment extends BaseSwipeRVDemoFragment {
         TextView nameView;
         TextView poemView;
 
-        DemoViewHolder(SwipeMenuDeleteDemoFragment parent, View itemView) {
+        public DemoViewHolder(SwipeMenuDeleteDemoFragment parent, View itemView) {
             super(itemView);
 
             this.parent = parent;

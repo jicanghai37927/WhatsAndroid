@@ -64,7 +64,7 @@ public class SwipeRedefineDemoFragment extends BaseSwipeRVDemoFragment {
         TextView nameView;
         TextView poemView;
 
-        DemoViewHolder(SwipeRedefineDemoFragment parent, View itemView) {
+        public DemoViewHolder(SwipeRedefineDemoFragment parent, View itemView) {
             super(itemView);
 
             this.parent = parent;

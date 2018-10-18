@@ -68,7 +68,7 @@ public class SimpleDeleteDemoFragment extends BaseSimpleRVDemoFragment {
         TextView nameView;
         TextView poemView;
 
-        DemoViewHolder(SimpleDeleteDemoFragment parent, View itemView) {
+        public DemoViewHolder(SimpleDeleteDemoFragment parent, View itemView) {
             super(itemView);
 
             this.parent = parent;

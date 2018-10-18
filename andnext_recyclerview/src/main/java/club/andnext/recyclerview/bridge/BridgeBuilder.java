@@ -1,6 +1,7 @@
 package club.andnext.recyclerview.bridge;
 
 import android.content.Context;
+import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
@@ -66,9 +67,10 @@ public class BridgeBuilder<T, VH extends BridgeHolder> extends ViewHolderBuilder
             }
 
             classArray[this.args.length] = View.class;
-
             try {
+
                 Constructor<? extends BridgeHolder> constructor = holderClazz.getConstructor(classArray);
+                constructor.setAccessible(true);
 
                 holder = constructor.newInstance(args);
             } catch (NoSuchMethodException e) {
@@ -82,9 +84,13 @@ public class BridgeBuilder<T, VH extends BridgeHolder> extends ViewHolderBuilder
             }
         }
 
+        if (holder == null) {
+            throw new IllegalArgumentException(holderClazz.getName() + " should have public constructor and match params.");
+        }
+
         if (holder != null) {
             if (holder.getLayoutResourceId() != this.resId) {
-                throw new IllegalArgumentException(holderClazz.getName() + "has different layout resource id. check it!");
+                throw new IllegalArgumentException(holderClazz.getName() + " has different layout resource id. check it!");
             }
 
             holder.onViewCreated(view);

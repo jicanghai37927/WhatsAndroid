@@ -63,7 +63,7 @@ public class SwipeDragDemoFragment extends BaseSwipeRVDemoFragment {
         TextView nameView;
         TextView poemView;
 
-        DemoViewHolder(SwipeDragDemoFragment parent, View itemView) {
+        public DemoViewHolder(SwipeDragDemoFragment parent, View itemView) {
             super(itemView);
 
             this.parent = parent;

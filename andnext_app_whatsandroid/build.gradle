@@ -5,6 +5,14 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
 android {
+    signingConfigs {
+        debug {
+            keyAlias 'androiddebugkey'
+            keyPassword 'android'
+            storeFile file('/Users/elevennnn/Documents/GitNext/WhatsAndroid/andnext_debug.keystore')
+            storePassword 'android'
+        }
+    }
     compileSdkVersion 28
     defaultConfig {
         applicationId "com.haiyunshan.whatsandroid"
@@ -18,17 +26,23 @@ android {
                 cppFlags ""
             }
         }
+        signingConfig signingConfigs.debug
     }
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+        debug {
+            debuggable true
+        }
     }
     externalNativeBuild {
         cmake {
             path "CMakeLists.txt"
         }
+    }
+    productFlavors {
     }
 }
 

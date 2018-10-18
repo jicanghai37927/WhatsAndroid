@@ -80,7 +80,7 @@ public class SimpleDragDemoFragment extends BaseSimpleRVDemoFragment {
         TextView poemView;
         View dragView;
 
-        DemoViewHolder(SimpleDragDemoFragment parent, View itemView) {
+        public DemoViewHolder(SimpleDragDemoFragment parent, View itemView) {
             super(itemView);
 
             this.parent = parent;

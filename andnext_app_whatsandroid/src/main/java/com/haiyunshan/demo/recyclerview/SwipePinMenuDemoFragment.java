@@ -73,7 +73,7 @@ public class SwipePinMenuDemoFragment extends BaseSwipeRVDemoFragment {
         TextView nameView;
         TextView poemView;
 
-        DemoViewHolder(SwipePinMenuDemoFragment parent, View itemView) {
+        public DemoViewHolder(SwipePinMenuDemoFragment parent, View itemView) {
             super(itemView);
 
             this.parent = parent;
