@@ -6,7 +6,9 @@
 下载地址：https://github.com/jicanghai37927/WhatsAndroid
 
 其次，在`Activity`的`onCreate()`方法中，  
-将`setContentView()`替换为`NavigationHelper.setContentView()`。
+将`setContentView()`替换为`NavigationHelper.setContentView()`。  
+或者  
+在`setContentView()`之后调用`NavigationHelper.attach()`。
 
 运行APP，Activity已经可以右滑返回了。  
 注：应用的第一个Activity不能右滑返回，需要在第二个Activity以后才能看到效果。
