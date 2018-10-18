@@ -12,8 +12,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_main);
-        NavigationHelper.setContentView(this, R.layout.activity_main);
+        this.setContentView(R.layout.activity_main);
+
+        {
+            NavigationHelper.attach(this);
+        }
 
         View view;
         int id = android.R.id.content;

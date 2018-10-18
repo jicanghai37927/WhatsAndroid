@@ -27,7 +27,11 @@ public class HelpActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        NavigationHelper.setContentView(this, R.layout.activity_help);
+        this.setContentView(R.layout.activity_help);
+
+        {
+            NavigationHelper.attach(this);
+        }
 
         {
             Intent intent = this.getIntent();

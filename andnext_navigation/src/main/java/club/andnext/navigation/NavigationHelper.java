@@ -1,9 +1,9 @@
 package club.andnext.navigation;
 
 import android.app.Activity;
-import android.text.Layout;
 import android.view.View;
 import android.view.ViewGroup;
+import androidx.annotation.NonNull;
 
 public class NavigationHelper {
 
@@ -30,7 +30,11 @@ public class NavigationHelper {
         return attach(context);
     }
 
-    static final boolean attach(Activity context) {
+    public static final boolean attach(@NonNull Activity context) {
+
+        if (isAttached(context)) {
+            return true;
+        }
 
         NavigationLayout layout = null;
 
@@ -69,6 +73,28 @@ public class NavigationHelper {
         }
 
         return (layout != null);
+    }
+
+
+    static final boolean isAttached(@NonNull Activity context) {
+
+        View decorView = context.getWindow().getDecorView();
+
+        if (decorView instanceof ViewGroup) {
+
+            ViewGroup decorGroup = (ViewGroup) decorView;
+            int count = decorGroup.getChildCount();
+            for (int i = 0; i < count; i++) {
+                View child = decorGroup.getChildAt(i);
+                if (child instanceof NavigationLayout) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        return true;
     }
 
     /**

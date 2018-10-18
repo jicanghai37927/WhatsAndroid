@@ -26,7 +26,11 @@ public class DemoFragmentActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        NavigationHelper.setContentView(this, R.layout.activity_demo_fragment);
+        this.setContentView(R.layout.activity_demo_fragment);
+
+        {
+            NavigationHelper.attach(this);
+        }
 
         {
             Intent intent = this.getIntent();
