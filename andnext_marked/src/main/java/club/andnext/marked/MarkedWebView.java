@@ -1,10 +1,13 @@
 package club.andnext.marked;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -73,6 +76,7 @@ public class MarkedWebView extends WebView {
         {
             this.mWebViewLoaded = false;
             this.setWebViewClient(new WebViewClient() {
+
                 @Override
                 public void onPageFinished(WebView view, String url) {
                     super.onPageFinished(view, url);
@@ -88,6 +92,20 @@ public class MarkedWebView extends WebView {
                         setText(mText);
                     }
                 }
+
+                @Override
+                public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+                    Uri uri = request.getUrl();
+                    String scheme = uri.getScheme();
+                    if (scheme.equalsIgnoreCase("http") || scheme.equalsIgnoreCase("https")) {
+                        open(view.getContext(), uri);
+
+                        return true;
+                    }
+
+                    return super.shouldOverrideUrlLoading(view, request);
+                }
+
             });
         }
 
@@ -115,7 +133,24 @@ public class MarkedWebView extends WebView {
         this.loadUrl(javascriptCommand);
     }
 
-    String escape(String s) {
+    static final boolean open(Context context, Uri uri) {
+        int launchFlags = Intent.FLAG_ACTIVITY_NEW_TASK
+                | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED;
+
+        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+        intent.setFlags(launchFlags);
+
+        try {
+            context.startActivity(intent);
+            return true;
+        } catch (Exception e) {
+
+        }
+
+        return false;
+    }
+
+    static String escape(String s) {
 
         StringBuilder out = new StringBuilder(s.length() + 128);
 
