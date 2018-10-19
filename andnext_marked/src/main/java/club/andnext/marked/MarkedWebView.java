@@ -15,7 +15,7 @@ public class MarkedWebView extends WebView {
 
     private static final String TAG = MarkedWebView.class.getSimpleName();
 
-    private static final String HTML_LOCATION = "file:///android_asset/marked/AndroidMarked.html";
+    private static final String HTML_LOCATION = "file:///android_asset/AndroidMarked.html";
 
     String mText;
 
