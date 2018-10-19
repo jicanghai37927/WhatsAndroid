@@ -23,7 +23,7 @@ public class NavigationHelper implements Application.ActivityLifecycleCallbacks 
     ArrayList<String> excludeList;
 
     /**
-     * Call from Activity#onCreate(), and before call super.onCreate().
+     * Call from Activity#onCreate(), and before you call super.onCreate().
      *
      * @param context
      */
@@ -48,7 +48,7 @@ public class NavigationHelper implements Application.ActivityLifecycleCallbacks 
     }
 
     /**
-     * Call from Activity#onCreate(), and before call super.onCreate().
+     * Call from Activity#onCreate(), and before you call super.onCreate().
      *
      * @param context
      */
