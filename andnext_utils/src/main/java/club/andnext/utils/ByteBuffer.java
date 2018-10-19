@@ -1,8 +1,13 @@
-package com.haiyunshan.preview;
+package club.andnext.utils;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Arrays;
 
-class ByteBuffer {
+/**
+ *
+ */
+public class ByteBuffer {
 
     byte[] buf;
 
@@ -19,6 +24,10 @@ class ByteBuffer {
     public ByteBuffer(byte[] buf) {
         this.buf = buf;
         this.count = buf.length;
+    }
+
+    public byte[] getData() {
+        return this.buf;
     }
 
     private void ensureCapacity(int minCapacity) {
@@ -62,4 +71,40 @@ class ByteBuffer {
         return count;
     }
 
+    public static final ByteBuffer create(InputStream is, int size) throws IOException {
+
+        ByteBuffer data = null;
+
+        if (size <= 0) {
+            size = 600 * 1024;
+
+            ByteBuffer stream = new ByteBuffer(size);
+
+            byte[] buf = new byte[200 * 1024];
+            int length;
+            while ((length = is.read(buf)) >= 0) {
+                stream.write(buf, 0, length);
+            }
+
+        } else {
+
+            byte[] buf = new byte[size];
+            int offset = 0;
+            while (true) {
+                int num = is.read(buf, offset, (size - offset));
+                if (num < 0) {
+                    break;
+                }
+
+                offset += num;
+                if (offset == size) {
+                    break;
+                }
+            }
+
+            data = new ByteBuffer(buf);
+        }
+
+        return data;
+    }
 }
