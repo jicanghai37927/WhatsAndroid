@@ -6,9 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
 import android.widget.TextView;
-import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import androidx.fragment.app.FragmentActivity;
 import club.andnext.navigation.NavigationHelper;
 import com.haiyunshan.whatsandroid.R;
 
@@ -19,11 +17,10 @@ public class TestViewHierarchyActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        NavigationHelper.onCreate(this);
+
         super.onCreate(savedInstanceState);
-        NavigationHelper.setContentView(this, R.layout.activity_test_view_hierarchy);
-
-//        setContentView(R.layout.activity_test_view_hierarchy);
-
+        this.setContentView(R.layout.activity_test_view_hierarchy);
 
         {
             this.contentLayout = findViewById(R.id.container);

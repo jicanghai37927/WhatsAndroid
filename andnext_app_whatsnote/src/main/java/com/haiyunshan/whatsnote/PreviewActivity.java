@@ -19,11 +19,9 @@ public class PreviewActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+        NavigationHelper.onCreate(this);
 
-        {
-            NavigationHelper.attach(this);
-        }
+        super.onCreate(savedInstanceState);
 
         if (extensionDataset == null) {
             extensionDataset = GsonUtils.fromJson(this, "preview/extension_ds.json", ExtensionDataset.class);

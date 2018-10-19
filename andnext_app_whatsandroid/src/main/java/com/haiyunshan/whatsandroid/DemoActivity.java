@@ -36,12 +36,10 @@ public class DemoActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        NavigationHelper.onCreate(this);
+
         super.onCreate(savedInstanceState);
         this.setContentView(R.layout.activity_demo);
-
-        {
-            NavigationHelper.attach(this);
-        }
 
         {
             Intent intent = this.getIntent();

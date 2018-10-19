@@ -30,10 +30,6 @@ public class HelpActivity extends AppCompatActivity {
         this.setContentView(R.layout.activity_help);
 
         {
-            NavigationHelper.attach(this);
-        }
-
-        {
             Intent intent = this.getIntent();
             name = intent.getStringExtra("name");
             help = intent.getStringExtra("help");

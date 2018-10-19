@@ -7,6 +7,8 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
+import android.text.Layout;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.MotionEvent;
@@ -27,7 +29,7 @@ class NavigationLayout extends FrameLayout {
     View shadowView;
     FrameLayout targetView;
 
-    int activityHash = 0;
+    String activityHash = "";
 
     OnNavigationListener onNavigationListener;
 
@@ -109,7 +111,7 @@ class NavigationLayout extends FrameLayout {
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
-        if (activityHash == 0) {
+        if (TextUtils.isEmpty(activityHash)) {
             return super.onInterceptTouchEvent(ev);
         }
 
@@ -137,7 +139,7 @@ class NavigationLayout extends FrameLayout {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        if (activityHash == 0) {
+        if (TextUtils.isEmpty(this.activityHash)) {
             return super.onTouchEvent(event);
         }
 
@@ -165,31 +167,45 @@ class NavigationLayout extends FrameLayout {
 
     }
 
-    int getActivityHash() {
+    String getActivityHash() {
         return this.activityHash;
     }
 
-    Drawable getBitmap() {
+    Drawable getPrevious() {
         Drawable d = previousView.getDrawable();
 
         return d;
 
     }
 
-    void setBitmap(int activityHash, Bitmap bm) {
+    void setPrevious(String activityHash, Bitmap bm) {
         this.activityHash = activityHash;
 
         previousView.setImageBitmap(bm);
     }
 
-    void setBitmap(int activityHash, Drawable d) {
+    void setPrevious(String activityHash, Drawable d) {
         this.activityHash = activityHash;
 
         previousView.setImageDrawable(d);
     }
 
+    void setNext(View view) {
+        this.targetView.removeAllViews();
+        this.targetView.addView(view, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+    }
 
-    ViewGroup getTargetView() {
+    View getNext() {
+        if (targetView.getChildCount() == 0) {
+            return null;
+        }
+
+        View child = targetView.getChildAt(0);
+
+        return child;
+    }
+
+    View getTargetView() {
         return this.targetView;
     }
 

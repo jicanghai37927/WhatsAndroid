@@ -8,7 +8,6 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
-import club.andnext.navigation.NavigationHelper;
 
 public class DemoFragmentActivity extends AppCompatActivity {
 
@@ -28,9 +27,6 @@ public class DemoFragmentActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         this.setContentView(R.layout.activity_demo_fragment);
 
-        {
-            NavigationHelper.attach(this);
-        }
 
         {
             Intent intent = this.getIntent();
