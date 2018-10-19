@@ -26,11 +26,22 @@ android {
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-
-    implementation 'androidx.appcompat:appcompat:1.0.0-alpha1'
-    implementation 'androidx.constraintlayout:constraintlayout:1.1.2'
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation 'androidx.appcompat:appcompat:1.0.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha2'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test:runner:1.1.0-alpha3'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0-alpha3'
+    androidTestImplementation 'androidx.test:runner:1.1.0-beta02'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0-beta02'
+    implementation 'androidx.recyclerview:recyclerview:1.0.0'
+    implementation 'me.everything:overscroll-decor-android:1.0.4'
+    implementation project(':andnext_dataset')
+    implementation project(':andnext_recyclerview')
+    implementation project(':andnext_utils')
+    implementation 'com.google.code.gson:gson:2.8.5'
+    implementation 'com.google.android.material:material:1.0.0'
+    implementation project(':andnext_navigation')
+    implementation project(':andnext_theme')
+    implementation project(':andnext_marked')
 }

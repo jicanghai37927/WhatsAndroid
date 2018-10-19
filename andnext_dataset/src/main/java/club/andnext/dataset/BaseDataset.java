@@ -7,7 +7,7 @@ import java.util.ArrayList;
 public class BaseDataset<E extends BaseEntity> {
 
     @SerializedName("list")
-    ArrayList<E> list;
+    protected ArrayList<E> list;
 
     public BaseDataset() {
         this.list = new ArrayList<>();

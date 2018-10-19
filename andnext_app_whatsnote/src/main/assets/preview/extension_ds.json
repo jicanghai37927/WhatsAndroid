@@ -1,0 +1,14 @@
+{
+  "list": [
+    {
+      "name": "Markdown",
+      "extensions": [".md", ".markdown"],
+      "fragment": "MarkdownPreviewFragment"
+    },
+    {
+      "name": "PlainText",
+      "extensions": [".txt"],
+      "fragment": "PlainTextPreviewFragment"
+    }
+  ]
+}

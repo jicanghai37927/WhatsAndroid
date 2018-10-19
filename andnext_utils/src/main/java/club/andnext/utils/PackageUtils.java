@@ -4,6 +4,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 
+/**
+ *
+ */
 public class PackageUtils {
 
     public static final boolean open(Context context, Uri uri) {
