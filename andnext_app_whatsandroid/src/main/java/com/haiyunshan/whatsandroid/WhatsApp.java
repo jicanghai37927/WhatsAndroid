@@ -11,4 +11,9 @@ public class WhatsApp extends Application {
 
         NavigationHelper.onCreate(this);
     }
+
+    @Override
+    public void onTerminate() {
+        super.onTerminate();
+    }
 }

@@ -59,6 +59,19 @@ public class NavigationHelper implements Application.ActivityLifecycleCallbacks 
         }
     }
 
+    /**
+     * Disable navigation.
+     * I think it will never be call, but should provide this method.
+     *
+     * @param application
+     */
+    public static final void onTerminate(@NonNull Application application) {
+        if (sInstance != null) {
+            application.unregisterActivityLifecycleCallbacks(sInstance);
+            sInstance = null;
+        }
+    }
+
     private NavigationHelper() {
         this.createdList = new ArrayList<>();
         this.activityList = new ArrayList<>();
@@ -149,11 +162,6 @@ public class NavigationHelper implements Application.ActivityLifecycleCallbacks 
             int index = activityList.indexOf(getHash(activity));
             if (index >= 0) {
                 activityList.remove(index);
-            }
-
-            if (activityList.isEmpty()) {
-                activity.getApplication().unregisterActivityLifecycleCallbacks(NavigationHelper.sInstance);
-                NavigationHelper.sInstance = null;
             }
         }
 
