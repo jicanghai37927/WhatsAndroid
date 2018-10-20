@@ -276,7 +276,7 @@ public class NavigationHelper implements Application.ActivityLifecycleCallbacks 
         @Override
         public void onComplete(NavigationLayout view) {
             context.finish();
-            context.overridePendingTransition(R.anim.anc_navigation_standby, R.anim.anc_navigation_standby);
+            context.overridePendingTransition(R.anim.anc_navigation_standby, R.anim.anc_navigation_fadeout);
         }
     }
 }

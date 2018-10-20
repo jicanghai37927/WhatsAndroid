@@ -5,6 +5,9 @@ import club.andnext.dataset.BaseDataset;
 import club.andnext.dataset.BaseEntity;
 import com.google.gson.annotations.SerializedName;
 
+/**
+ *
+ */
 public class ExtensionDataset extends BaseDataset<ExtensionDataset.ExtensionEntity> {
 
     public ExtensionEntity accept(String ext) {
@@ -18,6 +21,9 @@ public class ExtensionDataset extends BaseDataset<ExtensionDataset.ExtensionEnti
         return null;
     }
 
+    /**
+     *
+     */
     public static class ExtensionEntity extends BaseEntity {
 
         @SerializedName("name")
