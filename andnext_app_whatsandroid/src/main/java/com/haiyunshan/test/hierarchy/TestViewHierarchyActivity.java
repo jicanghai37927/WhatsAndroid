@@ -17,8 +17,6 @@ public class TestViewHierarchyActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        NavigationHelper.onCreate(this);
-
         super.onCreate(savedInstanceState);
         this.setContentView(R.layout.activity_test_view_hierarchy);
 

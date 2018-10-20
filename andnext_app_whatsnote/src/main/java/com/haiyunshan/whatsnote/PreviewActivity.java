@@ -19,7 +19,6 @@ public class PreviewActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        NavigationHelper.onCreate(this);
 
         super.onCreate(savedInstanceState);
 

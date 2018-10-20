@@ -7,7 +7,6 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
-import android.text.Layout;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.Gravity;
