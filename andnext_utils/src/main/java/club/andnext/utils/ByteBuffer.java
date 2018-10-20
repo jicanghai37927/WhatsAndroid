@@ -1,7 +1,9 @@
 package club.andnext.utils;
 
-import java.io.IOException;
-import java.io.InputStream;
+import android.content.Context;
+import android.net.Uri;
+
+import java.io.*;
 import java.util.Arrays;
 
 /**
@@ -106,5 +108,65 @@ public class ByteBuffer {
         }
 
         return data;
+    }
+
+    public static final ByteBuffer create(Context context, Uri data, long size) {
+        ByteBuffer buf = null;
+
+        {
+            InputStream is = null;
+
+            try {
+                is = context.getContentResolver().openInputStream(data);
+                buf = ByteBuffer.create(is, (int)size);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                if (is != null) {
+                    try {
+                        is.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+
+        return buf;
+    }
+
+    public static final ByteBuffer create(File file) {
+        if (!file.exists()) {
+            return null;
+        }
+
+        ByteBuffer buf = null;
+
+        {
+            FileInputStream fis = null;
+
+            try {
+                fis = new FileInputStream(file);
+
+                buf = ByteBuffer.create(fis, (int) (file.length()));
+
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                if (fis != null) {
+                    try {
+                        fis.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+
+        return buf;
     }
 }

@@ -83,7 +83,7 @@ public class PreviewActivity extends AppCompatActivity {
         String fragment = PlainTextPreviewFragment.class.getSimpleName();
 
         {
-            String ext = getExtension(entity);
+            String ext = entity.getExtension();
             ext = ext.toLowerCase();
             ExtensionDataset.ExtensionEntity e = null;
             if (extensionDataset != null) {
@@ -105,17 +105,5 @@ public class PreviewActivity extends AppCompatActivity {
 
         return fragment;
     }
-
-    String getExtension(PreviewEntity entity) {
-        String uri = entity.getUri();
-        int index = uri.lastIndexOf('.');
-        if (index <= 0) {
-            return "";
-        }
-
-        return uri.substring(index);
-    }
-
-
 
 }

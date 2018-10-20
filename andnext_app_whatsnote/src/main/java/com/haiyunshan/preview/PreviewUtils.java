@@ -42,72 +42,13 @@ public class PreviewUtils {
         Uri data = Uri.parse(uri);
         String path = ContentUtils.getFilePath(context, data);
         if (TextUtils.isEmpty(path)) {
-            buf = getBytes(context, data, entity.getSize());
+            buf = ByteBuffer.create(context, data, entity.getSize());
         } else {
-            buf = getBytes(new File(path));
+            buf = ByteBuffer.create(new File(path));
         }
 
         return buf;
     }
 
-    static final ByteBuffer getBytes(Context context, Uri data, long size) {
-        ByteBuffer buf = null;
-
-        {
-            InputStream is = null;
-
-            try {
-                is = context.getContentResolver().openInputStream(data);
-                buf = ByteBuffer.create(is, (int)size);
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } finally {
-                if (is != null) {
-                    try {
-                        is.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        }
-
-        return buf;
-    }
-
-    static final ByteBuffer getBytes(File file) {
-        if (!file.exists()) {
-            return null;
-        }
-
-        ByteBuffer buf = null;
-
-        {
-            FileInputStream fis = null;
-
-            try {
-                fis = new FileInputStream(file);
-
-                buf = ByteBuffer.create(fis, (int) (file.length()));
-
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } finally {
-                if (fis != null) {
-                    try {
-                        fis.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        }
-
-        return buf;
-    }
 
 }

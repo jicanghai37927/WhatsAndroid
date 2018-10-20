@@ -2,12 +2,12 @@
   "list": [
     {
       "name": "Markdown",
-      "extensions": [".md", ".markdown"],
+      "extensions": ["md", "markdown"],
       "fragment": "MarkdownPreviewFragment"
     },
     {
       "name": "PlainText",
-      "extensions": [".txt"],
+      "extensions": ["txt"],
       "fragment": "PlainTextPreviewFragment"
     }
   ]

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import club.andnext.utils.ContentUtils;
 
@@ -47,6 +48,10 @@ public class PreviewEntity {
 
     public String getDisplayName() {
         return displayName;
+    }
+
+    public String getExtension() {
+        return getExtension(this.uri);
     }
 
     public String getExtraTitle() {
@@ -108,4 +113,16 @@ public class PreviewEntity {
         return entity;
     }
 
+    public static String getExtension(String uri) {
+        if (TextUtils.isEmpty(uri)) {
+            return "";
+        }
+
+        int index = uri.lastIndexOf('.');
+        if (index <= 0) {
+            return "";
+        }
+
+        return uri.substring(index + 1);
+    }
 }
