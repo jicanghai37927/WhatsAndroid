@@ -77,6 +77,8 @@ public abstract class OverScrollBounceEffectDecoratorBase implements IOverScroll
     protected IOverScrollStateListener mStateListener = new OverScrollStateListenerStub();
     protected IOverScrollUpdateListener mUpdateListener = new OverScrollUpdateListenerStub();
 
+    protected boolean mEnable = true;
+
     /**
      * When in over-scroll mode, keep track of dragging velocity to provide a smooth slow-down
      * for the bounce-back effect.
@@ -418,12 +420,14 @@ public abstract class OverScrollBounceEffectDecoratorBase implements IOverScroll
         mIdleState = new IdleState();
 
         mCurrentState = mIdleState;
-
-        attach();
     }
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
+        if (!this.mEnable) {
+            return false;
+        }
+
         switch (event.getAction()) {
             case MotionEvent.ACTION_MOVE:
                 return mCurrentState.handleMoveTouchEvent(event);
@@ -462,9 +466,23 @@ public abstract class OverScrollBounceEffectDecoratorBase implements IOverScroll
         mCurrentState.handleEntryTransition(oldState);
     }
 
-    protected void attach() {
+    @Override
+    public IOverScrollDecor setEnable(boolean enable) {
+        this.mEnable = enable;
+
+        return this;
+    }
+
+    public boolean isEnable() {
+        return this.mEnable;
+    }
+
+    @Override
+    public IOverScrollDecor attach() {
         getView().setOnTouchListener(this);
         getView().setOverScrollMode(View.OVER_SCROLL_NEVER);
+
+        return this;
     }
 
     @Override

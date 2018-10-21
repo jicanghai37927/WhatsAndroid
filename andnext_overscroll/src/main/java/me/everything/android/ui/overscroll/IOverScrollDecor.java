@@ -17,6 +17,15 @@ public interface IOverScrollDecor {
      */
     int getCurrentState();
 
+    IOverScrollDecor setEnable(boolean enable);
+
+    boolean isEnable();
+
+    /**
+     *
+     */
+    IOverScrollDecor attach();
+
     /**
      * Detach the decorator from its associated view, thus disabling it entirely.
      *
@@ -30,4 +39,5 @@ public interface IOverScrollDecor {
      * overridden by calling <code>View.setOverScrollMode(mode)</code> immediately thereafter.</p>
      */
     void detach();
+
 }
