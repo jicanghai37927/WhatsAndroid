@@ -1,16 +1,13 @@
-package club.andnext.recyclerview.overscroll;
+package me.everything.android.ui.overscroll.adapters;
 
 import android.graphics.Canvas;
 import android.view.View;
-
-
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import me.everything.android.ui.overscroll.HorizontalOverScrollBounceEffectDecorator;
 import me.everything.android.ui.overscroll.VerticalOverScrollBounceEffectDecorator;
-import me.everything.android.ui.overscroll.adapters.IOverScrollDecoratorAdapter;
 
 import java.util.List;
 
@@ -20,7 +17,7 @@ import java.util.List;
  * @see HorizontalOverScrollBounceEffectDecorator
  * @see VerticalOverScrollBounceEffectDecorator
  */
-class RecyclerViewOverScrollDecorAdapter implements IOverScrollDecoratorAdapter {
+public class RecyclerViewOverScrollDecorAdapter implements IOverScrollDecoratorAdapter {
 
     /**
      * A delegation of the adapter implementation of this view that should provide the processing
@@ -33,7 +30,7 @@ class RecyclerViewOverScrollDecorAdapter implements IOverScrollDecoratorAdapter 
     }
 
     protected final RecyclerView mRecyclerView;
-    protected final RecyclerViewOverScrollDecorAdapter.Impl mImpl;
+    protected final Impl mImpl;
 
     protected boolean mIsItemTouchInEffect = false;
 
@@ -43,17 +40,17 @@ class RecyclerViewOverScrollDecorAdapter implements IOverScrollDecoratorAdapter 
 
         final RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
         if (layoutManager instanceof LinearLayoutManager ||
-                layoutManager instanceof StaggeredGridLayoutManager)
+            layoutManager instanceof StaggeredGridLayoutManager)
         {
             final int orientation =
                     (layoutManager instanceof LinearLayoutManager
-                            ? ((LinearLayoutManager) layoutManager).getOrientation()
-                            : ((StaggeredGridLayoutManager) layoutManager).getOrientation());
+                        ? ((LinearLayoutManager) layoutManager).getOrientation()
+                        : ((StaggeredGridLayoutManager) layoutManager).getOrientation());
 
             if (orientation == LinearLayoutManager.HORIZONTAL) {
-                mImpl = new RecyclerViewOverScrollDecorAdapter.ImplHorizLayout();
+                mImpl = new ImplHorizLayout();
             } else {
-                mImpl = new RecyclerViewOverScrollDecorAdapter.ImplVerticalLayout();
+                mImpl = new ImplVerticalLayout();
             }
         }
         else
@@ -63,7 +60,7 @@ class RecyclerViewOverScrollDecorAdapter implements IOverScrollDecoratorAdapter 
         }
     }
 
-    public RecyclerViewOverScrollDecorAdapter(RecyclerView recyclerView, RecyclerViewOverScrollDecorAdapter.Impl impl) {
+    public RecyclerViewOverScrollDecorAdapter(RecyclerView recyclerView, Impl impl) {
         mRecyclerView = recyclerView;
         mImpl = impl;
     }
@@ -73,19 +70,14 @@ class RecyclerViewOverScrollDecorAdapter implements IOverScrollDecoratorAdapter 
         setUpTouchHelperCallback(itemTouchHelperCallback);
     }
 
-    public RecyclerViewOverScrollDecorAdapter(RecyclerView recyclerView, RecyclerViewOverScrollDecorAdapter.Impl impl, ItemTouchHelper.Callback itemTouchHelperCallback) {
+    public RecyclerViewOverScrollDecorAdapter(RecyclerView recyclerView, Impl impl, ItemTouchHelper.Callback itemTouchHelperCallback) {
         this(recyclerView, impl);
         setUpTouchHelperCallback(itemTouchHelperCallback);
     }
 
     protected void setUpTouchHelperCallback(final ItemTouchHelper.Callback itemTouchHelperCallback) {
-        new ItemTouchHelper(new RecyclerViewOverScrollDecorAdapter.ItemTouchHelperCallbackWrapper(itemTouchHelperCallback) {
-            @Override
-            public void onSelectedChanged(RecyclerView.ViewHolder viewHolder, int actionState) {
-                mIsItemTouchInEffect = actionState != 0;
-                super.onSelectedChanged(viewHolder, actionState);
-            }
-        }).attachToRecyclerView(mRecyclerView);
+        ItemTouchHelper helper = new ItemTouchHelper(new ItemTouchHelperCallbackWrapper(this, itemTouchHelperCallback));
+        helper.attachToRecyclerView(mRecyclerView);
     }
 
     @Override
@@ -103,7 +95,7 @@ class RecyclerViewOverScrollDecorAdapter implements IOverScrollDecoratorAdapter 
         return !mIsItemTouchInEffect && mImpl.isInAbsoluteEnd();
     }
 
-    protected class ImplHorizLayout implements RecyclerViewOverScrollDecorAdapter.Impl {
+    protected class ImplHorizLayout implements Impl {
 
         @Override
         public boolean isInAbsoluteStart() {
@@ -116,7 +108,7 @@ class RecyclerViewOverScrollDecorAdapter implements IOverScrollDecoratorAdapter 
         }
     }
 
-    protected class ImplVerticalLayout implements RecyclerViewOverScrollDecorAdapter.Impl {
+    protected class ImplVerticalLayout implements Impl {
 
         @Override
         public boolean isInAbsoluteStart() {
@@ -133,8 +125,11 @@ class RecyclerViewOverScrollDecorAdapter implements IOverScrollDecoratorAdapter 
 
         final ItemTouchHelper.Callback mCallback;
 
-        private ItemTouchHelperCallbackWrapper(ItemTouchHelper.Callback callback) {
+        final RecyclerViewOverScrollDecorAdapter mAdapter;
+
+        private ItemTouchHelperCallbackWrapper(RecyclerViewOverScrollDecorAdapter adapter, ItemTouchHelper.Callback callback) {
             mCallback = callback;
+            mAdapter = adapter;
         }
 
         @Override
@@ -194,6 +189,8 @@ class RecyclerViewOverScrollDecorAdapter implements IOverScrollDecoratorAdapter 
 
         @Override
         public void onSelectedChanged(RecyclerView.ViewHolder viewHolder, int actionState) {
+            mAdapter.mIsItemTouchInEffect = (actionState != 0);
+
             mCallback.onSelectedChanged(viewHolder, actionState);
         }
 
@@ -228,4 +225,3 @@ class RecyclerViewOverScrollDecorAdapter implements IOverScrollDecoratorAdapter 
         }
     }
 }
-

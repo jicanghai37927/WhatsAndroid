@@ -23,6 +23,9 @@ public class PreviewEntity {
         this.uri = uri == null? "": uri;
         this.size = size;
         this.displayName = displayName == null? "": displayName;
+
+        this.extraTitle = "";
+        this.extraText = "";
     }
 
     public Bundle toBundle() {

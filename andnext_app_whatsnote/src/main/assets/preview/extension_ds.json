@@ -1,14 +1,76 @@
 {
-  "list": [
+  "list":
+  [
     {
       "name": "Markdown",
-      "extensions": ["md", "markdown"],
-      "fragment": "MarkdownPreviewFragment"
+      "fragment": "MarkdownPreviewFragment",
+      "extensions":
+      [
+        "md", "markdown"
+      ]
     },
+
+    {
+      "name": "Code",
+      "fragment": "CodePreviewFragment",
+      "extensions":
+      [
+        "java",
+        "c", "cpp",
+        "py",
+        "sh",
+        "xml", "html", "xhtml", "xslt",
+        "php", "php3", "php4", "php5", "phps", "phtml",
+        "pl", "pm", "t",
+        "js", "es",
+        "fx",
+        "groovy",
+        "diff", "patch",
+        "pas",
+        "cs",
+        "as",
+        "applescript", "scpt",
+        "cfm", "cfml",
+        "apollo", "agc", "aea",
+        "basic", "cbm",
+        "clj",
+        "css", "css-kw", "css-str",
+        "dart",
+        "erlang", "erl",
+        "go",
+        "hs",
+        "cl", "el", "lisp", "lsp", "scm", "ss", "rkt",
+        "llvm", "ll",
+        "lua",
+        "matlab", "matlab-identifiers", "matlab-operators",
+        "fs", "ml",
+        "mumps",
+        "n", "nemerle",
+        "pascal",
+        "r", "s", "R", "S", "Splus",
+        "Rd", "rd",
+        "scala", "scl",
+        "sql",
+        "tcl",
+        "latex", "tex",
+        "vb", "vbs",
+        "vhdl", "vhd",
+        "wiki", "wiki.meta",
+        "xq", "xquery",
+        "yaml", "yml",
+        "sass", "scss",
+        "rb", "rbw",
+        "ps1"
+      ]
+    },
+
     {
       "name": "PlainText",
-      "extensions": ["txt"],
-      "fragment": "PlainTextPreviewFragment"
+      "fragment": "PlainTextPreviewFragment",
+      "extensions":
+      [
+        "txt"
+      ]
     }
   ]
 }

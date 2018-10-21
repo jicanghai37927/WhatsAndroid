@@ -29,11 +29,11 @@ public class ExtensionDataset extends BaseDataset<ExtensionDataset.ExtensionEnti
         @SerializedName("name")
         String name;
 
-        @SerializedName("extensions")
-        String[] extensions;
-
         @SerializedName("fragment")
         String fragment;
+
+        @SerializedName("extensions")
+        String[] extensions;
 
         public String getFragment() {
             return fragment;

@@ -14,7 +14,7 @@ public class PreviewUtils {
     public static final String getText(Context context, PreviewEntity entity) {
         ByteBuffer stream = getBytes(context, entity);
         if (stream == null || stream.size() == 0) {
-            return "";
+            return entity.getExtraText();
         }
 
         int length = 6 * 1024;

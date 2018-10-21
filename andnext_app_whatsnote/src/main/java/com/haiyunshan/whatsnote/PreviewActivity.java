@@ -6,7 +6,6 @@ import android.text.TextUtils;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import club.andnext.navigation.NavigationHelper;
 import club.andnext.utils.GsonUtils;
 import com.haiyunshan.preview.ExtensionDataset;
 import com.haiyunshan.preview.PreviewEntity;
