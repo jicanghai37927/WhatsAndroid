@@ -10,13 +10,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
-import club.andnext.navigation.NavigationHelper;
+import club.andnext.overscroll.OverScrollHelper;
 import club.andnext.recyclerview.bridge.BridgeAdapter;
 import club.andnext.recyclerview.bridge.BridgeAdapterProvider;
 import club.andnext.recyclerview.bridge.BridgeBuilder;
 import club.andnext.recyclerview.bridge.BridgeHolder;
 import club.andnext.recyclerview.decoration.MarginDividerDecoration;
-import club.andnext.recyclerview.overscroll.OverScrollHelper;
 import club.andnext.utils.GsonUtils;
 import com.haiyunshan.dataset.DemoDataset;
 

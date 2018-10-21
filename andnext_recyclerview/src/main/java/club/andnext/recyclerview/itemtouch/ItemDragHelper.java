@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import android.view.View;
 
 import club.andnext.recyclerview.R;
-import club.andnext.recyclerview.overscroll.OverScrollHelper;
+import club.andnext.overscroll.OverScrollHelper;
 
 public class ItemDragHelper {
 

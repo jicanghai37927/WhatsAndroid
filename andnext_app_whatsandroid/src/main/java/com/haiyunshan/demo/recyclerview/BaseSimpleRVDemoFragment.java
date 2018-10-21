@@ -4,9 +4,9 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import android.view.View;
+import club.andnext.overscroll.OverScrollHelper;
 import club.andnext.recyclerview.bridge.BridgeAdapter;
 import club.andnext.recyclerview.decoration.MarginDividerDecoration;
-import club.andnext.recyclerview.overscroll.OverScrollHelper;
 import club.andnext.utils.GsonUtils;
 import com.haiyunshan.dataset.PiliDataset;
 

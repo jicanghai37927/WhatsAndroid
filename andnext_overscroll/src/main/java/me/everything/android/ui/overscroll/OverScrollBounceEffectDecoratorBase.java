@@ -478,11 +478,9 @@ public abstract class OverScrollBounceEffectDecoratorBase implements IOverScroll
     }
 
     @Override
-    public IOverScrollDecor attach() {
+    public void attach() {
         getView().setOnTouchListener(this);
         getView().setOverScrollMode(View.OVER_SCROLL_NEVER);
-
-        return this;
     }
 
     @Override

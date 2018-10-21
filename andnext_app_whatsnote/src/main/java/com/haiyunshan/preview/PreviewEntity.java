@@ -6,7 +6,12 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import club.andnext.utils.ByteBuffer;
+import club.andnext.utils.CharsetUtils;
 import club.andnext.utils.ContentUtils;
+
+import java.io.File;
+import java.io.UnsupportedEncodingException;
 
 public class PreviewEntity {
 
@@ -63,6 +68,48 @@ public class PreviewEntity {
 
     public String getExtraText() {
         return extraText;
+    }
+
+    public String getText(Context context) {
+        PreviewEntity entity = this;
+        ByteBuffer stream = getBytes(context);
+        if (stream == null || stream.size() == 0) {
+            return entity.getExtraText();
+        }
+
+        int length = 6 * 1024;
+        length = (stream.size() > length)? length: stream.size();
+        String charset = CharsetUtils.getCharset(stream.getData(), length, "utf-8");
+
+        String str = "";
+        try {
+            str = new String(stream.getData(), 0, stream.size(), charset);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
+        return str;
+    }
+
+    public ByteBuffer getBytes(Context context) {
+        PreviewEntity entity = this;
+
+        ByteBuffer buf = null;
+
+        String uri = entity.getUri();
+        if (TextUtils.isEmpty(uri)) {
+            return buf;
+        }
+
+        Uri data = Uri.parse(uri);
+        String path = ContentUtils.getFilePath(context, data);
+        if (TextUtils.isEmpty(path)) {
+            buf = ByteBuffer.create(context, data, entity.getSize());
+        } else {
+            buf = ByteBuffer.create(new File(path));
+        }
+
+        return buf;
     }
 
     public static final PreviewEntity create(Bundle bundle) {

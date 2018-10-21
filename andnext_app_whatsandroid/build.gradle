@@ -56,7 +56,6 @@ dependencies {
     androidTestImplementation 'androidx.test:runner:1.1.0-beta02'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0-beta02'
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
-    implementation 'me.everything:overscroll-decor-android:1.0.4'
     implementation project(':andnext_dataset')
     implementation project(':andnext_recyclerview')
     implementation project(':andnext_utils')
@@ -68,4 +67,5 @@ dependencies {
     implementation project(':andnext_handwrite')
     implementation project(':andnext_java')
     implementation project(':andnext_syntaxprettify')
+    implementation project(':andnext_overscroll')
 }

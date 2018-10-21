@@ -36,10 +36,7 @@ public class PlainTextPreviewFragment extends BasePreviewFragment {
         super.onActivityCreated(savedInstanceState);
 
         PreviewEntity entity = this.getEntity();
-        String text = PreviewUtils.getText(getActivity(), entity);
-        if (TextUtils.isEmpty(text)) {
-            text = entity.getExtraText();
-        }
+        String text = entity.getText(getActivity());
 
         textView.setText(text);
 

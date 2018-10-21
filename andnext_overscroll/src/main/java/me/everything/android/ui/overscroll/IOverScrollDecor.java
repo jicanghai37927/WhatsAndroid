@@ -24,7 +24,7 @@ public interface IOverScrollDecor {
     /**
      *
      */
-    IOverScrollDecor attach();
+    void attach();
 
     /**
      * Detach the decorator from its associated view, thus disabling it entirely.

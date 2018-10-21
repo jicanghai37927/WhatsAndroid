@@ -1,42 +1,25 @@
-package club.andnext.recyclerview.overscroll;
+package club.andnext.overscroll;
 
-import androidx.recyclerview.widget.RecyclerView;
-import me.everything.android.ui.overscroll.IOverScrollDecor;
-import me.everything.android.ui.overscroll.IOverScrollStateListener;
-import me.everything.android.ui.overscroll.IOverScrollUpdateListener;
-import me.everything.android.ui.overscroll.VerticalOverScrollBounceEffectDecorator;
+import android.widget.HorizontalScrollView;
+import me.everything.android.ui.overscroll.*;
+import me.everything.android.ui.overscroll.adapters.HorizontalScrollViewOverScrollDecorAdapter;
 import me.everything.android.ui.overscroll.adapters.IOverScrollDecoratorAdapter;
-import me.everything.android.ui.overscroll.adapters.RecyclerViewOverScrollDecorAdapter;
 
 import java.util.ArrayList;
 
-public class OverScrollHelper extends VerticalOverScrollBounceEffectDecorator implements IOverScrollStateListener, IOverScrollUpdateListener{
+/**
+ *
+ */
+public class HorizontalOverScrollHelper extends HorizontalOverScrollBounceEffectDecorator implements IOverScrollStateListener, IOverScrollUpdateListener {
 
     ArrayList<IOverScrollStateListener> stateListeners;
     ArrayList<IOverScrollUpdateListener> updateListeners;
 
-    public static OverScrollHelper attach(RecyclerView recyclerView) {
-        RecyclerViewOverScrollDecorAdapter adapter = new RecyclerViewOverScrollDecorAdapter(recyclerView);
-        OverScrollHelper helper = new OverScrollHelper(adapter);
-        return helper;
-    }
-
-    public OverScrollHelper(IOverScrollDecoratorAdapter viewAdapter) {
+    HorizontalOverScrollHelper(IOverScrollDecoratorAdapter viewAdapter) {
         super(viewAdapter);
 
-        super.setOverScrollStateListener(this);
-        super.setOverScrollUpdateListener(this);
-    }
-
-    @Override
-    public void attach() {
-        super.attach();
-
-    }
-
-    @Override
-    public void detach() {
-        super.detach();
+        this.mStateListener = this;
+        this.mUpdateListener = this;
     }
 
     @Override
@@ -89,5 +72,13 @@ public class OverScrollHelper extends VerticalOverScrollBounceEffectDecorator im
                 listener.onOverScrollUpdate(decor, state, offset);
             }
         }
+    }
+
+    public static final HorizontalOverScrollHelper attach(HorizontalScrollView scrollView) {
+        HorizontalScrollViewOverScrollDecorAdapter adapter = new HorizontalScrollViewOverScrollDecorAdapter(scrollView);
+        HorizontalOverScrollHelper helper = new HorizontalOverScrollHelper(adapter);
+        helper.attach();
+
+        return helper;
     }
 }

@@ -31,34 +31,62 @@ public class OverScrollDecoratorHelper {
      * @return The over-scroll effect 'decorator', enabling further effect configuration.
      */
     public static IOverScrollDecor setUpOverScroll(RecyclerView recyclerView, int orientation) {
+        IOverScrollDecor decor = null;
+
         switch (orientation) {
-            case ORIENTATION_HORIZONTAL:
-                return new HorizontalOverScrollBounceEffectDecorator(new RecyclerViewOverScrollDecorAdapter(recyclerView)).attach();
-            case ORIENTATION_VERTICAL:
-                return new VerticalOverScrollBounceEffectDecorator(new RecyclerViewOverScrollDecorAdapter(recyclerView)).attach();
+            case ORIENTATION_HORIZONTAL: {
+                decor = new HorizontalOverScrollBounceEffectDecorator(new RecyclerViewOverScrollDecorAdapter(recyclerView));
+                break;
+            }
+            case ORIENTATION_VERTICAL: {
+                decor = new VerticalOverScrollBounceEffectDecorator(new RecyclerViewOverScrollDecorAdapter(recyclerView));
+                break;
+            }
+
             default:
                 throw new IllegalArgumentException("orientation");
         }
+
+        if (decor != null) {
+            decor.attach();
+        }
+
+        return decor;
     }
 
     public static IOverScrollDecor setUpOverScroll(ListView listView) {
-        return new VerticalOverScrollBounceEffectDecorator(new AbsListViewOverScrollDecorAdapter(listView)).attach();
+        IOverScrollDecor decor = new VerticalOverScrollBounceEffectDecorator(new AbsListViewOverScrollDecorAdapter(listView));
+        decor.attach();
+
+        return decor;
     }
 
     public static IOverScrollDecor setUpOverScroll(GridView gridView) {
-        return new VerticalOverScrollBounceEffectDecorator(new AbsListViewOverScrollDecorAdapter(gridView)).attach();
+        IOverScrollDecor decor = new VerticalOverScrollBounceEffectDecorator(new AbsListViewOverScrollDecorAdapter(gridView));
+        decor.attach();
+
+        return decor;
     }
 
     public static IOverScrollDecor setUpOverScroll(ScrollView scrollView) {
-        return new VerticalOverScrollBounceEffectDecorator(new ScrollViewOverScrollDecorAdapter(scrollView)).attach();
+        IOverScrollDecor decor = new VerticalOverScrollBounceEffectDecorator(new ScrollViewOverScrollDecorAdapter(scrollView));
+        decor.attach();
+
+        return decor;
     }
 
     public static IOverScrollDecor setUpOverScroll(NestedScrollView scrollView) {
-        return new VerticalOverScrollBounceEffectDecorator(new NestedScrollViewOverScrollDecorAdapter(scrollView)).attach();
+        IOverScrollDecor decor = new VerticalOverScrollBounceEffectDecorator(new NestedScrollViewOverScrollDecorAdapter(scrollView));
+        decor.attach();
+
+        return decor;
     }
 
     public static IOverScrollDecor setUpOverScroll(HorizontalScrollView scrollView) {
-        return new HorizontalOverScrollBounceEffectDecorator(new HorizontalScrollViewOverScrollDecorAdapter(scrollView)).attach();
+        IOverScrollDecor decor = new HorizontalOverScrollBounceEffectDecorator(new HorizontalScrollViewOverScrollDecorAdapter(scrollView));
+        decor.attach();
+
+        return decor;
     }
 
     /**
@@ -71,20 +99,33 @@ public class OverScrollDecoratorHelper {
      * @return The over-scroll effect 'decorator', enabling further effect configuration.
      */
     public static IOverScrollDecor setUpStaticOverScroll(View view, int orientation) {
+        IOverScrollDecor decor = null;
+
         switch (orientation) {
-            case ORIENTATION_HORIZONTAL:
-                return new HorizontalOverScrollBounceEffectDecorator(new StaticOverScrollDecorAdapter(view)).attach();
-
-            case ORIENTATION_VERTICAL:
-                return new VerticalOverScrollBounceEffectDecorator(new StaticOverScrollDecorAdapter(view)).attach();
-
+            case ORIENTATION_HORIZONTAL: {
+                decor = new HorizontalOverScrollBounceEffectDecorator(new StaticOverScrollDecorAdapter(view));
+                break;
+            }
+            case ORIENTATION_VERTICAL: {
+                decor = new VerticalOverScrollBounceEffectDecorator(new StaticOverScrollDecorAdapter(view));
+                break;
+            }
             default:
                 throw new IllegalArgumentException("orientation");
         }
+
+        if (decor != null) {
+            decor.attach();
+        }
+
+        return decor;
     }
 
     public static IOverScrollDecor setUpOverScroll(ViewPager viewPager) {
-        return new HorizontalOverScrollBounceEffectDecorator(new ViewPagerOverScrollDecorAdapter(viewPager)).attach();
+        IOverScrollDecor decor = new HorizontalOverScrollBounceEffectDecorator(new ViewPagerOverScrollDecorAdapter(viewPager));
+        decor.attach();
+
+        return decor;
     }
 
 }

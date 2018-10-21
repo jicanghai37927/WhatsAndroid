@@ -35,7 +35,7 @@ public class MarkdownPreviewFragment extends BasePreviewFragment {
         super.onActivityCreated(savedInstanceState);
 
         PreviewEntity entity = this.getEntity();
-        String text = PreviewUtils.getText(getActivity(), entity);
+        String text = entity.getText(getActivity());
         markdownView.setText(text);
 
     }
