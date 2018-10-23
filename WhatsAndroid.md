@@ -1,2 +1,0 @@
-# WhatsAndroid
-android development
