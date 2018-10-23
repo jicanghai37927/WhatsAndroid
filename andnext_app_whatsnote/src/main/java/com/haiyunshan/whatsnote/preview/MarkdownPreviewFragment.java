@@ -6,14 +6,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import club.andnext.marked.MarkedWebView;
+import club.andnext.markdown.MarkdownWebView;
 import com.haiyunshan.preview.PreviewEntity;
-import com.haiyunshan.preview.PreviewUtils;
 import com.haiyunshan.whatsnote.R;
 
 public class MarkdownPreviewFragment extends BasePreviewFragment {
 
-    MarkedWebView markdownView;
+    MarkdownWebView markdownView;
 
     @Nullable
     @Override

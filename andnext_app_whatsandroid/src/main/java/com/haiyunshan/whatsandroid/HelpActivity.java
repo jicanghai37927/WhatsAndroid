@@ -5,13 +5,12 @@ import android.content.Intent;
 import android.text.TextUtils;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import club.andnext.marked.MarkedWebView;
-import club.andnext.navigation.NavigationHelper;
+import club.andnext.markdown.MarkdownWebView;
 import club.andnext.utils.AssetUtils;
 
 public class HelpActivity extends AppCompatActivity {
 
-    MarkedWebView markedWebView;
+    MarkdownWebView markdownWebView;
 
     String name;
     String help;
@@ -36,7 +35,7 @@ public class HelpActivity extends AppCompatActivity {
         }
 
         {
-            this.markedWebView = findViewById(R.id.marked_view);
+            this.markdownWebView = findViewById(R.id.marked_view);
         }
 
         {
@@ -46,7 +45,7 @@ public class HelpActivity extends AppCompatActivity {
         if (!TextUtils.isEmpty(help)) {
             String name = "help/" + help;
             String text = AssetUtils.getString(this, name);
-            markedWebView.setText(text);
+            markdownWebView.setText(text);
         }
     }
 }

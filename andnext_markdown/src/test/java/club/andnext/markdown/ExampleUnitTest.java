@@ -1,4 +1,4 @@
-package club.andnext.marked;
+package club.andnext.markdown;
 
 import org.junit.Test;
 

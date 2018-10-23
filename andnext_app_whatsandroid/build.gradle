@@ -63,7 +63,7 @@ dependencies {
     implementation 'com.google.android.material:material:1.0.0'
     implementation project(':andnext_navigation')
     implementation project(':andnext_theme')
-    implementation project(':andnext_marked')
+    implementation project(':andnext_markdown')
     implementation project(':andnext_handwrite')
     implementation project(':andnext_java')
     implementation project(':andnext_syntaxprettify')

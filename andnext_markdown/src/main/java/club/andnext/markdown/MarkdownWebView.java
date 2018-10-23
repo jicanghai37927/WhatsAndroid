@@ -1,4 +1,4 @@
-package club.andnext.marked;
+package club.andnext.markdown;
 
 import android.content.Context;
 import android.content.Intent;
@@ -14,29 +14,29 @@ import android.webkit.WebViewClient;
 
 import java.io.File;
 
-public class MarkedWebView extends WebView {
+public class MarkdownWebView extends WebView {
 
-    private static final String TAG = MarkedWebView.class.getSimpleName();
+    private static final String TAG = MarkdownWebView.class.getSimpleName();
 
-    private static final String HTML_LOCATION = "file:///android_asset/AndroidMarked.html";
+    private static final String HTML_LOCATION = "file:///android_asset/AndroidMarkdown.html";
 
     String mText;
 
     private boolean mWebViewLoaded = false;
 
-    public MarkedWebView(Context context) {
+    public MarkdownWebView(Context context) {
         this(context, null);
     }
 
-    public MarkedWebView(Context context, AttributeSet attrs) {
+    public MarkdownWebView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public MarkedWebView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public MarkdownWebView(Context context, AttributeSet attrs, int defStyleAttr) {
         this(context, attrs, defStyleAttr, 0);
     }
 
-    public MarkedWebView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public MarkdownWebView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
 
         this.init(context);

@@ -3,11 +3,11 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent">
 
-    <club.andnext.marked.MarkedWebView
+    <club.andnext.markdown.MarkdownWebView
             android:id="@+id/wv_markdown"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-    </club.andnext.marked.MarkedWebView>
+    </club.andnext.markdown.MarkdownWebView>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

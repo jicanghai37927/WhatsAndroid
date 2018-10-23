@@ -4,20 +4,20 @@
 
 - 实现效果
 
-![md_marked](./README/md_marked.gif)
+![md_markdown](./README/markdown.gif)
 
 
 
-- 下载android_marked模块
+- 下载android_markdown模块
 
-下载地址：https://github.com/jicanghai37927/WhatsAndroid/tree/master/andnext_marked
+下载地址：https://github.com/jicanghai37927/WhatsAndroid/tree/master/andnext_markdown
 
 
 
-- 创建MarkedWebView控件
+- 创建MarkdownWebView控件
 
 ```xml
-    <club.andnext.marked.MarkedWebView
+    <club.andnext.marked.MarkdownWebView
             android:id="@+id/marked_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -38,27 +38,27 @@ markedWebView.setText(text);
 - 代码结构
 
 ```Java
-package club.andnext.marked;
-	MarkedWebView.java
+package club.andnext.markdown;
+	MarkdownWebView.java
 ```
 
 * 资源结构
 
 ```Java
 assets
-	AndroidMarked.html // WebView预加载页面，负责渲染markdown文件
+	AndroidMarkdown.html // WebView预加载页面，负责渲染markdown文件
 	marked.0.5 // 使用marked解析markdown
     github-markdown-css.2.10.0 // css样式
     highlightjs.9.13.1 // 代码高亮
 ```
 
-- `MarkedWebView.java`
+- `MarkdownWebView.java`
 
-MarkedWebView继承自WebView，并且预先加载了`AndroidMarked.html`文件用以渲染markdown内容。
+MarkdownWebView继承自WebView，并且预先加载了`AndroidMarkdown.html`文件用以渲染markdown内容。
 
-- `AndroidMarked.html`
+- `AndroidMarkdown.html`
 
-AndroidMarked.html有三个部分组成：  
+AndroidMarkdown.html有三个部分组成：  
 
 1. `marked.js` 解析markdown内容，生成html内容；
 2. `markdown.css` markdown的样式css，决定最终显示效果，使用的是GitHub样式；
