@@ -72,6 +72,31 @@ public class NavigationHelper implements Application.ActivityLifecycleCallbacks 
         }
     }
 
+    /**
+     * Get attached NavigationLayout.
+     *
+     * @param activity
+     * @return
+     */
+    public static final NavigationLayout getNavigationLayout(Activity activity) {
+
+        View decorView = activity.getWindow().getDecorView();
+
+        if (decorView instanceof ViewGroup) {
+            ViewGroup decorGroup = (ViewGroup) decorView;
+
+            int count = decorGroup.getChildCount();
+            for (int i = 0; i < count; i++) {
+                View view = ((ViewGroup) decorView).getChildAt(i);
+                if (view instanceof NavigationLayout) {
+                    return (NavigationLayout)view;
+                }
+            }
+        }
+
+        return null;
+    }
+
     private NavigationHelper() {
         this.createdList = new ArrayList<>();
         this.activityList = new ArrayList<>();
@@ -127,13 +152,13 @@ public class NavigationHelper implements Application.ActivityLifecycleCallbacks 
         int createdIndex = activityList.indexOf(getHash(createdActivity));
 
         if (stoppedIndex < createdIndex) {
-            NavigationLayout layout = this.getNavigationLayout(createdActivity);
+            NavigationLayout layout = getNavigationLayout(createdActivity);
 
             if (layout != null && TextUtils.isEmpty(layout.getActivityHash())) {
 
                 if (activity.isFinishing()) { // 即将被destroy
 
-                    NavigationLayout prev = this.getNavigationLayout(activity);
+                    NavigationLayout prev = getNavigationLayout(activity);
                     if (prev != null) {
                         Drawable d = prev.getPrevious();
                         layout.setPrevious(prev.getActivityHash(), d);
@@ -169,14 +194,14 @@ public class NavigationHelper implements Application.ActivityLifecycleCallbacks 
 
     boolean isAttached(@NonNull Activity context) {
 
-        NavigationLayout layout = this.getNavigationLayout(context);
+        NavigationLayout layout = getNavigationLayout(context);
         return (layout != null);
 
     }
 
     void detach(@NonNull Activity context) {
 
-        NavigationLayout layout = this.getNavigationLayout(context);
+        NavigationLayout layout = getNavigationLayout(context);
         if (layout == null) {
             return;
         }
@@ -204,7 +229,7 @@ public class NavigationHelper implements Application.ActivityLifecycleCallbacks 
 
     boolean attach(@NonNull Activity context) {
 
-        NavigationLayout layout = this.getNavigationLayout(context);
+        NavigationLayout layout = getNavigationLayout(context);
         if (layout != null) {
             return true;
         }
@@ -245,25 +270,6 @@ public class NavigationHelper implements Application.ActivityLifecycleCallbacks 
         view.draw(canvas);
 
         return bitmap;
-    }
-
-    NavigationLayout getNavigationLayout(Activity activity) {
-
-        View decorView = activity.getWindow().getDecorView();
-
-        if (decorView instanceof ViewGroup) {
-            ViewGroup decorGroup = (ViewGroup) decorView;
-
-            int count = decorGroup.getChildCount();
-            for (int i = 0; i < count; i++) {
-                View view = ((ViewGroup) decorView).getChildAt(i);
-                if (view instanceof NavigationLayout) {
-                    return (NavigationLayout)view;
-                }
-            }
-        }
-
-        return null;
     }
 
     static String getHash(Activity context) {
