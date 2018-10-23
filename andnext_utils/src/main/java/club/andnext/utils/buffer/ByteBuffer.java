@@ -1,4 +1,4 @@
-package club.andnext.utils;
+package club.andnext.utils.buffer;
 
 import android.content.Context;
 import android.net.Uri;

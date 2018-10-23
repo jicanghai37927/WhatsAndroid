@@ -1,8 +1,5 @@
-package club.andnext.utils;
+package club.andnext.utils.buffer;
 
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
 
 public class IntBuffer {
