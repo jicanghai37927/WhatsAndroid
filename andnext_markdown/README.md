@@ -48,8 +48,8 @@ package club.andnext.markdown;
 assets
 	AndroidMarkdown.html // WebView预加载页面，负责渲染markdown文件
 	marked.0.5 // 使用marked解析markdown
-    github-markdown-css.2.10.0 // css样式
-    highlightjs.9.13.1 // 代码高亮
+	github-markdown-css.2.10.0 // css样式
+	highlightjs.9.13.1 // 代码高亮
 ```
 
 - `MarkdownWebView.java`
