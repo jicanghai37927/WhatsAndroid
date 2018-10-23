@@ -46,4 +46,5 @@ dependencies {
     implementation project(':andnext_overscroll')
     implementation project(':andnext_syntaxprettify')
     implementation project(':andnext_java')
+    implementation project(':andnext_widget')
 }

@@ -2,6 +2,7 @@ package com.haiyunshan.whatsandroid;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,6 +18,7 @@ import club.andnext.recyclerview.bridge.BridgeBuilder;
 import club.andnext.recyclerview.bridge.BridgeHolder;
 import club.andnext.recyclerview.decoration.MarginDividerDecoration;
 import club.andnext.utils.GsonUtils;
+import club.andnext.utils.PackageUtils;
 import com.haiyunshan.dataset.DemoDataset;
 
 public class DemoActivity extends AppCompatActivity {
@@ -157,13 +159,13 @@ public class DemoActivity extends AppCompatActivity {
                 } else if (!TextUtils.isEmpty(entity.getActivity())) {
                     parent.startActivity(entity.getActivity());
                 } else if (!TextUtils.isEmpty(entity.getHelp())) {
-                    HelpActivity.start(parent, entity.getName(), entity.getHelp());
+                    PackageUtils.open(parent, Uri.parse(entity.getHelp()));
                 }
 
             } else if (v == helpView) {
                 DemoDataset.DemoEntity entity = getEntity();
 
-                HelpActivity.start(parent, entity.getName(), entity.getHelp());
+                PackageUtils.open(parent, Uri.parse(entity.getHelp()));
             }
         }
 
