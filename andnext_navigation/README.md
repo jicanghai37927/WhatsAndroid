@@ -6,6 +6,12 @@
 
 ![右滑返回效果](./README/navigation_back.gif)
 
+- 导入and next_navigation模块
+
+下载地址：https://github.com/jicanghai37927/WhatsAndroid/tree/master/andnext_navigation
+
+
+
 - 在Application的onCreate()方法中调用  
 
 ```Java
@@ -13,6 +19,8 @@ NavigationHelper.onCreate()
 ```
 
 所有的Activity支持右滑返回。
+
+
 
 - 在Activity的onCreate()方法中调用
 
@@ -22,6 +30,8 @@ super.onCreate();
 ```
 
 之后所有的Activity都会支持右滑返回。
+
+
 
 - 关闭Activity的右滑返回
 
