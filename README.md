@@ -1,6 +1,6 @@
 # WhatsAndroid模块介绍
 
-## 一、andnext_app_whatsandroid
+## 一、安卓实战手册andnext_app_whatsandroid
 
 由演示和测试两部分功能组成。  
 
@@ -10,7 +10,7 @@
 
 
 
-## 二、andnext_app_whatsnote
+## 二、神马笔记andnext_app_whatsnote
 
 使用WhatsAndroid中的各个模块创建的笔记应用。各模块在生产环境下的具体应用。
 
@@ -26,7 +26,7 @@
 
 实现了右滑返回上一个Activity功能。
 
-
+[使用说明](./andnext_navigation/README.md)
 
 ## 五、andnext_utils
 
@@ -46,3 +46,30 @@
 
 
 
+## 八、andnext_markdown
+
+Markdown渲染库。
+
+
+
+## 九、andnext_overscroll
+
+`EverythingMe/overscroll-decor`的Fork版本。
+
+
+
+## 十、andnext_dataset
+
+数据集合。
+
+
+
+## 十一、andnext_theme
+
+设计主题。
+
+
+
+## 十二、andnext_handwrite
+
+汉字手写识别库。
