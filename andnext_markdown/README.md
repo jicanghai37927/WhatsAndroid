@@ -17,8 +17,8 @@
 - 创建MarkdownWebView控件
 
 ```xml
-    <club.andnext.marked.MarkdownWebView
-            android:id="@+id/marked_view"
+    <club.andnext.markdown.MarkdownWebView
+            android:id="@+id/markdown_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 ```
@@ -28,7 +28,7 @@
 - 设置Markdown内容
 
 ```Java
-markedWebView.setText(text);
+markdownWebView.setText(text);
 ```
 
 
