@@ -73,3 +73,11 @@ Markdown渲染库。
 ## 十二、andnext_handwrite
 
 汉字手写识别库。
+
+
+
+## 十三、andnext_article
+
+Android技术文章。
+
+[阅读文章](./andnext_article/README.md)

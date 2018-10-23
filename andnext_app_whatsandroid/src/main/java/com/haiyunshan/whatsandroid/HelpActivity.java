@@ -3,14 +3,14 @@ package com.haiyunshan.whatsandroid;
 import android.app.Activity;
 import android.content.Intent;
 import android.text.TextUtils;
+import android.webkit.WebView;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import club.andnext.markdown.MarkdownWebView;
 import club.andnext.utils.AssetUtils;
 
 public class HelpActivity extends AppCompatActivity {
 
-    MarkdownWebView markdownWebView;
+    WebView webView;
 
     String name;
     String help;
@@ -35,7 +35,7 @@ public class HelpActivity extends AppCompatActivity {
         }
 
         {
-            this.markdownWebView = findViewById(R.id.marked_view);
+            this.webView = findViewById(R.id.webview);
         }
 
         {
@@ -43,9 +43,7 @@ public class HelpActivity extends AppCompatActivity {
         }
 
         if (!TextUtils.isEmpty(help)) {
-            String name = "help/" + help;
-            String text = AssetUtils.getString(this, name);
-            markdownWebView.setText(text);
+
         }
     }
 }

@@ -1,1 +1,1 @@
-include ':andnext_app_whatsandroid', ':andnext_recyclerview', ':andnext_utils', ':andnext_dataset', ':andnext_navigation', ':andnext_theme', ':andnext_markdown', ':andnext_app_whatsnote', ':andnext_java', ':andnext_syntaxprettify', ':andnext_handwrite', ':andnext_overscroll'
+include ':andnext_app_whatsandroid', ':andnext_recyclerview', ':andnext_utils', ':andnext_dataset', ':andnext_navigation', ':andnext_theme', ':andnext_markdown', ':andnext_app_whatsnote', ':andnext_java', ':andnext_syntaxprettify', ':andnext_handwrite', ':andnext_overscroll', ':andnext_article'
