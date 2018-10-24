@@ -37,6 +37,12 @@
       "desc": "ItemTouchHelper的拖拽排序，长按拖拽或者点击拖拽",
       "help": "",
       "fragment": "com.haiyunshan.demo.recyclerview.SimpleDragDemoFragment"
+    },
+    {
+      "name": "树形结构",
+      "desc": "参考SortedList设计的TreeList，实现RecyclerView的树形结构",
+      "help": "",
+      "fragment": "com.haiyunshan.demo.recyclerview.TreeRVDemoFragment"
     }
 
   ]
