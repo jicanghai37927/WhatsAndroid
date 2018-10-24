@@ -65,7 +65,7 @@ public class SwipeActionHelper extends RecyclerView.ItemDecoration {
         return itemTouchCallback;
     }
 
-    public void attachToRecyclerView(@Nullable RecyclerView recyclerView) {
+    public void attach(@Nullable RecyclerView recyclerView) {
         this.recyclerView = recyclerView;
 
         // be first please

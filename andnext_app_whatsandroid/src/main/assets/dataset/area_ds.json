@@ -1,0 +1,79 @@
+{
+  "list": [
+    {
+      "id": "usa",
+      "parent": "",
+      "name": "美国"
+    },
+    {
+      "id": "Minnesota",
+      "parent": "usa",
+      "name": "明尼苏达州"
+    },
+    {
+      "id": "Mississippi",
+      "parent": "usa",
+      "name": "密西西比州"
+    },
+    {
+      "id": "Ohio",
+      "parent": "usa",
+      "name": "俄亥俄州"
+    },
+    {
+      "id": "Pennsylvania",
+      "parent": "usa",
+      "name": "宾夕法尼亚"
+    },
+    {
+      "id": "Texas",
+      "parent": "usa",
+      "name": "得克萨斯州"
+    },
+    {
+      "id": "Wisconsin",
+      "parent": "usa",
+      "name": "威斯康辛州"
+    },
+    {
+      "id": "canada",
+      "parent": "",
+      "name": "加拿大"
+    },
+    {
+      "id": "russia",
+      "parent": "",
+      "name": "俄罗斯"
+    },
+    {
+      "id": "china",
+      "parent": "",
+      "name": "中国"
+    },
+    {
+      "id": "fujian",
+      "parent": "china",
+      "name": "福建"
+    },
+    {
+      "id": "xiamen",
+      "parent": "fujian",
+      "name": "厦门"
+    },
+    {
+      "id": "haicang",
+      "parent": "xiamen",
+      "name": "海沧"
+    },
+    {
+      "id": "dongfu",
+      "parent": "haicang",
+      "name": "东孚"
+    },
+    {
+      "id": "maluanwan",
+      "parent": "dongfu",
+      "name": "马銮湾"
+    }
+  ]
+}

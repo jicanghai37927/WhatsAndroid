@@ -5,16 +5,16 @@ import com.google.gson.annotations.SerializedName;
 public class BaseEntity {
 
     @SerializedName("id")
-    String id;
+    protected String id;
 
     @SerializedName("created")
-    long created;
+    protected long created;
 
     @SerializedName("modified")
-    long modified;
+    protected long modified;
 
     @SerializedName("deleted")
-    long deleted;
+    protected long deleted;
 
     public String getId() {
         return id;

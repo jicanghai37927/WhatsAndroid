@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content">
+
+    <FrameLayout
+            android:id="@+id/action_folder"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:foreground="?selectableItemBackground"
+            android:background="#777bff">
+
+        <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minWidth="80dp"
+                android:layout_gravity="left|center_vertical"
+                android:src="@drawable/ic_create_new_folder_white_24dp"/>
+    </FrameLayout>
+
+    <FrameLayout
+            android:id="@+id/action_delete"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:foreground="?selectableItemBackground"
+            android:background="#f83b2f">
+
+        <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minWidth="80dp"
+                android:layout_gravity="left|center_vertical"
+                android:src="@drawable/ic_delete_white_24dp"/>
+    </FrameLayout>
+
+    <LinearLayout
+            android:id="@+id/content_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:minHeight="?listPreferredItemHeight"
+            android:background="#ffffff"
+            android:gravity="center_vertical"
+            android:foreground="?selectableItemBackground"
+            android:paddingLeft="?listPreferredItemPaddingLeft"
+            android:paddingRight="?listPreferredItemPaddingRight">
+
+        <TextView
+                android:id="@+id/tv_name"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="left|center_vertical"
+                android:textAppearance="?android:textAppearanceLarge"
+                />
+
+        <ImageView
+                android:id="@+id/iv_right"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_chevron_right_white_24dp"
+                android:tint="#000000"/>
+    </LinearLayout>
+
+</FrameLayout>

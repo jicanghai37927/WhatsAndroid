@@ -28,6 +28,10 @@ public class ClazzAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         return this.context;
     }
 
+    public Object get(int position) {
+        return provider.get(position);
+    }
+
     public ClazzAdapter bind(Class<?> clazz, ViewHolderBuilder... builders) {
         pool.bind(clazz, builders);
 

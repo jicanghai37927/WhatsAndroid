@@ -44,7 +44,7 @@ public abstract class BaseSwipeRVDemoFragment extends BaseRVDemoFragment {
 
         {
             this.swipeActionhelper = new SwipeActionHelper(overScrollHelper);
-            swipeActionhelper.attachToRecyclerView(recyclerView);
+            swipeActionhelper.attach(recyclerView);
         }
 
         {

@@ -32,4 +32,5 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0-beta02'
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
     implementation project(':andnext_overscroll')
+    implementation project(':andnext_java')
 }

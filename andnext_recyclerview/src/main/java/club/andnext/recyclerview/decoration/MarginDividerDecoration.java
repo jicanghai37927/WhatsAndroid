@@ -160,10 +160,12 @@ public class MarginDividerDecoration extends RecyclerView.ItemDecoration {
 
             // divider
             {
-                int offset = (int)this.getTranslation(h);
+                boolean isLast = (pos + 1 == itemCount);
+
+                int offset = (!isLast)? (int)this.getTranslation(h): 0;
 
                 int x = left;
-                x += (pos + 1 < itemCount)? this.getMargin(h): 0; // 最后一个限定为没有margin
+                x += (!isLast)? this.getMargin(h): 0; // 最后一个限定为没有margin
 
                 divider.setBounds(x + offset, top, right + offset, bottom);
                 divider.draw(canvas);
@@ -179,6 +181,10 @@ public class MarginDividerDecoration extends RecyclerView.ItemDecoration {
     }
 
     float getTranslation(RecyclerView.ViewHolder holder) {
+        if (holder.getAdapterPosition() < 0) {
+            return 0;
+        }
+
         if (holder instanceof Adapter) {
             return ((Adapter)holder).getTranslation(this);
         }

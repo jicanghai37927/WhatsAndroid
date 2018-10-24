@@ -11,6 +11,10 @@ public class SectionDividerDecoration extends MarginDividerDecoration {
 
     @Override
     int getMargin(RecyclerView.ViewHolder holder) {
+        if (holder.getAdapterPosition() < 0) {
+            return super.getMargin(holder);
+        }
+
         if (holder instanceof Adapter) {
             return ((Adapter)holder).getMargin(this);
         }
