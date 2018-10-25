@@ -1,5 +1,6 @@
 package com.haiyunshan.whatsnote.preview;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,9 +14,33 @@ public abstract class BasePreviewFragment extends Fragment {
 
     PreviewEntity entity;
 
+    /**
+     *
+     * @param entity
+     */
     public void setArguments(PreviewEntity entity) {
         Bundle args = entity.toBundle();
         this.setArguments(args);
+    }
+
+    /**
+     *
+     * @return
+     */
+    public boolean canPreview(Context context) {
+        return true;
+    }
+
+    /**
+     *
+     * @return
+     */
+    PreviewEntity getEntity() {
+        if (entity == null) {
+            entity = PreviewEntity.create(this.getArguments());
+        }
+
+        return entity;
     }
 
     @Nullable
@@ -25,11 +50,4 @@ public abstract class BasePreviewFragment extends Fragment {
     @Override
     public abstract void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState);
 
-    PreviewEntity getEntity() {
-        if (entity == null) {
-            entity = PreviewEntity.create(this.getArguments());
-        }
-
-        return entity;
-    }
 }

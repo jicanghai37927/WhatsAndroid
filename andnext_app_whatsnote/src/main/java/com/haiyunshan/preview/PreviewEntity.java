@@ -49,6 +49,15 @@ public class PreviewEntity {
         return uri;
     }
 
+    public String getFilePath(Context context) {
+        if (TextUtils.isEmpty(uri)) {
+            return null;
+        }
+
+        String path = ContentUtils.getFilePath(context, Uri.parse(uri));
+        return path;
+    }
+
     public long getSize() {
         return size;
     }

@@ -71,6 +71,15 @@
       [
         "txt"
       ]
+    },
+    {
+      "name": "APK",
+      "fragment": "PackagePreviewFragment",
+      "extensions":
+      [
+        "apk"
+      ]
     }
+
   ]
 }

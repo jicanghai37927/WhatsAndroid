@@ -3,6 +3,7 @@ package com.haiyunshan.whatsnote;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -13,6 +14,8 @@ import com.haiyunshan.whatsnote.preview.BasePreviewFragment;
 import com.haiyunshan.whatsnote.preview.PlainTextPreviewFragment;
 
 public class PreviewActivity extends AppCompatActivity {
+
+    static final String TAG = PreviewActivity.class.getSimpleName();
 
     static ExtensionDataset extensionDataset = null;
 
@@ -48,16 +51,23 @@ public class PreviewActivity extends AppCompatActivity {
             }
         }
 
-        if (f != null) {
-
+        {
             f.setArguments(entity);
+        }
+
+        if (f.canPreview(this)) {
 
             FragmentManager fm = this.getSupportFragmentManager();
             FragmentTransaction t = fm.beginTransaction();
             t.replace(android.R.id.content, f);
             t.commit();
 
+        } else {
+
+
         }
+
+        Log.v(TAG, "uri = " + entity.getUri());
     }
 
     BasePreviewFragment createFragment(String fragment) {

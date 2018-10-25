@@ -317,7 +317,7 @@ public class PackageUtils {
     }
 
     public static final boolean install(Context context, File file) {
-        Intent intent = new Intent(Intent.ACTION_VIEW);
+        Intent intent = new Intent(Intent.ACTION_INSTALL_PACKAGE);
         String mimeType = "application/vnd.android.package-archive";
 
         //版本在7.0以上是不能直接通过uri访问的
