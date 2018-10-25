@@ -7,7 +7,7 @@
 ![树形结构](./rv_tree_demo.gif)
 
 [演示代码](https://github.com/jicanghai37927/WhatsAndroid/blob/master/andnext_app_whatsandroid/src/main/java/com/haiyunshan/demo/recyclerview/TreeRVDemoFragment.java)
-
+[点击下载演示APK](https://raw.githubusercontent.com/jicanghai37927/WhatsAndroid/master/release/andnext_app_whatsandroid-release.apk)
 
 
 * 导入相关模块
