@@ -8,6 +8,8 @@
 
 [演示代码](https://github.com/jicanghai37927/WhatsAndroid/blob/master/andnext_app_whatsandroid/src/main/java/com/haiyunshan/demo/recyclerview/TreeRVDemoFragment.java)  
 
+[演示工程项目](https://github.com/jicanghai37927/WhatsAndroid)
+
 [点击下载演示APK](https://raw.githubusercontent.com/jicanghai37927/WhatsAndroid/master/release/andnext_app_whatsandroid-release.apk)
 
 
