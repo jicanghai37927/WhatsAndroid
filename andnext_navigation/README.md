@@ -4,7 +4,8 @@
 
 - 实现效果
 
-![右滑返回效果](./README/navigation_back.gif)
+![右滑返回效果](./README/navigation_back.gif)  
+
 [点击下载演示APK](https://raw.githubusercontent.com/jicanghai37927/WhatsAndroid/master/release/andnext_app_whatsandroid-release.apk)
 
 - 导入and next_navigation模块
