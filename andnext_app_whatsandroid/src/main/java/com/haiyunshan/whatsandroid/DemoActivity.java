@@ -159,13 +159,13 @@ public class DemoActivity extends AppCompatActivity {
                 } else if (!TextUtils.isEmpty(entity.getActivity())) {
                     parent.startActivity(entity.getActivity());
                 } else if (!TextUtils.isEmpty(entity.getHelp())) {
-                    PackageUtils.open(parent, Uri.parse(entity.getHelp()));
+                    PackageUtils.openBrowser(parent, Uri.parse(entity.getHelp()));
                 }
 
             } else if (v == helpView) {
                 DemoDataset.DemoEntity entity = getEntity();
 
-                PackageUtils.open(parent, Uri.parse(entity.getHelp()));
+                PackageUtils.openBrowser(parent, Uri.parse(entity.getHelp()));
             }
         }
 

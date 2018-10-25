@@ -41,7 +41,7 @@
     {
       "name": "树形结构",
       "desc": "参考SortedList设计的TreeList，实现RecyclerView的树形结构",
-      "help": "",
+      "help": "https://github.com/jicanghai37927/WhatsAndroid/blob/master/andnext_recyclerview/README/rv_tree.md",
       "fragment": "com.haiyunshan.demo.recyclerview.TreeRVDemoFragment"
     }
 
