@@ -12,5 +12,5 @@
             android:tag="swipe"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:name="com.haiyunshan.demo.recyclerview.TreeRVDemoFragment"/>
+            android:name="com.haiyunshan.test.widget.TestCoordinatorLayout1Fragment"/>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

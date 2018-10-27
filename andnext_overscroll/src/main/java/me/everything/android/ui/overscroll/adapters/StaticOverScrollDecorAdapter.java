@@ -28,11 +28,11 @@ public class StaticOverScrollDecorAdapter implements IOverScrollDecoratorAdapter
 
     @Override
     public boolean isInAbsoluteStart() {
-        return true;
+        return !mView.canScrollVertically(-1);
     }
 
     @Override
     public boolean isInAbsoluteEnd() {
-        return true;
+        return !mView.canScrollVertically(1);
     }
 }

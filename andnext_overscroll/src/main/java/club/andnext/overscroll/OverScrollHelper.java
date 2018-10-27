@@ -17,7 +17,7 @@ public class OverScrollHelper extends VerticalOverScrollBounceEffectDecorator im
     ArrayList<IOverScrollStateListener> stateListeners;
     ArrayList<IOverScrollUpdateListener> updateListeners;
 
-    OverScrollHelper(IOverScrollDecoratorAdapter viewAdapter) {
+    protected OverScrollHelper(IOverScrollDecoratorAdapter viewAdapter) {
         super(viewAdapter);
 
         this.mStateListener = this;
@@ -93,6 +93,5 @@ public class OverScrollHelper extends VerticalOverScrollBounceEffectDecorator im
 
         return helper;
     }
-
 
 }

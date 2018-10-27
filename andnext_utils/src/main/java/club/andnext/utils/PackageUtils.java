@@ -26,8 +26,7 @@ import java.util.List;
 public class PackageUtils {
 
     public static final boolean openBrowser(Context context, Uri uri) {
-        int launchFlags = Intent.FLAG_ACTIVITY_NEW_TASK
-                | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED;
+        int launchFlags = Intent.FLAG_ACTIVITY_NEW_TASK;
 
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setDataAndType(uri, null);

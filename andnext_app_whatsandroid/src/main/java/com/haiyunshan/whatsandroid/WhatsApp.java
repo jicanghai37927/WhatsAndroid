@@ -9,7 +9,7 @@ public class WhatsApp extends Application {
     public void onCreate() {
         super.onCreate();
 
-        NavigationHelper.onCreate(this);
+//        NavigationHelper.onCreate(this);
     }
 
     @Override
