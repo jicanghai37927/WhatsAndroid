@@ -16,6 +16,11 @@ public class BaseEntity {
     @SerializedName("deleted")
     protected long deleted;
 
+    public BaseEntity() {
+        this.created = System.currentTimeMillis();
+        this.modified = this.created;
+    }
+
     public String getId() {
         return id;
     }

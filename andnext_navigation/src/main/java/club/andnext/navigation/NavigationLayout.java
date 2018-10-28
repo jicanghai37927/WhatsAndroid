@@ -20,7 +20,10 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.customview.widget.ViewDragHelper;
 
-class NavigationLayout extends FrameLayout {
+/**
+ *
+ */
+public class NavigationLayout extends FrameLayout {
 
     ViewDragHelper viewDragHelper;
 
