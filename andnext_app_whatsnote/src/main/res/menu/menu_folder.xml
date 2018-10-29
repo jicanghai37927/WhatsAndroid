@@ -3,7 +3,7 @@
       xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-            android:id="@+id/btn_create_note"
+            android:id="@+id/menu_create_note"
             android:title="新建笔记"
             android:icon="@drawable/ic_add_white_24dp"
             app:showAsAction="always"/>

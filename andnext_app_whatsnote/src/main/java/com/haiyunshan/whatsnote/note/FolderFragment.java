@@ -2,23 +2,22 @@ package com.haiyunshan.whatsnote.note;
 
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import club.andnext.recyclerview.bridge.BridgeAdapter;
 import club.andnext.recyclerview.bridge.BridgeAdapterProvider;
 import club.andnext.recyclerview.bridge.BridgeBuilder;
 import club.andnext.recyclerview.bridge.BridgeHolder;
-import com.haiyunshan.note.FileEntity;
+import com.haiyunshan.note.FileDataset;
 import com.haiyunshan.note.FolderDataset;
 import com.haiyunshan.note.NoteDataset;
 import com.haiyunshan.note.NoteManager;
@@ -38,7 +37,7 @@ public class FolderFragment extends Fragment {
     BridgeAdapter adapter;
 
     String parentFolder;
-    List<FileEntity> fileList;
+    List<FileDataset.FileEntity> fileList;
 
     public FolderFragment() {
 
@@ -73,6 +72,13 @@ public class FolderFragment extends Fragment {
                     createFolder();
                 }
             });
+
+            view.findViewById(R.id.btn_create_note).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    createNote();
+                }
+            });
         }
     }
 
@@ -101,7 +107,7 @@ public class FolderFragment extends Fragment {
     }
 
     void createFolder() {
-        FileEntity entity = NoteManager.getInstance().create(parentFolder, NoteManager.TYPE_FOLDER);
+        FileDataset.FileEntity entity = NoteManager.getInstance().create(parentFolder, NoteManager.TYPE_FOLDER);
 
         String name = "新建文件夹";
         name = NoteManager.getInstance().getName(entity, name);
@@ -113,7 +119,7 @@ public class FolderFragment extends Fragment {
     }
 
     void createNote() {
-        FileEntity entity = NoteManager.getInstance().create(parentFolder, NoteManager.TYPE_NOTE);
+        FileDataset.FileEntity entity = NoteManager.getInstance().create(parentFolder, NoteManager.TYPE_NOTE);
 
         String name = "空白笔记";
         name = NoteManager.getInstance().getName(entity, name);
@@ -183,7 +189,7 @@ public class FolderFragment extends Fragment {
 
         FolderDataset.FolderEntity getEntity() {
             int position = this.getAdapterPosition();
-            FileEntity en = parent.fileList.get(position);
+            FileDataset.FileEntity en = parent.fileList.get(position);
 
             return (FolderDataset.FolderEntity)en;
         }
@@ -231,7 +237,7 @@ public class FolderFragment extends Fragment {
         public boolean onMenuItemClick(MenuItem item) {
             int id = item.getItemId();
             switch (id) {
-                case R.id.btn_create_note: {
+                case R.id.menu_create_note: {
 
                     parent.createNote();
 
