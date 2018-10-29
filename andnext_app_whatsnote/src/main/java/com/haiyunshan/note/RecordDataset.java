@@ -39,7 +39,7 @@ public class RecordDataset extends BaseDataset<RecordDataset.RecordEntity> {
         @SerializedName("type")
         String type;
 
-        private int typeValue; // i prefer to save string value and use int value. :)
+        private int typeValue; // I prefer to save string value and use int value. :)
 
         public RecordEntity(String id, String parent, int type) {
             this.id = id;

@@ -1,9 +1,9 @@
 package com.haiyunshan.note;
 
+import android.util.SparseArray;
 import androidx.annotation.NonNull;
 import club.andnext.utils.UUIDUtils;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,16 +14,10 @@ public class NoteManager {
     public static final int TYPE_ALL    = TYPE_FOLDER | TYPE_NOTE;
 
     RecordDataset recordDs; // 记录集合
-    File recordFile;
-
-    FolderDataset folderDs; // 目录集合
-    File folderFile;
-
-    NoteDataset	noteDs; 	// 笔记集合
-    File noteFile;
+    SparseArray<FileDataset<? extends FileDataset.FileEntity>> noteDsArray; // folder and note dataset
 
     List<RecordDataset.RecordEntity> recordList;
-    List<FileEntity> fileList;
+    List<FileDataset.FileEntity> fileList;
 
     static NoteManager instance;
 
@@ -36,7 +30,7 @@ public class NoteManager {
     }
 
     private NoteManager() {
-
+        this.noteDsArray = new SparseArray<>();
     }
 
     /**
@@ -45,12 +39,12 @@ public class NoteManager {
      * @param list
      * @return
      */
-    public List<FileEntity> getList(String parent, int type, List<FileEntity> list) {
+    public List<FileDataset.FileEntity> getList(String parent, int type, List<FileDataset.FileEntity> list) {
 
         {
             parent = (parent == null) ? "" : parent;
 
-            list = (list == null) ? new ArrayList<FileEntity>() : list;
+            list = (list == null) ? new ArrayList<FileDataset.FileEntity>() : list;
             list.clear();
         }
 
@@ -60,14 +54,14 @@ public class NoteManager {
             for (RecordDataset.RecordEntity e : recordList) {
 
                 if ((type & TYPE_FOLDER) != 0) {
-                    FileEntity en = obtain(e.getId(), type & TYPE_FOLDER);
+                    FileDataset.FileEntity en = obtain(e.getId(), type & TYPE_FOLDER);
                     if (en != null) {
                         list.add(en);
                     }
                 }
 
                 if ((type & TYPE_NOTE) != 0) {
-                    FileEntity en = obtain(e.getId(), type & TYPE_NOTE);
+                    FileDataset.FileEntity en = obtain(e.getId(), type & TYPE_NOTE);
                     if (en != null) {
                         list.add(en);
                     }
@@ -82,9 +76,9 @@ public class NoteManager {
         return list;
     }
 
-    public FileEntity create(String parent, int type) {
+    public FileDataset.FileEntity create(String parent, int type) {
 
-        FileEntity en = null;
+        FileDataset.FileEntity entity = null;
 
         boolean accept = (type == TYPE_FOLDER) || (type == TYPE_NOTE);
         if (!accept) {
@@ -94,28 +88,20 @@ public class NoteManager {
         RecordDataset.RecordEntity r = createRecord(parent, type);
 
         if (type == TYPE_FOLDER) {
-
-            FolderDataset.FolderEntity entity = new FolderDataset.FolderEntity(r.getId());
-
-            FolderDataset ds = getFolderDataset();
-            ds.add(entity);
-
-            en = entity;
-
+            entity = new FolderDataset.FolderEntity(r.getId());
         } else if (type == TYPE_NOTE) {
-
-            NoteDataset.NoteEntity entity = new NoteDataset.NoteEntity(r.getId());
-
-            NoteDataset ds = getNoteDataset();
-            ds.add(entity);
-
-            en = entity;
+            entity = new NoteDataset.NoteEntity(r.getId());
         }
 
-        return en;
+        if (entity != null) {
+            FileDataset ds = getDataset(type);
+            ds.add(entity);
+        }
+
+        return entity;
     }
 
-    public String getName(@NonNull FileEntity entity, @NonNull  String name) {
+    public String getName(@NonNull FileDataset.FileEntity entity, @NonNull  String name) {
 
         int type = (entity.isDirectory())? TYPE_FOLDER: TYPE_NOTE;
         String parent = getRecordDataset().obtain(entity.getId()).getParent();
@@ -129,30 +115,37 @@ public class NoteManager {
         return r;
     }
 
-    FileEntity obtain(String id, int type) {
+    FileDataset.FileEntity obtain(String id, int type) {
 
-        if ((type & TYPE_FOLDER) != 0) {
-            FolderDataset ds = getFolderDataset();
-            FolderDataset.FolderEntity en = ds.obtain(id);
+        FileDataset.FileEntity entity = null;
 
-            if (en != null) {
-                return en;
+        while (true) {
+
+            if ((type & TYPE_FOLDER) != 0) {
+                FileDataset<? extends FileDataset.FileEntity> ds = getDataset(type & TYPE_FOLDER);
+                entity = ds.obtain(id);
+
+                if (entity != null) {
+                    break;
+                }
             }
+
+            if ((type & TYPE_NOTE) != 0) {
+                FileDataset<? extends FileDataset.FileEntity> ds = getDataset(type & TYPE_NOTE);
+                entity = ds.obtain(id);
+
+                if (entity != null) {
+                    break;
+                }
+            }
+
+            break;
         }
 
-        if ((type & TYPE_NOTE) != 0) {
-            NoteDataset ds = getNoteDataset();
-            NoteDataset.NoteEntity en = ds.obtain(id);
-
-            if (en != null) {
-                return en;
-            }
-        }
-
-        return null;
+        return entity;
     }
 
-    String getName(String name, List<FileEntity> list) {
+    String getName(String name, List<FileDataset.FileEntity> list) {
         if (indexOfName(name, list) < 0) {
             return name;
         }
@@ -168,9 +161,9 @@ public class NoteManager {
         }
     }
 
-    int indexOfName(String name, List<FileEntity> list) {
+    int indexOfName(String name, List<FileDataset.FileEntity> list) {
         for (int i = 0, size = list.size(); i < size; i++) {
-            FileEntity e = list.get(i);
+            FileDataset.FileEntity e = list.get(i);
             if (e.getDisplayName().equals(name)) {
                 return i;
             }
@@ -202,23 +195,20 @@ public class NoteManager {
         return recordDs;
     }
 
-    FolderDataset getFolderDataset() {
-        if (folderDs != null) {
-            return folderDs;
+    FileDataset<? extends FileDataset.FileEntity> getDataset(int type) {
+        FileDataset ds = noteDsArray.get(type);
+        if (ds != null) {
+            return ds;
         }
 
-        folderDs = new FolderDataset();
-
-        return folderDs;
-    }
-
-    NoteDataset getNoteDataset() {
-        if (noteDs != null) {
-            return noteDs;
+        if (type == TYPE_FOLDER) {
+            ds = new FolderDataset();
+        } else {
+            ds = new NoteDataset();
         }
 
-        noteDs = new NoteDataset();
+        noteDsArray.put(type, ds);
 
-        return noteDs;
+        return ds;
     }
 }

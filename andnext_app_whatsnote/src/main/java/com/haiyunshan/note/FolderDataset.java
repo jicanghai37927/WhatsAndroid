@@ -1,13 +1,11 @@
 package com.haiyunshan.note;
 
-import club.andnext.dataset.BaseDataset;
-
-public class FolderDataset extends BaseDataset<FolderDataset.FolderEntity> {
+public class FolderDataset extends FileDataset<FolderDataset.FolderEntity> {
 
     /**
      *
      */
-    public static class FolderEntity extends FileEntity {
+    public static class FolderEntity extends FileDataset.FileEntity {
 
         public FolderEntity(String id) {
             super(id);
