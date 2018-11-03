@@ -48,10 +48,10 @@ public class SimpleDragDemoFragment extends BaseSimpleRVDemoFragment {
     }
 
     protected BridgeAdapter createAdapter() {
-        this.adapter = new BridgeAdapter(getActivity(), new BridgeAdapterProvider<PiliDataset.PiliEntity>() {
+        this.adapter = new BridgeAdapter(getActivity(), new BridgeAdapterProvider<PiliDataset.PiliEntry>() {
 
             @Override
-            public PiliDataset.PiliEntity get(int position) {
+            public PiliDataset.PiliEntry get(int position) {
                 return dataset.get(position);
             }
 
@@ -61,7 +61,7 @@ public class SimpleDragDemoFragment extends BaseSimpleRVDemoFragment {
             }
         });
 
-        adapter.bind(PiliDataset.PiliEntity.class,
+        adapter.bind(PiliDataset.PiliEntry.class,
                 new BridgeBuilder(DemoViewHolder.class, DemoViewHolder.LAYOUT_RES_ID, this));
 
         return adapter;
@@ -70,7 +70,7 @@ public class SimpleDragDemoFragment extends BaseSimpleRVDemoFragment {
     /**
      *
      */
-    private static class DemoViewHolder extends BridgeHolder<PiliDataset.PiliEntity> implements View.OnClickListener, ItemDragHelper.Adapter, MarginDividerDecoration.Adapter {
+    private static class DemoViewHolder extends BridgeHolder<PiliDataset.PiliEntry> implements View.OnClickListener, ItemDragHelper.Adapter, MarginDividerDecoration.Adapter {
 
         static final int LAYOUT_RES_ID = R.layout.layout_pili_simple_drag_list_item;
 
@@ -113,7 +113,7 @@ public class SimpleDragDemoFragment extends BaseSimpleRVDemoFragment {
         }
 
         @Override
-        public void onBind(PiliDataset.PiliEntity item, int position) {
+        public void onBind(PiliDataset.PiliEntry item, int position) {
 
             nameView.setText(item.getName());
             poemView.setText(item.getPoem());
@@ -138,7 +138,7 @@ public class SimpleDragDemoFragment extends BaseSimpleRVDemoFragment {
 
         @Override
         public boolean onMove(ItemDragHelper helper, int from, int to) {
-            PiliDataset.PiliEntity entity = parent.dataset.remove(from);
+            PiliDataset.PiliEntry entity = parent.dataset.remove(from);
             parent.dataset.add(to, entity);
 
             parent.adapter.notifyItemMoved(from, to);
@@ -158,7 +158,7 @@ public class SimpleDragDemoFragment extends BaseSimpleRVDemoFragment {
 
         void click() {
             int position = this.getAdapterPosition();
-            PiliDataset.PiliEntity entity = parent.dataset.get(position);
+            PiliDataset.PiliEntry entity = parent.dataset.get(position);
 
             Snackbar.make(itemView, entity.getPoem(), Snackbar.LENGTH_LONG).show();
 

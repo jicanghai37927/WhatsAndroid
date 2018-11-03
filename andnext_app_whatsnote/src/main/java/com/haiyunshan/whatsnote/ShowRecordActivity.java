@@ -6,13 +6,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import com.haiyunshan.whatsnote.note.FolderFragment;
+import com.haiyunshan.whatsnote.record.ShowRecordFragment;
 
-public class FolderActivity extends AppCompatActivity {
+public class ShowRecordActivity extends AppCompatActivity {
 
     public static final void start(Activity context, String parent) {
-        Intent intent = new Intent(context, FolderActivity.class);
-        intent.putExtra("parent", parent);
+        Intent intent = new Intent(context, ShowRecordActivity.class);
+        intent.putExtra(ShowRecordFragment.KEY_PARENT, parent);
 
         context.startActivity(intent);
     }
@@ -25,7 +25,7 @@ public class FolderActivity extends AppCompatActivity {
         Bundle args = intent.getExtras();
         args = (args == null)? new Bundle(): args;
 
-        FolderFragment f = new FolderFragment();
+        ShowRecordFragment f = new ShowRecordFragment();
         f.setArguments(args);
 
         FragmentManager fm = getSupportFragmentManager();

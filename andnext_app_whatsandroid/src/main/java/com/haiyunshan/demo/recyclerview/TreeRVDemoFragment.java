@@ -98,7 +98,7 @@ public class TreeRVDemoFragment extends Fragment {
                 }
             });
 
-            adapter.bind(AreaDataset.AreaEntity.class,
+            adapter.bind(AreaDataset.AreaEntry.class,
                     new BridgeBuilder(TreeDemoViewHolder.class, TreeDemoViewHolder.LAYOUT_RES_ID, this));
             adapter.bind(FolderHeader.class,
                     new BridgeBuilder(FolderViewHolder.class, FolderViewHolder.LAYOUT_RES_ID, this));
@@ -135,14 +135,14 @@ public class TreeRVDemoFragment extends Fragment {
 
     }
 
-    void buildTree(TreeList tree, AreaDataset ds, AreaDataset.AreaEntity parent) {
-        List<AreaDataset.AreaEntity> list = ds.getChildren(parent == null? "": parent.getId(), null);
+    void buildTree(TreeList tree, AreaDataset ds, AreaDataset.AreaEntry parent) {
+        List<AreaDataset.AreaEntry> list = ds.getChildren(parent == null? "": parent.getId(), null);
 
-        for (AreaDataset.AreaEntity e : list) {
+        for (AreaDataset.AreaEntry e : list) {
             tree.add(parent, e);
         }
 
-        for (AreaDataset.AreaEntity e : list) {
+        for (AreaDataset.AreaEntry e : list) {
             this.buildTree(tree, ds, e);
         }
     }
@@ -192,14 +192,14 @@ public class TreeRVDemoFragment extends Fragment {
             String parent = "";
             String name = "新建文件夹 " + (count + 1);
 
-            this.parent.treeList.add(null, new AreaDataset.AreaEntity(id, parent, name));
+            this.parent.treeList.add(null, new AreaDataset.AreaEntry(id, parent, name));
         }
     }
 
     /**
      *
      */
-    private static class TreeDemoViewHolder extends SwipeViewHolder<AreaDataset.AreaEntity> implements View.OnClickListener {
+    private static class TreeDemoViewHolder extends SwipeViewHolder<AreaDataset.AreaEntry> implements View.OnClickListener {
 
         static final int LAYOUT_RES_ID = R.layout.layout_area_tree_list_item;
 
@@ -259,7 +259,7 @@ public class TreeRVDemoFragment extends Fragment {
         }
 
         @Override
-        public void onBind(AreaDataset.AreaEntity item, int position) {
+        public void onBind(AreaDataset.AreaEntry item, int position) {
             {
                 nameView.setText(item.getName());
 
@@ -307,7 +307,7 @@ public class TreeRVDemoFragment extends Fragment {
         }
 
         void click() {
-            AreaDataset.AreaEntity item = this.getEntity();
+            AreaDataset.AreaEntry item = this.getEntity();
             if (parent.treeList.isLeaf(item)) {
 
             } else {
@@ -322,38 +322,38 @@ public class TreeRVDemoFragment extends Fragment {
         }
 
         void delete() {
-            AreaDataset.AreaEntity entity = getEntity();
+            AreaDataset.AreaEntry entity = getEntity();
             parent.treeList.remove(entity);
         }
 
         void folder() {
-            AreaDataset.AreaEntity entity = getEntity();
+            AreaDataset.AreaEntry entity = getEntity();
 
             String name = entity.getName() + " " + (parent.treeList.getChildCount(entity) + 1);
             String parent = entity.getId();
             String id = UUIDUtils.next();
 
-            AreaDataset.AreaEntity child = new AreaDataset.AreaEntity(id, parent, name);
+            AreaDataset.AreaEntry child = new AreaDataset.AreaEntry(id, parent, name);
             this.parent.treeList.add(entity, child);
 
             this.parent.treeList.setExpand(entity, true);
         }
 
-        AreaDataset.AreaEntity getEntity() {
+        AreaDataset.AreaEntry getEntity() {
             int position = this.getAdapterPosition();
             if (position < 0) {
                 return null;
             }
 
             Object obj = parent.adapter.get(position);
-            AreaDataset.AreaEntity item = (AreaDataset.AreaEntity)(obj);
+            AreaDataset.AreaEntry item = (AreaDataset.AreaEntry)(obj);
 
             return item;
         }
 
         @Override
         public float getTranslation(MarginDividerDecoration decoration) {
-            AreaDataset.AreaEntity item = this.getEntity();
+            AreaDataset.AreaEntry item = this.getEntity();
 
             int level = parent.treeList.getLevel(item);
             level = (level < 0)? 0: level;

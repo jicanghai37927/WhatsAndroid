@@ -13,19 +13,27 @@
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
         <activity android:name=".MainActivity">
+        </activity>
+        <activity android:name=".DemoActivity">
+        </activity>
+        <activity android:name=".DemoFragmentActivity">
+        </activity>
+        <activity android:name="com.haiyunshan.test.hierarchy.TestViewHierarchyActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".DemoActivity">
+        <activity android:name=".ProcessTextActivity"
+                  android:label="文本处理">
+            <intent-filter>
+                <action android:name="android.intent.action.PROCESS_TEXT" />
 
-        </activity>
-        <activity android:name=".DemoFragmentActivity">
-        </activity>
-        <activity android:name="com.haiyunshan.test.hierarchy.TestViewHierarchyActivity">
+                <category android:name="android.intent.category.DEFAULT" />
 
+                <data android:mimeType="text/plain" />
+            </intent-filter>
         </activity>
     </application>
 

@@ -9,7 +9,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import club.andnext.utils.GsonUtils;
 import com.haiyunshan.preview.ExtensionDataset;
-import com.haiyunshan.preview.PreviewEntity;
+import com.haiyunshan.preview.PreviewMessage;
 import com.haiyunshan.whatsnote.preview.BasePreviewFragment;
 import com.haiyunshan.whatsnote.preview.PlainTextPreviewFragment;
 
@@ -31,7 +31,7 @@ public class PreviewActivity extends AppCompatActivity {
         BasePreviewFragment f = null;
 
         Intent intent = this.getIntent();
-        PreviewEntity entity = PreviewEntity.create(this, intent);
+        PreviewMessage entity = PreviewMessage.create(this, intent);
         this.setTitle(entity.getDisplayName());
 
         if (TextUtils.isEmpty(entity.getUri())) {
@@ -87,14 +87,14 @@ public class PreviewActivity extends AppCompatActivity {
         return f;
     }
 
-    String getFragment(PreviewEntity entity) {
+    String getFragment(PreviewMessage entity) {
 
         String fragment = PlainTextPreviewFragment.class.getSimpleName();
 
         {
             String ext = entity.getExtension();
             ext = ext.toLowerCase();
-            ExtensionDataset.ExtensionEntity e = null;
+            ExtensionDataset.ExtensionEntry e = null;
             if (extensionDataset != null) {
                 e = extensionDataset.accept(ext);
             }

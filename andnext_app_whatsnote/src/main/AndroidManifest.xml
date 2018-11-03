@@ -16,6 +16,7 @@
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
+
         <provider
                 android:name="androidx.core.content.FileProvider"
                 android:authorities="com.haiyunshan.whatsnote.fileprovider"
@@ -25,6 +26,12 @@
                     android:name="android.support.FILE_PROVIDER_PATHS"
                     android:resource="@xml/file_paths"/>
         </provider>
+
+        <provider
+                android:name="com.haiyunshan.extract.ExtractProvider"
+                android:authorities="com.haiyunshan.whatsnote.extractprovider"
+                android:exported="false"
+                />
 
         <activity android:name=".MainActivity">
             <intent-filter>
@@ -62,7 +69,24 @@
                 <data android:mimeType="*/*"/>
             </intent-filter>
         </activity>
-        <activity android:name=".FolderActivity">
+        <activity android:name=".ShowRecordActivity">
+        </activity>
+        <activity android:name=".test.TestActivity">
+        </activity>
+        <activity
+                android:name=".PackActivity"
+                android:windowSoftInputMode="adjustResize|stateAlwaysVisible">
+        </activity>
+        <activity android:name=".ExtractActivity"
+                android:label="摘抄"
+                android:theme="@style/AppTheme.Transparent">
+            <intent-filter>
+                <action android:name="android.intent.action.PROCESS_TEXT" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:mimeType="text/plain" />
+            </intent-filter>
         </activity>
     </application>
 

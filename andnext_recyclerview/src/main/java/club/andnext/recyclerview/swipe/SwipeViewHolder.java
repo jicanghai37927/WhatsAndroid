@@ -29,10 +29,14 @@ public abstract class SwipeViewHolder<T> extends BridgeHolder<T> implements Swip
     }
 
     @Override
-    public abstract void onActionBegin(SwipeActionHelper helper, int action);
+    public void onActionBegin(SwipeActionHelper helper, int action) {
+
+    }
 
     @Override
-    public abstract void onActionEnd(SwipeActionHelper helper, int action);
+    public void onActionEnd(SwipeActionHelper helper, int action) {
+
+    }
 
     protected void setSwipeHolder(SwipeHolder holder) {
         this.swipeHolder = holder;

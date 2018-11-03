@@ -20,7 +20,7 @@ import androidx.core.widget.NestedScrollView;
 import club.andnext.overscroll.HorizontalOverScrollHelper;
 import club.andnext.overscroll.OverScrollHelper;
 import club.andnext.utils.buffer.IntBuffer;
-import com.haiyunshan.preview.PreviewEntity;
+import com.haiyunshan.preview.PreviewMessage;
 import com.haiyunshan.whatsnote.R;
 import prettify.PrettifyParser;
 import prettify.parser.Prettify;
@@ -75,7 +75,7 @@ public class CodePreviewFragment extends BasePreviewFragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        PreviewEntity entity = this.getEntity();
+        PreviewMessage entity = this.getEntity();
         this.codePage = new CodePage(this, entity);
 
         {
@@ -115,10 +115,10 @@ public class CodePreviewFragment extends BasePreviewFragment {
         SpannableString code;
         IntBuffer lines;
 
-        PreviewEntity entity;
+        PreviewMessage entity;
         CodePreviewFragment parent;
 
-        public CodePage(CodePreviewFragment parent, PreviewEntity entity) {
+        public CodePage(CodePreviewFragment parent, PreviewMessage entity) {
             this.parent = parent;
             this.entity = entity;
 

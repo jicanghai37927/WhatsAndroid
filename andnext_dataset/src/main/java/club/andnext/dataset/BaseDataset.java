@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
 
-public class BaseDataset<E extends BaseEntity> {
+public class BaseDataset<E extends BaseEntry> {
 
     @SerializedName("list")
     protected ArrayList<E> list;
@@ -13,7 +13,7 @@ public class BaseDataset<E extends BaseEntity> {
         this.list = new ArrayList<>();
     }
 
-    public E obtain(String id) {
+    public E get(String id) {
         int index = this.indexOf(id);
         if (index >= 0) {
             return list.get(index);
@@ -30,12 +30,12 @@ public class BaseDataset<E extends BaseEntity> {
         return list.get(index);
     }
 
-    public void add(int index, E entity) {
-        list.add(index, entity);
+    public void add(int index, E entry) {
+        list.add(index, entry);
     }
 
-    public boolean add(E entity) {
-        return list.add(entity);
+    public boolean add(E entry) {
+        return list.add(entry);
     }
 
     public E remove(int index) {

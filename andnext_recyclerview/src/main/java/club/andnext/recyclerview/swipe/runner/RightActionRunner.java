@@ -13,7 +13,17 @@ public class RightActionRunner extends SwipeRunner {
     ArrayList<ViewGroup> actionList;
 
     public RightActionRunner() {
+        this(null);
+    }
+
+    public RightActionRunner(View... buttons) {
         super(DIRECTION_RTL);
+
+        if (buttons != null) {
+            for (View v : buttons) {
+                this.add(v);
+            }
+        }
     }
 
     @Override
@@ -27,6 +37,10 @@ public class RightActionRunner extends SwipeRunner {
 
     @Override
     public void add(View view) {
+        if (view.getVisibility() == View.GONE) {
+            return;
+        }
+
         if (view instanceof ViewGroup) {
             ViewGroup group = (ViewGroup)view;
             if (group.getChildCount() > 0) {

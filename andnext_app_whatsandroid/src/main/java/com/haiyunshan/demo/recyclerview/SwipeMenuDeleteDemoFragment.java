@@ -30,10 +30,10 @@ public class SwipeMenuDeleteDemoFragment extends BaseSwipeRVDemoFragment {
     }
 
     protected BridgeAdapter createAdapter() {
-        this.adapter = new BridgeAdapter(getActivity(), new BridgeAdapterProvider<PiliDataset.PiliEntity>() {
+        this.adapter = new BridgeAdapter(getActivity(), new BridgeAdapterProvider<PiliDataset.PiliEntry>() {
 
             @Override
-            public PiliDataset.PiliEntity get(int position) {
+            public PiliDataset.PiliEntry get(int position) {
                 return dataset.get(position);
             }
 
@@ -43,7 +43,7 @@ public class SwipeMenuDeleteDemoFragment extends BaseSwipeRVDemoFragment {
             }
         });
 
-        adapter.bind(PiliDataset.PiliEntity.class,
+        adapter.bind(PiliDataset.PiliEntry.class,
                 new BridgeBuilder(DemoViewHolder.class, DemoViewHolder.LAYOUT_RES_ID, this));
 
         return adapter;
@@ -52,7 +52,7 @@ public class SwipeMenuDeleteDemoFragment extends BaseSwipeRVDemoFragment {
     /**
      *
      */
-    private static class DemoViewHolder extends SwipeViewHolder<PiliDataset.PiliEntity> implements View.OnClickListener {
+    private static class DemoViewHolder extends SwipeViewHolder<PiliDataset.PiliEntry> implements View.OnClickListener {
 
         static final int LAYOUT_RES_ID = R.layout.layout_pili_swipe_menu_delete_list_item;
 
@@ -113,7 +113,7 @@ public class SwipeMenuDeleteDemoFragment extends BaseSwipeRVDemoFragment {
         }
 
         @Override
-        public void onBind(PiliDataset.PiliEntity item, int position) {
+        public void onBind(PiliDataset.PiliEntry item, int position) {
             super.onBind(item, position);
 
             nameView.setText(item.getName());
@@ -145,7 +145,7 @@ public class SwipeMenuDeleteDemoFragment extends BaseSwipeRVDemoFragment {
 
         void click() {
             int position = this.getAdapterPosition();
-            PiliDataset.PiliEntity entity = parent.dataset.get(position);
+            PiliDataset.PiliEntry entity = parent.dataset.get(position);
 
             Snackbar.make(itemView, entity.getPoem(), Snackbar.LENGTH_LONG).show();
 

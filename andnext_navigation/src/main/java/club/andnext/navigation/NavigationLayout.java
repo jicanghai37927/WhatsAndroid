@@ -32,6 +32,7 @@ public class NavigationLayout extends FrameLayout {
     FrameLayout targetView;
 
     String activityHash = "";
+    boolean edgeTouchable = true;
 
     OnNavigationListener onNavigationListener;
 
@@ -113,6 +114,10 @@ public class NavigationLayout extends FrameLayout {
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
+        if (!this.isEnabled()) {
+            return super.onInterceptTouchEvent(ev);
+        }
+
         if (TextUtils.isEmpty(activityHash)) {
             return super.onInterceptTouchEvent(ev);
         }
@@ -127,7 +132,7 @@ public class NavigationLayout extends FrameLayout {
 
         boolean result = viewDragHelper.shouldInterceptTouchEvent(ev);
 
-        {
+        if (!result && !edgeTouchable) {
             int action = ev.getActionMasked();
             if (action == MotionEvent.ACTION_DOWN) {
                 if (ev.getX() < viewDragHelper.getEdgeSize()) {
@@ -141,6 +146,10 @@ public class NavigationLayout extends FrameLayout {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+        if (!this.isEnabled()) {
+            return super.onTouchEvent(event);
+        }
+
         if (TextUtils.isEmpty(this.activityHash)) {
             return super.onTouchEvent(event);
         }
@@ -167,6 +176,10 @@ public class NavigationLayout extends FrameLayout {
             this.postInvalidateOnAnimation();
         }
 
+    }
+
+    public void setEdgeTouchable(boolean value) {
+        this.edgeTouchable = value;
     }
 
     String getActivityHash() {

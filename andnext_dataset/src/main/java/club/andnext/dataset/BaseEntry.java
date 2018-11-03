@@ -2,7 +2,7 @@ package club.andnext.dataset;
 
 import com.google.gson.annotations.SerializedName;
 
-public class BaseEntity {
+public class BaseEntry {
 
     @SerializedName("id")
     protected String id;
@@ -16,7 +16,7 @@ public class BaseEntity {
     @SerializedName("deleted")
     protected long deleted;
 
-    public BaseEntity() {
+    public BaseEntry() {
         this.created = System.currentTimeMillis();
         this.modified = this.created;
     }
@@ -31,6 +31,7 @@ public class BaseEntity {
 
     public void setCreated(long created) {
         this.created = created;
+        this.modified = created;
     }
 
     public long getModified() {

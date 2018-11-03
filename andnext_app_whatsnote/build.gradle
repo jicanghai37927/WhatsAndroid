@@ -1,13 +1,21 @@
 apply plugin: 'com.android.application'
 
 android {
+    signingConfigs {
+        debug {
+            keyAlias 'androiddebugkey'
+            keyPassword 'android'
+            storeFile file('/Users/elevennnn/Documents/GitNext/WhatsAndroid/andnext_debug.keystore')
+            storePassword 'android'
+        }
+    }
     compileSdkVersion 28
     defaultConfig {
         applicationId "com.haiyunshan.whatsnote"
         minSdkVersion 22
         targetSdkVersion 28
-        versionCode 1002
-        versionName '1.0.2'
+        versionCode 1004
+        versionName '1.0.4'
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
@@ -44,4 +52,5 @@ dependencies {
     implementation project(':andnext_syntaxprettify')
     implementation project(':andnext_java')
     implementation project(':andnext_widget')
+    implementation 'org.ocpsoft.prettytime:prettytime:4.0.1.Final'
 }

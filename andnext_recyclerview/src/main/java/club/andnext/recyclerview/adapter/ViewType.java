@@ -1,5 +1,8 @@
 package club.andnext.recyclerview.adapter;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 public class ViewType {
 
     static final int INTERVAL = 1000;
@@ -7,12 +10,22 @@ public class ViewType {
     Class<?> clazz;
     int value;
 
-    ViewHolderBuilder[] array;
+    ArrayList<ViewHolderBuilder> list;
 
     ViewType(Class<?> clz, int value, ViewHolderBuilder... builders) {
         this.clazz = clz;
         this.value = value;
-        this.array = builders;
+        this.list = new ArrayList<>(Arrays.asList(builders));
+    }
+
+    void add(ViewHolderBuilder... builders) {
+        for (ViewHolderBuilder b : builders) {
+            if (list.indexOf(b) >= 0) {
+                continue;
+            }
+
+            list.add(b);
+        }
     }
 
     ViewType accept(int value) {
@@ -27,10 +40,10 @@ public class ViewType {
     }
 
     int index(Object obj, BuilderFilter filter) {
-        ViewHolderBuilder d = filter.accept(obj, this.array);
+        ViewHolderBuilder d = filter.accept(obj, this.list);
         if (d != null) {
-            for (int i = 0; i < array.length; i++) {
-                if (d == array[i]) {
+            for (int i = 0, size = list.size(); i < size; i++) {
+                if (d == list.get(i)) {
                     return this.value + i;
                 }
             }
@@ -41,11 +54,11 @@ public class ViewType {
 
     ViewHolderBuilder get(int value) {
         int index = value - this.value;
-        if (index < 0 || index >= array.length) {
+        if (index < 0 || index >= list.size()) {
             return null;
         }
 
-        return array[index];
+        return list.get(index);
     }
 
 }

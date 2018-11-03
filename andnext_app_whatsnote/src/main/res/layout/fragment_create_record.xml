@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              tools:context=".record.CreateRecordFragment">
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+        <Button
+                android:id="@+id/btn_cancel"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="取消"/>
+        <Button
+                android:id="@+id/btn_ok"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="完成"/>
+    </LinearLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/text_input_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edit_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="新建文件夹"
+                android:singleLine="true"
+                android:imeOptions="flagNoExtractUi">
+            <requestFocus/>
+        </com.google.android.material.textfield.TextInputEditText>
+    </com.google.android.material.textfield.TextInputLayout>
+
+</LinearLayout>

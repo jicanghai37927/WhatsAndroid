@@ -3,16 +3,18 @@ package club.andnext.recyclerview.bridge;
 import club.andnext.recyclerview.adapter.BuilderFilter;
 import club.andnext.recyclerview.adapter.ViewHolderBuilder;
 
+import java.util.List;
+
 public abstract class BridgeFilter<T> extends BuilderFilter<T> {
 
     @Override
-    public ViewHolderBuilder accept(T obj, ViewHolderBuilder[] array) {
+    public ViewHolderBuilder accept(T obj, List<ViewHolderBuilder> list) {
         Class<? extends BridgeHolder> tag = this.getHolder(obj);
         if (tag == null) {
             return null;
         }
 
-        for (ViewHolderBuilder d : array) {
+        for (ViewHolderBuilder d : list) {
             BridgeBuilder delegate = (BridgeBuilder)d;
             Class<? extends BridgeHolder> holder = delegate.holderClazz;
 

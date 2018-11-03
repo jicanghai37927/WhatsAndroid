@@ -1,10 +1,8 @@
 package com.haiyunshan.whatsnote.preview;
 
 
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.pm.*;
-import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.widget.TextView;
@@ -16,7 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import club.andnext.utils.PackageUtils;
-import com.haiyunshan.preview.PreviewEntity;
+import com.haiyunshan.preview.PreviewMessage;
 import com.haiyunshan.whatsnote.R;
 
 import java.io.File;
@@ -36,7 +34,7 @@ public class PackagePreviewFragment extends BasePreviewFragment implements View.
 
     @Override
     public boolean canPreview(Context context) {
-        PreviewEntity data = this.getEntity();
+        PreviewMessage data = this.getEntity();
         String path = data.getFilePath(context);
         if (TextUtils.isEmpty(path)) {
             return false;
@@ -69,7 +67,7 @@ public class PackagePreviewFragment extends BasePreviewFragment implements View.
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        PreviewEntity entity = this.getEntity();
+        PreviewMessage entity = this.getEntity();
         CharSequence text = this.getPackageInfo(getActivity(), entity.getFilePath(getActivity()));
 
         textView.setText(text);

@@ -1,15 +1,15 @@
 package com.haiyunshan.dataset;
 
 import club.andnext.dataset.BaseDataset;
-import club.andnext.dataset.BaseEntity;
+import club.andnext.dataset.BaseEntry;
 import com.google.gson.annotations.SerializedName;
 
-public class PiliDataset extends BaseDataset<PiliDataset.PiliEntity> {
+public class PiliDataset extends BaseDataset<PiliDataset.PiliEntry> {
 
     /**
      *
      */
-    public static class PiliEntity extends BaseEntity {
+    public static class PiliEntry extends BaseEntry {
 
         @SerializedName("name")
         String name;

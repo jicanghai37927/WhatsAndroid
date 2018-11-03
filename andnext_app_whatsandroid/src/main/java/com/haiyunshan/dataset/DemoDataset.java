@@ -1,10 +1,10 @@
 package com.haiyunshan.dataset;
 
 import club.andnext.dataset.BaseDataset;
-import club.andnext.dataset.BaseEntity;
+import club.andnext.dataset.BaseEntry;
 import com.google.gson.annotations.SerializedName;
 
-public class DemoDataset extends BaseDataset<DemoDataset.DemoEntity> {
+public class DemoDataset extends BaseDataset<DemoDataset.DemoEntry> {
 
     @SerializedName("name")
     String name;
@@ -13,7 +13,7 @@ public class DemoDataset extends BaseDataset<DemoDataset.DemoEntity> {
         return name;
     }
 
-    public static class DemoEntity extends BaseEntity {
+    public static class DemoEntry extends BaseEntry {
 
         @SerializedName("name")
         String name;

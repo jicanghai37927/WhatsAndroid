@@ -1,26 +1,26 @@
 package com.haiyunshan.dataset;
 
 import club.andnext.dataset.BaseDataset;
-import club.andnext.dataset.BaseEntity;
+import club.andnext.dataset.BaseEntry;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class AreaDataset extends BaseDataset<AreaDataset.AreaEntity> {
+public class AreaDataset extends BaseDataset<AreaDataset.AreaEntry> {
 
-    public List<AreaEntity> getChildren(String parent) {
-        List<AreaEntity> list = new ArrayList<>();
+    public List<AreaEntry> getChildren(String parent) {
+        List<AreaEntry> list = new ArrayList<>();
         list = getChildren(parent, list);
 
         return list;
     }
 
-    public List<AreaEntity> getChildren(String parent, List<AreaEntity> list) {
-        list = (list == null)? new ArrayList<AreaEntity>(): list;
+    public List<AreaEntry> getChildren(String parent, List<AreaEntry> list) {
+        list = (list == null)? new ArrayList<AreaEntry>(): list;
         list.clear();
 
-        for (AreaEntity e: this.list) {
+        for (AreaEntry e: this.list) {
             if (e.getParent().equalsIgnoreCase(parent)) {
                 list.add(e);
             }
@@ -29,7 +29,7 @@ public class AreaDataset extends BaseDataset<AreaDataset.AreaEntity> {
         return list;
     }
 
-    public static class AreaEntity extends BaseEntity {
+    public static class AreaEntry extends BaseEntry {
 
         @SerializedName("parent")
         String parent;
@@ -37,7 +37,7 @@ public class AreaDataset extends BaseDataset<AreaDataset.AreaEntity> {
         @SerializedName("name")
         String name;
 
-        public AreaEntity(String id, String parent, String name) {
+        public AreaEntry(String id, String parent, String name) {
             this.id = id;
             this.parent = parent;
             this.name = name;

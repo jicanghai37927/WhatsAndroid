@@ -8,17 +8,17 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import com.haiyunshan.preview.PreviewEntity;
+import com.haiyunshan.preview.PreviewMessage;
 
 public abstract class BasePreviewFragment extends Fragment {
 
-    PreviewEntity entity;
+    PreviewMessage entity;
 
     /**
      *
      * @param entity
      */
-    public void setArguments(PreviewEntity entity) {
+    public void setArguments(PreviewMessage entity) {
         Bundle args = entity.toBundle();
         this.setArguments(args);
     }
@@ -35,9 +35,9 @@ public abstract class BasePreviewFragment extends Fragment {
      *
      * @return
      */
-    PreviewEntity getEntity() {
+    PreviewMessage getEntity() {
         if (entity == null) {
-            entity = PreviewEntity.create(this.getArguments());
+            entity = PreviewMessage.create(this.getArguments());
         }
 
         return entity;

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+import com.haiyunshan.record.RecordEntity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -15,7 +16,23 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.btn_folder).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FolderActivity.start((Activity)(v.getContext()), "");
+                ShowRecordActivity.start((Activity)(v.getContext()), RecordEntity.ROOT_NOTE);
+            }
+        });
+
+        findViewById(R.id.btn_extract).setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                ShowRecordActivity.start((Activity)(v.getContext()), RecordEntity.ROOT_EXTRACT);
+            }
+        });
+
+        findViewById(R.id.btn_trash).setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                ShowRecordActivity.start((Activity)(v.getContext()), RecordEntity.ROOT_TRASH);
             }
         });
     }

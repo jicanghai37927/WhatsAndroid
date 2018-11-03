@@ -12,9 +12,9 @@ import club.andnext.utils.ContentUtils;
 import java.io.File;
 import java.io.UnsupportedEncodingException;
 
-public class PreviewEntity {
+public class PreviewMessage {
 
-    static final String TAG = PreviewEntity.class.getSimpleName();
+    static final String TAG = PreviewMessage.class.getSimpleName();
 
     String uri;
     long size;
@@ -23,7 +23,7 @@ public class PreviewEntity {
     String extraTitle;
     String extraText;
 
-    PreviewEntity(String uri, long size, String displayName) {
+    PreviewMessage(String uri, long size, String displayName) {
         this.uri = uri == null? "": uri;
         this.size = size;
         this.displayName = displayName == null? "": displayName;
@@ -79,7 +79,7 @@ public class PreviewEntity {
     }
 
     public String getText(Context context) {
-        PreviewEntity entity = this;
+        PreviewMessage entity = this;
         ByteBuffer stream = getBytes(context);
         if (stream == null || stream.size() == 0) {
             return entity.getExtraText();
@@ -100,7 +100,7 @@ public class PreviewEntity {
     }
 
     public ByteBuffer getBytes(Context context) {
-        PreviewEntity entity = this;
+        PreviewMessage entity = this;
 
         ByteBuffer buf = null;
 
@@ -120,12 +120,12 @@ public class PreviewEntity {
         return buf;
     }
 
-    public static final PreviewEntity create(Bundle bundle) {
+    public static final PreviewMessage create(Bundle bundle) {
         String uri = bundle.getString("uri");
         long size = bundle.getLong("size");
         String displayName = bundle.getString("displayName");
 
-        PreviewEntity entity = new PreviewEntity(uri, size, displayName);
+        PreviewMessage entity = new PreviewMessage(uri, size, displayName);
         {
             entity.extraTitle = bundle.getString(Intent.EXTRA_TITLE, "");
             entity.extraText = bundle.getString(Intent.EXTRA_TEXT, "");
@@ -134,7 +134,7 @@ public class PreviewEntity {
         return entity;
     }
 
-    public static final PreviewEntity create(Context context, Intent intent) {
+    public static final PreviewMessage create(Context context, Intent intent) {
 
         String uri = null;
         long size = 0;
@@ -159,7 +159,7 @@ public class PreviewEntity {
             }
         }
 
-        PreviewEntity entity = new PreviewEntity(uri, size, displayName);
+        PreviewMessage entity = new PreviewMessage(uri, size, displayName);
 
         Bundle bundle = intent.getExtras();
         if (bundle != null) {

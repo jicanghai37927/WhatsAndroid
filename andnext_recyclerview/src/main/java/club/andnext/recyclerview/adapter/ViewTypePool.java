@@ -18,11 +18,11 @@ public class ViewTypePool {
     }
 
     void bind(Class<?> clazz, ViewHolderBuilder... builders) {
+
         if (clazzMap.get(clazz) != null) {
             ViewType type = clazzMap.get(clazz);
 
-            clazzMap.put(clazz, new ViewType(clazz, type.value, builders));
-
+            type.add(builders);
         } else {
 
             clazzMap.put(clazz, new ViewType(clazz, type, builders));
@@ -46,7 +46,7 @@ public class ViewTypePool {
         }
 
         viewType = type.value;
-        if (type.array.length > 1) {
+        if (type.list.size() > 1) {
             BuilderFilter filter = filterMap.get(clazz);
             if (filter != null) {
                 viewType = type.index(obj, filter);

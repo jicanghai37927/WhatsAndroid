@@ -81,7 +81,7 @@ public class DemoActivity extends AppCompatActivity {
                 }
             });
 
-            adapter.bind(DemoDataset.DemoEntity.class,
+            adapter.bind(DemoDataset.DemoEntry.class,
                     new BridgeBuilder(DemoViewHolder.class, DemoViewHolder.LAYOUT_RES_ID, this));
         }
 
@@ -104,7 +104,7 @@ public class DemoActivity extends AppCompatActivity {
     /**
      *
      */
-    private static class DemoViewHolder extends BridgeHolder<DemoDataset.DemoEntity> implements View.OnClickListener {
+    private static class DemoViewHolder extends BridgeHolder<DemoDataset.DemoEntry> implements View.OnClickListener {
 
         static final int LAYOUT_RES_ID = R.layout.layout_demo_list_item;
 
@@ -137,7 +137,7 @@ public class DemoActivity extends AppCompatActivity {
         }
 
         @Override
-        public void onBind(DemoDataset.DemoEntity item, int position) {
+        public void onBind(DemoDataset.DemoEntry item, int position) {
             nameView.setText(item.getName());
             descView.setText(item.getDesc());
 
@@ -150,7 +150,7 @@ public class DemoActivity extends AppCompatActivity {
         @Override
         public void onClick(View v) {
             if (v == itemView) {
-                DemoDataset.DemoEntity entity = getEntity();
+                DemoDataset.DemoEntry entity = getEntity();
 
                 if (!TextUtils.isEmpty(entity.getTarget())) {
                     DemoActivity.start(parent, entity.getTarget());
@@ -163,13 +163,13 @@ public class DemoActivity extends AppCompatActivity {
                 }
 
             } else if (v == helpView) {
-                DemoDataset.DemoEntity entity = getEntity();
+                DemoDataset.DemoEntry entity = getEntity();
 
                 PackageUtils.openBrowser(parent, Uri.parse(entity.getHelp()));
             }
         }
 
-        boolean isHelpVisible(DemoDataset.DemoEntity entity) {
+        boolean isHelpVisible(DemoDataset.DemoEntry entity) {
             if (TextUtils.isEmpty(entity.getHelp())) {
                 return false;
             }
@@ -183,7 +183,7 @@ public class DemoActivity extends AppCompatActivity {
             return true;
         }
 
-        DemoDataset.DemoEntity getEntity() {
+        DemoDataset.DemoEntry getEntity() {
             return parent.dataset.get(getAdapterPosition());
         }
     }

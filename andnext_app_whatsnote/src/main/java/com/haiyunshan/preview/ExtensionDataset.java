@@ -2,17 +2,17 @@ package com.haiyunshan.preview;
 
 import android.text.TextUtils;
 import club.andnext.dataset.BaseDataset;
-import club.andnext.dataset.BaseEntity;
+import club.andnext.dataset.BaseEntry;
 import com.google.gson.annotations.SerializedName;
 
 /**
  *
  */
-public class ExtensionDataset extends BaseDataset<ExtensionDataset.ExtensionEntity> {
+public class ExtensionDataset extends BaseDataset<ExtensionDataset.ExtensionEntry> {
 
-    public ExtensionEntity accept(String ext) {
-        for (ExtensionEntity e : list) {
-            ExtensionEntity entity = e.accept(ext);
+    public ExtensionEntry accept(String ext) {
+        for (ExtensionEntry e : list) {
+            ExtensionEntry entity = e.accept(ext);
             if (entity != null) {
                 return entity;
             }
@@ -24,7 +24,7 @@ public class ExtensionDataset extends BaseDataset<ExtensionDataset.ExtensionEnti
     /**
      *
      */
-    public static class ExtensionEntity extends BaseEntity {
+    public static class ExtensionEntry extends BaseEntry {
 
         @SerializedName("name")
         String name;
@@ -39,7 +39,7 @@ public class ExtensionDataset extends BaseDataset<ExtensionDataset.ExtensionEnti
             return fragment;
         }
 
-        ExtensionEntity accept(String ext) {
+        ExtensionEntry accept(String ext) {
             if (extensions == null || extensions.length == 0) {
                 return this;
             }

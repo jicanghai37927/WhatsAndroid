@@ -18,8 +18,8 @@ android {
         applicationId "com.haiyunshan.whatsandroid"
         minSdkVersion 22
         targetSdkVersion 28
-        versionCode 1003
-        versionName '1.0.3'
+        versionCode 1004
+        versionName '1.0.4'
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         externalNativeBuild {
             cmake {
@@ -69,4 +69,5 @@ dependencies {
     implementation project(':andnext_syntaxprettify')
     implementation project(':andnext_overscroll')
     implementation project(':andnext_widget')
+    implementation 'me.kareluo.ui:popmenu:1.1.0'
 }

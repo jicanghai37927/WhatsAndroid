@@ -2,7 +2,10 @@ package club.andnext.utils;
 
 import android.content.Context;
 
+import android.util.Pair;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonDeserializer;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -11,6 +14,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.lang.reflect.Type;
 
 public class GsonUtils {
 
@@ -72,6 +76,10 @@ public class GsonUtils {
     }
 
     public static final <T> T fromJson(File file, Class<T> classOfT) {
+        return fromJson(file, classOfT, null);
+    }
+
+    public static final <T> T fromJson(File file, Class<T> classOfT, Pair<Type, JsonDeserializer>... typeAdapter) {
 
         if (!file.exists()) {
             return null;
@@ -81,7 +89,17 @@ public class GsonUtils {
             FileInputStream fis = new FileInputStream(file);
             InputStreamReader isr = new InputStreamReader(fis, "utf-8");
 
-            Gson gson = new Gson();
+            Gson gson;
+            if (typeAdapter != null) {
+                GsonBuilder builder = new GsonBuilder();
+                for (Pair<Type, JsonDeserializer> p : typeAdapter) {
+                    builder.registerTypeAdapter(p.first, p.second);
+                }
+                gson = builder.create();
+            } else {
+                gson = new Gson();
+            }
+
             T ds = gson.fromJson(isr, classOfT);
 
             isr.close();
@@ -94,5 +112,6 @@ public class GsonUtils {
 
         return null;
     }
+
 
 }
