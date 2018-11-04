@@ -18,10 +18,14 @@ import androidx.recyclerview.widget.RecyclerView;
  */
 public class EditTouchHelper implements RecyclerView.OnItemTouchListener {
 
+    public static final int FLAG_SCROLL = 0x01;
+    public static final int FLAG_BOTTOM = 0x01 << 2;
+
     boolean enable;
 
     TextView target;
     Rect rect;
+    int hideFlags = FLAG_BOTTOM;
 
     RecyclerView recyclerView;
 
@@ -44,12 +48,20 @@ public class EditTouchHelper implements RecyclerView.OnItemTouchListener {
         return enable;
     }
 
-    public void setEnable(boolean value) {
+    public EditTouchHelper setEnable(boolean value) {
         this.enable = value;
 
         if (!enable) {
             target = null;
         }
+
+        return this;
+    }
+
+    public EditTouchHelper setFlags(int hideFlags) {
+        this.hideFlags = hideFlags;
+
+        return this;
     }
 
     @Override
@@ -71,13 +83,28 @@ public class EditTouchHelper implements RecyclerView.OnItemTouchListener {
 
             case MotionEvent.ACTION_MOVE: {
 
-                boolean hide = (e.getY() > rv.getBottom());
+                int state = rv.getScrollState();
+                boolean hide = false;
+                while (true) {
+                    if ((hideFlags & FLAG_SCROLL) != 0) {
+                        hide = (state != RecyclerView.SCROLL_STATE_IDLE);
+                        if (hide) {
+                            break;
+                        }
+                    }
+
+                    if ((hideFlags & FLAG_BOTTOM) != 0) {
+                        hide = (e.getY() > rv.getBottom());
+                        if (hide) {
+                            break;
+                        }
+                    }
+
+                    break;
+                }
 
                 if (target != null) {
-
-                    int state = rv.getScrollState();
-                    if (hide || (state != RecyclerView.SCROLL_STATE_IDLE)) {
-
+                    if (hide) {
                         MotionEvent event = this.obtain(e);
                         event.setAction(MotionEvent.ACTION_CANCEL);
 
