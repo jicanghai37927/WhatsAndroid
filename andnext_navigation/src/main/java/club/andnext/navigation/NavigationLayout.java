@@ -57,7 +57,7 @@ public class NavigationLayout extends FrameLayout {
     void init(Context context) {
 
         {
-            this.viewDragHelper = ViewDragHelper.create(this, new DragCallback());
+            this.viewDragHelper = ViewDragHelper.create(this, 2.f, new DragCallback());
             viewDragHelper.setEdgeTrackingEnabled(ViewDragHelper.EDGE_LEFT);
         }
 
