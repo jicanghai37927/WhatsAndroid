@@ -20,6 +20,7 @@ import club.andnext.recyclerview.bridge.BridgeBuilder;
 import com.haiyunshan.article.Document;
 import com.haiyunshan.article.DocumentEntity;
 import com.haiyunshan.article.ParagraphEntity;
+import com.haiyunshan.record.RecentEntity;
 import com.haiyunshan.whatsnote.R;
 import club.andnext.recyclerview.helper.EditTouchHelper;
 
@@ -65,6 +66,10 @@ public class ComposeArticleFragment extends Fragment {
             Bundle args = this.getArguments();
             String id = args.getString(KEY_ID, "demo");
             this.document = Document.obtain(id);
+        }
+
+        {
+            RecentEntity.put(document.getId());
         }
 
         {

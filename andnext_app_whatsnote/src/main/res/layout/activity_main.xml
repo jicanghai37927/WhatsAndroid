@@ -9,6 +9,14 @@
         tools:context=".MainActivity">
 
     <Button
+            android:id="@+id/btn_recent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="最近项目"
+            />
+
+
+    <Button
             android:id="@+id/btn_folder"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

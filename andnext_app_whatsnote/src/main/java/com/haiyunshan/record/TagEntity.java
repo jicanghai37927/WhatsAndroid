@@ -153,4 +153,16 @@ public class TagEntity {
 
         return entity;
     }
+
+    static final TagEntity create(String id) {
+        RecordManager mgr = RecordManager.getInstance();
+        TagDataset ds = mgr.getTagDataset();
+        TagEntry entry = ds.get(id);
+        if (entry == null) {
+            return null;
+        }
+
+        TagEntity entity = new TagEntity(id, entry, mgr);
+        return entity;
+    }
 }

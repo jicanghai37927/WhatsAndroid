@@ -37,6 +37,8 @@ class RecordManager {
     FavoriteDataset favoriteDataset;
     FavoriteEntity favoriteEntity;
 
+    RecentDataset recentDataset;
+
     HashMap<Class<? extends BaseDataset>, File> fileMap;
 
     static RecordManager instance;
@@ -57,6 +59,8 @@ class RecordManager {
         fileMap.put(RecordDataset.class, new File(dir, "record_ds.json"));
         fileMap.put(TagDataset.class, new File(dir, "tag_ds.json"));
         fileMap.put(FavoriteDataset.class, new File(dir, "favorite_ds.json"));
+        fileMap.put(RecentDataset.class, new File(dir, "recent_ds.json"));
+
     }
 
     /**
@@ -235,25 +239,46 @@ class RecordManager {
         return favoriteDataset;
     }
 
+    RecentDataset getRecentDataset() {
+        if (recentDataset != null) {
+            return recentDataset;
+        }
+
+        recentDataset = createDataset(RecentDataset.class);
+
+        return recentDataset;
+    }
     void save(int flags) {
 
-        if (((flags & DS_RECORD) != 0)
-                && (recordDataset != null)) {
-            File file = fileMap.get(recordDataset.getClass());
-            GsonUtils.toJson(recordDataset, file);
+        if (((flags & DS_RECORD) != 0)) {
+            save(recordDataset);
         }
 
-        if (((flags & DS_FAVORITE) != 0)
-                && (favoriteDataset != null)) {
-            File file = fileMap.get(favoriteDataset.getClass());
-            GsonUtils.toJson(favoriteDataset, file);
+        if (((flags & DS_FAVORITE) != 0)) {
+            save(favoriteDataset);
         }
 
-        if (((flags & DS_TAG) != 0)
-                && (tagDataset != null)) {
-            File file = fileMap.get(tagDataset.getClass());
-            GsonUtils.toJson(tagDataset, file);
+        if (((flags & DS_TAG) != 0)) {
+            save(tagDataset);
         }
+
+        if (((flags & DS_RECENT) != 0)) {
+            save(recentDataset);
+        }
+    }
+
+    void save(BaseDataset dataset) {
+        if (dataset == null) {
+            return;
+        }
+
+        Class clz = dataset.getClass();
+        File file = fileMap.get(clz);
+        if (file == null) {
+            throw new IllegalArgumentException("cannot find file path for " + clz);
+        }
+
+        GsonUtils.toJson(dataset, file);
     }
 
     <T> T createDataset(Class<T> type) {

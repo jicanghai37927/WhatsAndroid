@@ -258,4 +258,5 @@ public class RecordEntity {
 
         return entity;
     }
+
 }

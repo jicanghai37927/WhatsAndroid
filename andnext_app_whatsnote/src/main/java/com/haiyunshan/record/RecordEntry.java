@@ -101,4 +101,12 @@ class RecordEntry extends BaseEntry {
     public void setTagList(List<String> tagList) {
         this.tagList = tagList;
     }
+
+    public int indexOfTag(String tag) {
+        if (tagList == null || tagList.isEmpty()) {
+            return -1;
+        }
+
+        return tagList.indexOf(tag);
+    }
 }
