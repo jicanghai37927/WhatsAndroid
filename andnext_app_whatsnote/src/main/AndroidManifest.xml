@@ -78,7 +78,7 @@
                 android:windowSoftInputMode="adjustResize|stateAlwaysVisible">
         </activity>
         <activity android:name=".ExtractActivity"
-                android:label="摘抄"
+                android:label="摘录"
                 android:theme="@style/AppTheme.Transparent">
             <intent-filter>
                 <action android:name="android.intent.action.PROCESS_TEXT" />
