@@ -1,13 +1,14 @@
 package club.andnext.recyclerview.tree;
 
 import androidx.recyclerview.widget.ListUpdateCallback;
+import club.andnext.recyclerview.adapter.ClazzAdapterProvider;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeNode;
 import java.util.ArrayList;
 import java.util.Enumeration;
 
-public class TreeList {
+public class TreeList implements ClazzAdapterProvider {
 
     Node root; // all nodes
 
@@ -31,10 +32,12 @@ public class TreeList {
         this.callback = callback;
     }
 
+    @Override
     public Object get(int index) {
         return nodeList.get(index).getUserObject();
     }
 
+    @Override
     public int size() {
         return nodeList.size();
     }
@@ -353,18 +356,18 @@ public class TreeList {
     /**
      *
      */
-    public static abstract class Callback implements ListUpdateCallback {
+    private static class Node extends DefaultMutableTreeNode {
+
+        public Node(Object userObject) {
+            super(userObject);
+        }
 
     }
 
     /**
      *
      */
-    private static class Node extends DefaultMutableTreeNode {
-
-        public Node(Object userObject) {
-            super(userObject);
-        }
+    public static abstract class Callback implements ListUpdateCallback {
 
     }
 

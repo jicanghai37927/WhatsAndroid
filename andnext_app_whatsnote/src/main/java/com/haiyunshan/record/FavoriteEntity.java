@@ -12,15 +12,11 @@ public class FavoriteEntity {
 
     ArrayList<FavoriteEntity> childList;
 
-    RecordManager recordManager;
-
-    FavoriteEntity(String id, FavoriteEntry entry, RecordManager mgr) {
+    FavoriteEntity(String id, FavoriteEntry entry) {
         this.id = id;
         this.entry = entry;
 
         this.childList = null;
-
-        this.recordManager = mgr;
     }
 
     public String getId() {
@@ -36,7 +32,7 @@ public class FavoriteEntity {
             return "";
         }
 
-        RecordEntry e = recordManager.getRecordDataset().get(entry.getId());
+        RecordEntry e = getManager().getRecordDataset().get(entry.getId());
         if (e == null) {
             return "";
         }
@@ -72,44 +68,33 @@ public class FavoriteEntity {
     }
 
     public FavoriteEntity add(String id) {
+
+        int index = 0;
+
         FavoriteEntry entry = new FavoriteEntry(id);
 
         {
-            recordManager.getFavoriteDataset().add(entry);
+            getManager().getFavoriteDataset().add(index, entry);
         }
 
         {
-            FavoriteEntity entity = new FavoriteEntity(entry.getId(), entry, this.recordManager);
+            FavoriteEntity entity = new FavoriteEntity(entry.getId(), entry);
             if (childList == null) {
                 childList = new ArrayList<>();
             }
 
-            childList.add(entity);
+            childList.add(index, entity);
 
             return entity;
         }
     }
 
-    public int getOrder() {
-        if (entry == null) {
-            return Integer.MAX_VALUE;
-        }
-
-        List<String> list = recordManager.getFavoriteDataset().getOrderList();
-        if (list == null) {
-            return Integer.MAX_VALUE;
-        }
-
-        int index = list.indexOf(entry.getId());
-        if (index < 0) {
-            return Integer.MAX_VALUE;
-        }
-
-        return index;
+    public void save() {
+        getManager().save(RecordManager.DS_FAVORITE);
     }
 
-    public void save() {
-        recordManager.save(RecordManager.DS_FAVORITE);
+    RecordManager getManager() {
+        return RecordManager.getInstance();
     }
 
     public static final FavoriteEntity obtain() {
@@ -128,7 +113,7 @@ public class FavoriteEntity {
         FavoriteEntry entry = null;
         RecordManager mgr = RecordManager.getInstance();
 
-        FavoriteEntity entity = new FavoriteEntity(id, entry, mgr);
+        FavoriteEntity entity = new FavoriteEntity(id, entry);
         FavoriteDataset ds = mgr.getFavoriteDataset();
         int size = ds.size();
         if (size != 0) {
@@ -137,7 +122,7 @@ public class FavoriteEntity {
             for (int i = 0; i < size; i++) {
                 FavoriteEntry e = ds.get(i);
 
-                FavoriteEntity en = new FavoriteEntity(e.getId(), e, mgr);
+                FavoriteEntity en = new FavoriteEntity(e.getId(), e);
                 entity.childList.add(en);
             }
         }

@@ -21,15 +21,11 @@ public class RecordEntity {
 
     ArrayList<RecordEntity> childList;
 
-    RecordManager recordManager;
-
-    RecordEntity(String id, RecordEntry entry, RecordManager mgr) {
+    RecordEntity(String id, RecordEntry entry) {
         this.id = id;
         this.entry = entry;
 
         this.childList = null;
-
-        this.recordManager = mgr;
     }
 
     public String getId() {
@@ -45,19 +41,7 @@ public class RecordEntity {
     }
 
     public String getName() {
-        if (entry == null) {
-            return "";
-        }
-
-        if (!TextUtils.isEmpty(entry.getName())) {
-            return entry.getName();
-        }
-
-        if (!TextUtils.isEmpty(entry.getAlias())) {
-            return entry.getAlias();
-        }
-
-        return "";
+        return getName(this.entry);
     }
 
     public void setName(String name) {
@@ -102,7 +86,7 @@ public class RecordEntity {
             return index;
         }
 
-        recordManager.remove(entity.entry);
+        getManager().remove(entity.entry);
         childList.remove(entity);
 
         return index;
@@ -117,11 +101,11 @@ public class RecordEntity {
     }
 
     public RecordEntity add(int type, String name) {
-        RecordEntry entry = recordManager.create(this.id, type);
-        name = recordManager.getName(entry, name);
+        RecordEntry entry = getManager().create(this.id, type);
+        name = getManager().getName(entry, name);
         entry.setAlias(name);
 
-        RecordEntity entity = new RecordEntity(entry.getId(), entry, this.recordManager);
+        RecordEntity entity = new RecordEntity(entry.getId(), entry);
         this.add(entity);
 
         return entity;
@@ -202,13 +186,13 @@ public class RecordEntity {
     }
 
     public boolean isTrash() {
-        String root = recordManager.getRoot(id);
+        String root = getManager().getRoot(id);
         boolean result = root.equals(ROOT_TRASH);
         return result;
     }
 
     public boolean isExtract() {
-        String root = recordManager.getRoot(id);
+        String root = getManager().getRoot(id);
         boolean result = root.equals(ROOT_EXTRACT);
         return result;
     }
@@ -226,7 +210,27 @@ public class RecordEntity {
     }
 
     public void save() {
-        recordManager.save(RecordManager.DS_ALL);
+        getManager().save(RecordManager.DS_ALL);
+    }
+
+    RecordManager getManager() {
+        return RecordManager.getInstance();
+    }
+
+    static String getName(RecordEntry entry) {
+        if (entry == null) {
+            return "";
+        }
+
+        if (!TextUtils.isEmpty(entry.getName())) {
+            return entry.getName();
+        }
+
+        if (!TextUtils.isEmpty(entry.getAlias())) {
+            return entry.getAlias();
+        }
+
+        return "";
     }
 
     public static RecordEntity obtain(String id) {
@@ -242,7 +246,7 @@ public class RecordEntity {
         RecordManager mgr = RecordManager.getInstance();
         RecordEntry entry = mgr.getRecordDataset().get(id);
 
-        RecordEntity entity = new RecordEntity(id, entry, mgr);
+        RecordEntity entity = new RecordEntity(id, entry);
         if (childFlags != TYPE_EMPTY) {
 
             List<RecordEntry> list = mgr.getList(id, childFlags, null);
@@ -250,7 +254,7 @@ public class RecordEntity {
                 entity.childList = new ArrayList<>(list.size());
 
                 for (RecordEntry e : list) {
-                    entity.childList.add(new RecordEntity(e.getId(), e, mgr));
+                    entity.childList.add(new RecordEntity(e.getId(), e));
                 }
             }
             

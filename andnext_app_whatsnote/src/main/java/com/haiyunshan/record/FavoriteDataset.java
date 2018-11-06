@@ -1,11 +1,11 @@
 package com.haiyunshan.record;
 
-import club.andnext.dataset.BaseOrderDataset;
+import club.andnext.dataset.BaseDataset;
 
-public class FavoriteDataset extends BaseOrderDataset<FavoriteEntry> {
+public class FavoriteDataset extends BaseDataset<FavoriteEntry> {
 
     public FavoriteDataset() {
-        super(true);
+
     }
 
 }

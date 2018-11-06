@@ -1,0 +1,41 @@
+{
+  "list":
+  [
+    {
+      "id": "note",
+      "name": "我的笔记",
+      "visible": true,
+      "editable": false,
+      "movable": true
+    },
+    {
+      "id": "extract",
+      "name": "我的摘抄",
+      "visible": true,
+      "editable": false,
+      "movable": true
+    },
+    {
+      "id": "recent",
+      "name": "最近项目",
+      "visible": true,
+      "editable": false,
+      "movable": true
+    },
+    {
+      "id": "preview",
+      "name": "最近预览",
+      "visible": true,
+      "editable": true,
+      "movable": true
+    },
+    {
+      "id": "trash",
+      "name": "最近删除",
+      "visible": true,
+      "editable": false,
+      "movable": true
+    }
+
+  ]
+}

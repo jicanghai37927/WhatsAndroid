@@ -6,4 +6,9 @@
             android:id="@+id/menu_tag"
             android:title="标签"
             app:showAsAction="always"/>
+
+    <item
+            android:id="@+id/menu_favorite"
+            android:title="收藏"
+            app:showAsAction="always"/>
 </menu>

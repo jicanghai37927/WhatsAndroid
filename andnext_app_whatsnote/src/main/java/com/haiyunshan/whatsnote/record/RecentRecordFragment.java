@@ -142,7 +142,7 @@ public class RecentRecordFragment extends BaseRecordFragment {
     /**
      *
      */
-    private class RecordProvider extends BridgeAdapterProvider<RecordEntity> {
+    private class RecordProvider implements BridgeAdapterProvider<RecordEntity> {
 
         @Override
         public RecordEntity get(int position) {

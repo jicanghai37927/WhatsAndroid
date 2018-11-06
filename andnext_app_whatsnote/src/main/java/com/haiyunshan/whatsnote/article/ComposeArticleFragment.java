@@ -125,7 +125,7 @@ public class ComposeArticleFragment extends Fragment {
     /**
      *
      */
-    private class ComposeProvider extends BridgeAdapterProvider<DocumentEntity> {
+    private class ComposeProvider implements BridgeAdapterProvider<DocumentEntity> {
 
         @Override
         public DocumentEntity get(int position) {

@@ -11,6 +11,8 @@ public class LocalStorage {
     public static final String PATH_NOTE_DIR    = "WhatsNote/note";
     public static final String PATH_EXTRACT_DIR = "WhatsNote/extract";
 
+    public static final String PATH_ENTRANCE_DIR = "Preference/entrance";
+
     static LocalStorage instance;
 
     public static final LocalStorage getInstance() {

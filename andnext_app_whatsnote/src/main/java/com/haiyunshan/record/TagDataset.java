@@ -1,11 +1,12 @@
 package com.haiyunshan.record;
 
-import club.andnext.dataset.BaseOrderDataset;
 
-public class TagDataset extends BaseOrderDataset<TagEntry> {
+import club.andnext.dataset.BaseDataset;
+
+public class TagDataset extends BaseDataset<TagEntry> {
 
     public TagDataset() {
-        super(true);
+
     }
 
 }

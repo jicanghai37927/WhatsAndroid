@@ -3,8 +3,11 @@ package com.haiyunshan.whatsnote.record;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -120,6 +123,13 @@ public class ShowTagFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        recordEntity.save();
+    }
+
     void requestCreate() {
         Intent intent = new Intent(getActivity(), PackActivity.class);
 
@@ -135,12 +145,14 @@ public class ShowTagFragment extends Fragment {
         if (entity != null) {
             sortedList.add(entity);
         }
+
+        recordEntity.addTag(entity.getId());
     }
 
     /**
      *
      */
-    private class TagProvider extends BridgeAdapterProvider {
+    private class TagProvider implements BridgeAdapterProvider {
 
         @Override
         public Object get(int position) {
@@ -164,15 +176,8 @@ public class ShowTagFragment extends Fragment {
 
         @Override
         public int compare(TagEntity o1, TagEntity o2) {
-            if (o1 == tagEntity) {
-                return -1;
-            }
-            if (o2 == tagEntity) {
-                return 1;
-            }
-
-            int a = o1.getOrder();
-            int b = o2.getOrder();
+            int a = tagEntity.indexOf(o1);
+            int b = tagEntity.indexOf(o2);
 
             return (a - b);
         }
@@ -232,12 +237,21 @@ public class ShowTagFragment extends Fragment {
     /**
      *
      */
-    private static class TagViewHolder extends BridgeHolder<TagEntity> {
+    private static class TagViewHolder extends BridgeHolder<TagEntity> implements View.OnClickListener {
 
-        static final int LAYOUT_RES_ID = android.R.layout.simple_list_item_1;
+        static final int LAYOUT_RES_ID = R.layout.layout_record_tag_list_item;
+
+        ImageView colorView;
+        TextView nameView;
+        ImageView checkView;
+
+        TagEntity entity;
+        ShowTagFragment parent;
 
         public TagViewHolder(ShowTagFragment f, View itemView) {
             super(itemView);
+
+            this.parent = f;
         }
 
         @Override
@@ -247,14 +261,50 @@ public class ShowTagFragment extends Fragment {
 
         @Override
         public void onViewCreated(@NonNull View view) {
+            this.colorView = view.findViewById(R.id.iv_color);
+            this.nameView = view.findViewById(R.id.tv_name);
+            this.checkView = view.findViewById(R.id.iv_check);
 
+            view.setOnClickListener(this);
         }
 
         @Override
         public void onBind(TagEntity item, int position) {
-            ((TextView)itemView).setText(item.getName());
-            ((TextView)itemView).setTextColor(item.getColor());
+            this.entity = item;
+
+            {
+                colorView.setImageResource(item.getDrawable());
+                colorView.setImageTintList(ColorStateList.valueOf(item.getDisplayColor()));
+            }
+
+            {
+                nameView.setText(item.getName());
+                nameView.setTextColor(item.getDisplayColor());
+            }
+
+            {
+                checkView.setImageTintList(ColorStateList.valueOf(item.getDisplayColor()));
+                checkView.setVisibility(parent.recordEntity.indexOfTag(item.getId()) >= 0 ? View.VISIBLE : View.INVISIBLE);
+            }
         }
+
+        @Override
+        public void onClick(View v) {
+            if (v == itemView) {
+                click();
+            }
+        }
+
+        void click() {
+            if (checkView.getVisibility() == View.VISIBLE) {
+                parent.recordEntity.removeTag(entity.getId());
+            } else {
+                parent.recordEntity.addTag(entity.getId());
+            }
+
+            checkView.setVisibility(parent.recordEntity.indexOfTag(entity.getId()) >= 0? View.VISIBLE: View.INVISIBLE);
+        }
+
     }
 
 }

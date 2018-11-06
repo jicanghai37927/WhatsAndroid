@@ -75,7 +75,7 @@
         </activity>
         <activity
                 android:name=".PackActivity"
-                android:windowSoftInputMode="adjustResize|stateAlwaysVisible">
+                android:windowSoftInputMode="adjustResize|stateAlwaysHidden">
         </activity>
         <activity android:name=".ExtractActivity"
                 android:label="摘录"

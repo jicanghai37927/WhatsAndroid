@@ -19,6 +19,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import club.andnext.recyclerview.bridge.BridgeAdapter;
 import club.andnext.recyclerview.decoration.MarginDividerDecoration;
 import club.andnext.recyclerview.swipe.SwipeActionHelper;
+import com.google.android.material.snackbar.Snackbar;
+import com.haiyunshan.record.FavoriteEntity;
 import com.haiyunshan.record.RecordEntity;
 import com.haiyunshan.whatsnote.PackActivity;
 import com.haiyunshan.whatsnote.R;
@@ -208,7 +210,7 @@ public class BaseRecordFragment extends Fragment implements View.OnClickListener
         this.startActivityForResult(intent, REQUEST_TAG);
     }
 
-    void requestCompose(RecordEntity entity) {
+    void requestCompose(@NonNull RecordEntity entity) {
         Intent intent = new Intent(getActivity(), PackActivity.class);
 
         intent.putExtra(PackActivity.KEY_FRAGMENT, ComposeArticleFragment.class.getName());
@@ -216,6 +218,19 @@ public class BaseRecordFragment extends Fragment implements View.OnClickListener
         intent.putExtra(ComposeArticleFragment.KEY_ID, entity.getId());
 
         this.startActivityForResult(intent, REQUEST_COMPOSE);
+    }
+
+    void requestFavorite(@NonNull RecordEntity entity) {
+        if (entity.isTrash() || !entity.isDirectory()) {
+            return;
+        }
+
+        String id = entity.getId();
+        FavoriteEntity result = FavoriteEntity.obtain().add(id);
+
+        String text = (result != null)? "已收藏": "不能收藏";
+        Snackbar.make(recyclerView, text, Snackbar.LENGTH_SHORT).show();
+
     }
 
 }

@@ -204,7 +204,7 @@ public class ShowRecordFragment extends BaseRecordFragment {
     /**
      *
      */
-    private class FileProvider extends BridgeAdapterProvider {
+    private class FileProvider implements BridgeAdapterProvider {
 
         @Override
         public Object get(int position) {

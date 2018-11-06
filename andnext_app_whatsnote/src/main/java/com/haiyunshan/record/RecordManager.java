@@ -197,10 +197,7 @@ class RecordManager {
     int indexOfName(String name, List<RecordEntry> list) {
         for (int i = 0, size = list.size(); i < size; i++) {
             RecordEntry e = list.get(i);
-            if (e.getName().equals(name)) {
-                return i;
-            }
-            if (e.getAlias().equals(name)) {
+            if (RecordEntity.getName(e).equals(name)) {
                 return i;
             }
         }

@@ -124,6 +124,10 @@ class NoteViewHolder<F extends BaseRecordFragment> extends SwipeViewHolder<Recor
                 parent.requestTag(getEntity());
                 break;
             }
+            case R.id.menu_favorite: {
+                parent.requestFavorite(getEntity());
+                break;
+            }
         }
 
         return false;
@@ -131,8 +135,13 @@ class NoteViewHolder<F extends BaseRecordFragment> extends SwipeViewHolder<Recor
 
     void popupMenu() {
         PopupMenu popup = new PopupMenu(parent.getActivity(), itemView);
-        popup.inflate(R.menu.menu_folder);
+        popup.inflate(R.menu.menu_record_list_item);
         popup.setOnMenuItemClickListener(this);
+
+        if (getEntity().isTrash() || !getEntity().isDirectory()) {
+            popup.getMenu().findItem(R.id.menu_favorite).setVisible(false);
+        }
+
         popup.show();
     }
 

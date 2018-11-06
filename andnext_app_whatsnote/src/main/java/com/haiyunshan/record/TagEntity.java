@@ -13,15 +13,11 @@ public class TagEntity {
 
     ArrayList<TagEntity> childList;
 
-    RecordManager recordManager;
-
-    TagEntity(String id, TagEntry entry, RecordManager mgr) {
+    TagEntity(String id, TagEntry entry) {
         this.id = id;
         this.entry = entry;
 
         this.childList = null;
-
-        this.recordManager = mgr;
     }
 
     public String getId() {
@@ -34,7 +30,7 @@ public class TagEntity {
 
     public int getColor() {
         if (entry == null) {
-            return Color.BLACK;
+            return Color.TRANSPARENT;
         }
 
         return entry.getColor();
@@ -68,57 +64,49 @@ public class TagEntity {
         return childList.size();
     }
 
+    public int indexOf(TagEntity entity) {
+        return childList.indexOf(entity);
+    }
+
     public TagEntity add(String name, int color) {
+        int index = 0;
+
         TagEntry entry = new TagEntry(UUIDUtils.next(), name, color);
 
         {
-            recordManager.getTagDataset().add(entry);
+            getManager().getTagDataset().add(index, entry);
         }
 
         {
-            TagEntity entity = new TagEntity(entry.getId(), entry, this.recordManager);
+            TagEntity entity = new TagEntity(entry.getId(), entry);
             if (childList == null) {
                 childList = new ArrayList<>();
             }
 
-            childList.add(entity);
+            childList.add(index, entity);
 
             return entity;
         }
     }
 
-    public int getOrder() {
-        if (entry == null) {
-            return Integer.MAX_VALUE;
-        }
+    public int getDrawable() {
+        int color = this.getColor();
 
-        List<String> list = recordManager.getTagDataset().getOrderList();
-        if (list == null) {
-            return Integer.MAX_VALUE;
-        }
+        return TagUtils.getDrawable(color);
+    }
 
-        int index = list.indexOf(entry.getId());
-        if (index < 0) {
-            return Integer.MAX_VALUE;
-        }
+    public int getDisplayColor() {
+        int color = this.getColor();
 
-        return index;
+        return TagUtils.getDisplayColor(color);
     }
 
     public void save() {
-        recordManager.save(RecordManager.DS_TAG);
+        getManager().save(RecordManager.DS_TAG);
     }
 
-    public static final boolean exist(String name) {
-        RecordManager mgr = RecordManager.getInstance();
-        TagDataset ds = mgr.getTagDataset();
-        for (int i = 0, size = ds.size(); i < size; i++) {
-            if (ds.get(i).getName().equals(name)) {
-                return true;
-            }
-        }
-
-        return false;
+    RecordManager getManager() {
+        return RecordManager.getInstance();
     }
 
     public static final TagEntity obtain() {
@@ -137,7 +125,7 @@ public class TagEntity {
         TagEntry entry = null;
         RecordManager mgr = RecordManager.getInstance();
 
-        TagEntity entity = new TagEntity(id, entry, mgr);
+        TagEntity entity = new TagEntity(id, entry);
         TagDataset ds = mgr.getTagDataset();
         int size = ds.size();
         if (size != 0) {
@@ -146,7 +134,7 @@ public class TagEntity {
             for (int i = 0; i < size; i++) {
                 TagEntry e = ds.get(i);
 
-                TagEntity en = new TagEntity(e.getId(), e, mgr);
+                TagEntity en = new TagEntity(e.getId(), e);
                 entity.childList.add(en);
             }
         }
@@ -162,7 +150,7 @@ public class TagEntity {
             return null;
         }
 
-        TagEntity entity = new TagEntity(id, entry, mgr);
+        TagEntity entity = new TagEntity(id, entry);
         return entity;
     }
 }

@@ -3,10 +3,11 @@ package club.andnext.recyclerview.bridge;
 import android.content.Context;
 
 import club.andnext.recyclerview.adapter.ClazzAdapter;
+import club.andnext.recyclerview.adapter.ClazzAdapterProvider;
 
 public class BridgeAdapter extends ClazzAdapter {
 
-    public BridgeAdapter(Context context, BridgeAdapterProvider provider) {
+    public BridgeAdapter(Context context, ClazzAdapterProvider provider) {
         super(context, provider);
     }
 

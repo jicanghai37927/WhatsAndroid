@@ -10,12 +10,8 @@ public class RecentEntity {
 
     ArrayList<RecordEntity> recordList;
 
-    RecordManager recordManager;
-
-    RecentEntity(TagEntity tag, RecordManager mgr) {
+    RecentEntity(TagEntity tag) {
         this.tagEntity = tag;
-
-        this.recordManager = mgr;
     }
 
     public TagEntity getTag() {
@@ -58,7 +54,7 @@ public class RecentEntity {
             return index;
         }
 
-        recordManager.remove(entity.entry);
+        getManager().remove(entity.entry);
         recordList.remove(entity);
 
         return index;
@@ -76,7 +72,11 @@ public class RecentEntity {
         RecordManager.getInstance().save(RecordManager.DS_RECENT);
     }
 
-    public static final void put(String id) {
+    RecordManager getManager() {
+        return RecordManager.getInstance();
+    }
+
+    public static final boolean put(String id) {
 
         RecentDataset ds = RecordManager.getInstance().getRecentDataset();
 
@@ -93,6 +93,8 @@ public class RecentEntity {
         {
             RecordManager.getInstance().save(ds);
         }
+
+        return true;
     }
 
     public static final RecentEntity obtain(String tag) {
@@ -109,7 +111,7 @@ public class RecentEntity {
     static final RecentEntity create(TagEntity tag) {
         RecordManager mgr = RecordManager.getInstance();
 
-        RecentEntity entity = new RecentEntity(tag, mgr);
+        RecentEntity entity = new RecentEntity(tag);
 
         RecentDataset ds = mgr.getRecentDataset();
         int size = ds.size();
@@ -128,7 +130,7 @@ public class RecentEntity {
                     }
                 }
 
-                RecordEntity r = new RecordEntity(en.getId(), en, mgr);
+                RecordEntity r = new RecordEntity(en.getId(), en);
                 if (r.isTrash()) {
                     continue;
                 }
