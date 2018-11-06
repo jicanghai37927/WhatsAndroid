@@ -179,7 +179,7 @@ public class RecordEntity {
 
     public boolean isDirectory() {
         if (entry == null) {
-            return true;
+            return false;
         }
 
         return (entry.getType() == TYPE_FOLDER);
@@ -233,15 +233,11 @@ public class RecordEntity {
         return "";
     }
 
-    public static RecordEntity obtain(String id) {
+    public static RecordEntity create(String id) {
         return create(id, TYPE_ALL);
     }
 
-    public static RecordEntity obtain(String id, int childFlags) {
-        return create(id, childFlags);
-    }
-
-    static RecordEntity create(String id, int childFlags) {
+    public static RecordEntity create(String id, int childFlags) {
 
         RecordManager mgr = RecordManager.getInstance();
         RecordEntry entry = mgr.getRecordDataset().get(id);

@@ -58,7 +58,7 @@ public class Document {
         DocumentManager mgr = DocumentManager.getInstance();
 
         Article article = mgr.create(id, "", System.currentTimeMillis());
-        RecordEntity record = RecordEntity.obtain(id, RecordEntity.TYPE_EMPTY);
+        RecordEntity record = RecordEntity.create(id, RecordEntity.TYPE_EMPTY);
         Document doc = new Document(article, record, mgr);
 
         return doc;

@@ -1,39 +1,29 @@
 package com.haiyunshan.whatsnote.record;
 
 
-import android.database.Cursor;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import club.andnext.recyclerview.bridge.*;
-import com.haiyunshan.article.Document;
-import com.haiyunshan.extract.ExtractProvider;
 import com.haiyunshan.record.RecordEntity;
+import com.haiyunshan.record.TagRecordSet;
 import com.haiyunshan.whatsnote.R;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ShowRecordFragment extends BaseRecordFragment {
+public class TagRecordFragment extends BaseRecordFragment {
 
-    public static final String KEY_PARENT = "parent";
+    public static final String KEY_TAG = "recent.tag";
 
-    RecordEntity recordEntity;
+    TagRecordSet tagRecordSet;
 
-    public ShowRecordFragment() {
+    public TagRecordFragment() {
 
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        return super.onCreateView(inflater, container, savedInstanceState);
     }
 
     @Override
@@ -51,12 +41,12 @@ public class ShowRecordFragment extends BaseRecordFragment {
         super.onActivityCreated(savedInstanceState);
 
         {
-            String parent = getArguments().getString(KEY_PARENT, RecordEntity.ROOT_NOTE);
-            this.recordEntity = RecordEntity.create(parent);
+            String tag = getArguments().getString(KEY_TAG, "");
+            this.tagRecordSet = TagRecordSet.create(tag);
         }
 
         {
-            this.adapter = new BridgeAdapter(getActivity(), new FileProvider());
+            this.adapter = new BridgeAdapter(getActivity(), new RecordProvider());
 
             adapter.bind(RecordEntity.class,
                     new BridgeBuilder(FolderViewHolder.class, FolderViewHolder.LAYOUT_RES_ID, this),
@@ -77,7 +67,7 @@ public class ShowRecordFragment extends BaseRecordFragment {
             recyclerView.setAdapter(adapter);
         }
 
-        if (recordEntity.isTrash() || recordEntity.isExtract()) {
+        {
             getView().findViewById(R.id.btn_create_folder).setVisibility(View.GONE);
             getView().findViewById(R.id.btn_create_note).setVisibility(View.GONE);
 
@@ -88,17 +78,11 @@ public class ShowRecordFragment extends BaseRecordFragment {
     @Override
     public void onResume() {
         super.onResume();
-
-        if (recordEntity.isExtract()) {
-            checkExtract();
-        }
     }
 
     @Override
     public void onPause() {
         super.onPause();
-
-        recordEntity.save();
     }
 
     @Override
@@ -116,64 +100,14 @@ public class ShowRecordFragment extends BaseRecordFragment {
         }
     }
 
-    void checkExtract() {
-        int count = 0;
-
-        Cursor cursor = getActivity().getContentResolver().query(ExtractProvider.obtainUri(), null, null, null, null);
-        if (cursor != null) {
-            count = cursor.getCount();
-
-            if (cursor.moveToFirst()) {
-                do {
-
-                    String content = cursor.getString(1);
-                    long created = cursor.getLong(2);
-
-                    addExtract(content, created);
-
-                } while (cursor.moveToNext());
-            }
-
-            cursor.close();
-        }
-
-        if (count != 0) {
-            getActivity().getContentResolver().delete(ExtractProvider.obtainUri(), null, null);
-        }
-    }
-
-    void addExtract(String content, long created) {
-
-        RecordEntity entity;
-
-        {
-            entity = recordEntity.add(RecordEntity.TYPE_NOTE, "新的摘抄");
-            entity.setCreated(created);
-
-            int position = recordEntity.indexOf(entity);
-            if (position >= 0) {
-                adapter.notifyItemInserted(position);
-            }
-        }
-
-        if (entity != null) {
-            Document.create(entity, content);
-        }
-
-    }
-
     @Override
     void create(int type, String name) {
-        RecordEntity entity = recordEntity.add(type, name);
-        int position = recordEntity.indexOf(entity);
-        if (position >= 0) {
-            adapter.notifyItemInserted(position);
-        }
+
     }
 
     @Override
     void rename(String id, String name) {
-        RecordEntity entity = recordEntity.get(id);
+        RecordEntity entity = tagRecordSet.get(id);
         if (entity == null) {
             return;
         }
@@ -184,7 +118,7 @@ public class ShowRecordFragment extends BaseRecordFragment {
         }
 
         entity.setName(name);
-        int position = recordEntity.indexOf(entity);
+        int position = tagRecordSet.indexOf(entity);
         if (position < 0) {
             return;
         }
@@ -195,7 +129,7 @@ public class ShowRecordFragment extends BaseRecordFragment {
     @Override
     void requestDelete(RecordEntity entity) {
 
-        int index = recordEntity.remove(entity);
+        int index = tagRecordSet.remove(entity);
         if (index >= 0) {
             adapter.notifyItemRemoved(index);
         }
@@ -204,16 +138,16 @@ public class ShowRecordFragment extends BaseRecordFragment {
     /**
      *
      */
-    private class FileProvider implements BridgeAdapterProvider {
+    private class RecordProvider implements BridgeAdapterProvider<RecordEntity> {
 
         @Override
-        public Object get(int position) {
-            return recordEntity.get(position);
+        public RecordEntity get(int position) {
+            return tagRecordSet.get(position);
         }
 
         @Override
         public int size() {
-            return recordEntity.size();
+            return tagRecordSet.size();
         }
     }
 
@@ -222,7 +156,7 @@ public class ShowRecordFragment extends BaseRecordFragment {
      */
     private static class FolderViewHolder extends NoteViewHolder {
 
-        public FolderViewHolder(ShowRecordFragment f, View itemView) {
+        public FolderViewHolder(TagRecordFragment f, View itemView) {
             super(f, itemView);
         }
     }
@@ -230,9 +164,9 @@ public class ShowRecordFragment extends BaseRecordFragment {
     /**
      *
      */
-    private static class NoteViewHolder extends com.haiyunshan.whatsnote.record.NoteViewHolder<ShowRecordFragment> {
+    private static class NoteViewHolder extends com.haiyunshan.whatsnote.record.NoteViewHolder<TagRecordFragment> {
 
-        public NoteViewHolder(ShowRecordFragment f, View itemView) {
+        public NoteViewHolder(TagRecordFragment f, View itemView) {
             super(f, itemView);
         }
 
@@ -243,9 +177,9 @@ public class ShowRecordFragment extends BaseRecordFragment {
      */
     private static class FolderMenuItemListener implements Toolbar.OnMenuItemClickListener {
 
-        final ShowRecordFragment parent;
+        final TagRecordFragment parent;
 
-        public FolderMenuItemListener(ShowRecordFragment f) {
+        public FolderMenuItemListener(TagRecordFragment f) {
             this.parent = f;
         }
 
@@ -266,4 +200,5 @@ public class ShowRecordFragment extends BaseRecordFragment {
             return false;
         }
     }
+
 }

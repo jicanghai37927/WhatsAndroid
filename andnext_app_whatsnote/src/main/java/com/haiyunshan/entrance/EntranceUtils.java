@@ -2,14 +2,15 @@ package com.haiyunshan.entrance;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.View;
 import androidx.fragment.app.Fragment;
+import com.haiyunshan.record.FavoriteEntity;
 import com.haiyunshan.record.RecordEntity;
+import com.haiyunshan.record.TagEntity;
 import com.haiyunshan.whatsnote.PackActivity;
 import com.haiyunshan.whatsnote.ShowRecordActivity;
 import com.haiyunshan.whatsnote.record.RecentRecordFragment;
+import com.haiyunshan.whatsnote.record.TagRecordFragment;
 
 public class EntranceUtils {
 
@@ -22,7 +23,7 @@ public class EntranceUtils {
         }
 
         if (id.equals(EntranceEntry.ID_NOTE)) {
-            showNote(context);
+            showNote(context, RecordEntity.ROOT_NOTE);
         } else if (id.equals(EntranceEntry.ID_EXTRACT)) {
             showExtract(context);
         } else if (id.equals(EntranceEntry.ID_RECENT)) {
@@ -34,8 +35,33 @@ public class EntranceUtils {
         }
     }
 
-    static void showNote(Activity context) {
-        ShowRecordActivity.start(context, RecordEntity.ROOT_NOTE);
+    public static final void enter(Fragment fragment, FavoriteEntity entity) {
+        String id = entity.getId();
+        if (TextUtils.isEmpty(id)) {
+            return;
+        }
+
+        Activity context = fragment.getActivity();
+        RecordEntity en = RecordEntity.create(id, RecordEntity.TYPE_EMPTY);
+        if (en.isDirectory()) {
+            showNote(context, en.getId());
+        }
+    }
+
+    public static final void enter(Fragment fragment, TagEntity entity) {
+        Activity context = fragment.getActivity();
+
+        Intent intent = new Intent(context, PackActivity.class);
+
+        intent.putExtra(PackActivity.KEY_FRAGMENT, TagRecordFragment.class.getName());
+
+        intent.putExtra(TagRecordFragment.KEY_TAG, entity.getId());
+
+        context.startActivity(intent);
+    }
+
+    static void showNote(Activity context, String parent) {
+        ShowRecordActivity.start(context, parent);
     }
 
     static void showExtract(Activity context) {

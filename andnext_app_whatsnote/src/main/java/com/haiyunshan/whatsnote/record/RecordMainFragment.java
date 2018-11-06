@@ -234,9 +234,11 @@ public class RecordMainFragment extends Fragment {
     /**
      *
      */
-    private static class FavoriteViewHolder extends BridgeHolder<FavoriteEntity> {
+    private static class FavoriteViewHolder extends BridgeHolder<FavoriteEntity> implements View.OnClickListener {
 
         static final int LAYOUT_RES_ID = android.R.layout.simple_list_item_1;
+
+        FavoriteEntity entity;
 
         RecordMainFragment parent;
 
@@ -253,21 +255,32 @@ public class RecordMainFragment extends Fragment {
 
         @Override
         public void onViewCreated(@NonNull View view) {
-
+            view.setOnClickListener(this);
         }
 
         @Override
         public void onBind(FavoriteEntity item, int position) {
+            this.entity = item;
+
             ((TextView)itemView).setText(item.getName());
+        }
+
+        @Override
+        public void onClick(View v) {
+            if (v == itemView) {
+                EntranceUtils.enter(parent, entity);
+            }
         }
     }
 
     /**
      *
      */
-    private static class TagViewHolder extends BridgeHolder<TagEntity> {
+    private static class TagViewHolder extends BridgeHolder<TagEntity> implements View.OnClickListener {
 
         static final int LAYOUT_RES_ID = android.R.layout.simple_list_item_1;
+
+        TagEntity entity;
 
         RecordMainFragment parent;
 
@@ -284,12 +297,21 @@ public class RecordMainFragment extends Fragment {
 
         @Override
         public void onViewCreated(@NonNull View view) {
-
+            view.setOnClickListener(this);
         }
 
         @Override
         public void onBind(TagEntity item, int position) {
+            this.entity = item;
+
             ((TextView)itemView).setText(item.getName());
+        }
+
+        @Override
+        public void onClick(View v) {
+            if (v == itemView) {
+                EntranceUtils.enter(parent, entity);
+            }
         }
     }
 

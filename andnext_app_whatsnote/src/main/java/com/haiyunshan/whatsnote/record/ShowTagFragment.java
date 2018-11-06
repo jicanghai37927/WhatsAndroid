@@ -4,7 +4,6 @@ package com.haiyunshan.whatsnote.record;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.ColorStateList;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.widget.ImageView;
@@ -72,7 +71,7 @@ public class ShowTagFragment extends Fragment {
         {
             String id = getArguments().getString(KEY_ID);
 
-            this.recordEntity = RecordEntity.obtain(id, RecordEntity.TYPE_EMPTY);
+            this.recordEntity = RecordEntity.create(id, RecordEntity.TYPE_EMPTY);
             this.tagEntity = TagEntity.obtain();
         }
 

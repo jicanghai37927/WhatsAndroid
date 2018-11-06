@@ -2,16 +2,14 @@ package com.haiyunshan.whatsnote.record;
 
 
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import club.andnext.recyclerview.bridge.*;
-import com.haiyunshan.record.RecentEntity;
+import com.haiyunshan.record.RecentRecordSet;
 import com.haiyunshan.record.RecordEntity;
 import com.haiyunshan.whatsnote.R;
 
@@ -22,7 +20,7 @@ public class RecentRecordFragment extends BaseRecordFragment {
 
     public static final String KEY_TAG = "recent.tag"; 
     
-    RecentEntity recentEntity;
+    RecentRecordSet recentRecordSet;
 
     public RecentRecordFragment() {
 
@@ -44,7 +42,7 @@ public class RecentRecordFragment extends BaseRecordFragment {
 
         {
             String tag = getArguments().getString(KEY_TAG, "");
-            this.recentEntity = RecentEntity.obtain(tag);
+            this.recentRecordSet = RecentRecordSet.create(tag);
         }
 
         {
@@ -85,8 +83,6 @@ public class RecentRecordFragment extends BaseRecordFragment {
     @Override
     public void onPause() {
         super.onPause();
-
-        recentEntity.save();
     }
 
     @Override
@@ -111,7 +107,7 @@ public class RecentRecordFragment extends BaseRecordFragment {
 
     @Override
     void rename(String id, String name) {
-        RecordEntity entity = recentEntity.get(id);
+        RecordEntity entity = recentRecordSet.get(id);
         if (entity == null) {
             return;
         }
@@ -122,7 +118,7 @@ public class RecentRecordFragment extends BaseRecordFragment {
         }
 
         entity.setName(name);
-        int position = recentEntity.indexOf(entity);
+        int position = recentRecordSet.indexOf(entity);
         if (position < 0) {
             return;
         }
@@ -133,7 +129,7 @@ public class RecentRecordFragment extends BaseRecordFragment {
     @Override
     void requestDelete(RecordEntity entity) {
 
-        int index = recentEntity.remove(entity);
+        int index = recentRecordSet.remove(entity);
         if (index >= 0) {
             adapter.notifyItemRemoved(index);
         }
@@ -146,12 +142,12 @@ public class RecentRecordFragment extends BaseRecordFragment {
 
         @Override
         public RecordEntity get(int position) {
-            return recentEntity.get(position);
+            return recentRecordSet.get(position);
         }
 
         @Override
         public int size() {
-            return recentEntity.size();
+            return recentRecordSet.size();
         }
     }
 
