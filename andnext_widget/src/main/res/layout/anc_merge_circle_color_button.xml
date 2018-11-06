@@ -4,13 +4,13 @@
        android:layout_height="wrap_content">
 
     <ImageView
-            android:id="@+id/iv_color"
+            android:id="@+id/anc_iv_color"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center"/>
 
     <ImageView
-            android:id="@+id/iv_check"
+            android:id="@+id/anc_iv_check"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"

@@ -46,8 +46,8 @@ public class CircleColorButton extends FrameLayout implements Checkable {
         }
 
         {
-            this.colorView = findViewById(R.id.iv_color);
-            this.checkView = findViewById(R.id.iv_check);
+            this.colorView = findViewById(R.id.anc_iv_color);
+            this.checkView = findViewById(R.id.anc_iv_check);
         }
 
         {

@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.SortedList;
 import androidx.recyclerview.widget.SortedListAdapterCallback;
 import club.andnext.recyclerview.bridge.*;
 import club.andnext.utils.ColorUtils;
+import club.andnext.widget.CircleColorButton;
 import com.haiyunshan.record.RecordEntity;
 import com.haiyunshan.record.TagEntity;
 import com.haiyunshan.whatsnote.PackActivity;
@@ -241,7 +242,7 @@ public class ShowTagFragment extends Fragment {
 
         static final int LAYOUT_RES_ID = R.layout.layout_record_tag_list_item;
 
-        ImageView colorView;
+        CircleColorButton colorView;
         TextView nameView;
         ImageView checkView;
 
@@ -273,8 +274,7 @@ public class ShowTagFragment extends Fragment {
             this.entity = item;
 
             {
-                colorView.setImageResource(item.getDrawable());
-                colorView.setImageTintList(ColorStateList.valueOf(item.getDisplayColor()));
+                colorView.setColor(item.getColor());
             }
 
             {

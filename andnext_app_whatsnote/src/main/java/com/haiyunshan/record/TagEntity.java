@@ -89,12 +89,6 @@ public class TagEntity {
         }
     }
 
-    public int getDrawable() {
-        int color = this.getColor();
-
-        return TagUtils.getDrawable(color);
-    }
-
     public int getDisplayColor() {
         int color = this.getColor();
 

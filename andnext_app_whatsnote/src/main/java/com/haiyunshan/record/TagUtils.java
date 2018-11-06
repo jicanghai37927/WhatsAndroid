@@ -40,15 +40,4 @@ public class TagUtils {
         return replaceColor;
     }
 
-
-    public static int getDrawable(int color) {
-
-        if (color == Color.TRANSPARENT) {
-            return R.drawable.anc_ic_circle_color_stroke;
-        }
-
-        return R.drawable.anc_ic_circle_color_solid;
-    }
-
-
 }

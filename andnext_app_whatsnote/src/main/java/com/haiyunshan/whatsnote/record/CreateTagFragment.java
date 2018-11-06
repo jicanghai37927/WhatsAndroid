@@ -23,7 +23,6 @@ import club.andnext.utils.ColorUtils;
 import club.andnext.utils.GsonUtils;
 import club.andnext.utils.SoftInputUtils;
 import com.google.gson.annotations.SerializedName;
-import com.haiyunshan.record.TagEntity;
 import com.haiyunshan.record.TagUtils;
 import com.haiyunshan.whatsnote.R;
 import club.andnext.widget.CircleColorButton;
@@ -41,7 +40,7 @@ public class CreateTagFragment extends Fragment implements View.OnClickListener 
     View cancelBtn;
     View okBtn;
 
-    ImageView targetView;
+    CircleColorButton targetView;
     EditText editName;
 
     CircleColorButton checkedTag;
@@ -160,9 +159,7 @@ public class CreateTagFragment extends Fragment implements View.OnClickListener 
     void setTarget(CircleColorButton button) {
 
         int color = (button == null)? Color.TRANSPARENT: button.getColor();
-
-        targetView.setImageResource(TagUtils.getDrawable(color));
-        targetView.setImageTintList(ColorStateList.valueOf(TagUtils.getDisplayColor(color)));
+        targetView.setColor(color);
 
     }
 

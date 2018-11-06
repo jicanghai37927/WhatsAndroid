@@ -8,12 +8,11 @@
               android:paddingLeft="?listPreferredItemPaddingLeft"
               android:paddingRight="?listPreferredItemPaddingRight">
 
-    <ImageView
+    <club.andnext.widget.CircleColorButton
             android:id="@+id/iv_color"
             android:layout_width="12dp"
-            android:layout_height="12dp"
+            android:layout_height="12dp"/>
 
-            />
     <TextView
             android:id="@+id/tv_name"
             android:layout_width="0dp"

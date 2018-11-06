@@ -137,8 +137,6 @@ public class SectionList implements ClazzAdapterProvider {
     }
 
     void add(Section section) {
-        section.parent = this;
-
         int position = list.size();
 
         list.add(section);
@@ -193,8 +191,6 @@ public class SectionList implements ClazzAdapterProvider {
 
         Object userObject;
         ClazzAdapterProvider provider;
-
-        SectionList parent;
 
         public Section(Object userObject, boolean expand, ClazzAdapterProvider provider) {
             this.expand = expand;
