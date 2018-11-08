@@ -5,6 +5,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 
+import java.util.List;
+
 public abstract class BridgeHolder<T> extends RecyclerView.ViewHolder {
 
     public BridgeHolder(View itemView) {
@@ -20,4 +22,16 @@ public abstract class BridgeHolder<T> extends RecyclerView.ViewHolder {
     public abstract void onViewCreated(@NonNull View view);
 
     public abstract void onBind(T item, int position);
+
+    public void onBind(T item, int position, @NonNull List payloads) {
+        this.onBind(item, position);
+    }
+
+    public void onViewAttachedToWindow() {
+
+    }
+
+    public void onViewDetachedFromWindow() {
+
+    }
 }

@@ -30,6 +30,22 @@ public abstract class ComposeViewHolder<E extends DocumentEntity> extends Bridge
         this.entity = item;
     }
 
+    @Override
+    @CallSuper
+    public void onViewAttachedToWindow() {
+
+    }
+
+    @Override
+    @CallSuper
+    public void onViewDetachedFromWindow() {
+        save();
+    }
+
+    void remove() {
+        parent.remove(this);
+    }
+
     abstract void save();
 
     E getEntity() {

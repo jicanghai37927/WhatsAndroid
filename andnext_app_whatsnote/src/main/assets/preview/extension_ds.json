@@ -2,6 +2,18 @@
   "list":
   [
     {
+      "name": "Picture",
+      "fragment": "PicturePreviewFragment",
+      "extensions":
+      [
+        "jpg", "jpeg",
+        "png",
+        "gif",
+        "bmp"
+      ]
+    },
+
+    {
       "name": "Markdown",
       "fragment": "MarkdownPreviewFragment",
       "extensions":

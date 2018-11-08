@@ -5,17 +5,20 @@ import com.google.gson.*;
 import java.lang.reflect.Type;
 import java.util.HashMap;
 
-public class EntityDeserializer implements JsonDeserializer<ArticleEntry> {
+public class EntryDeserializer implements JsonDeserializer<ArticleEntry> {
 
     HashMap<String, Class<? extends ArticleEntry>> map;
 
     Gson mGson;
 
-    EntityDeserializer() {
+    EntryDeserializer() {
         this.mGson = new Gson();
 
         this.map = new HashMap<>();
-        map.put(ParagraphEntry.TYPE, ParagraphEntry.class);
+    }
+
+    void put(String type, Class<? extends ArticleEntry> clz) {
+        map.put(type, clz);
     }
 
     @Override

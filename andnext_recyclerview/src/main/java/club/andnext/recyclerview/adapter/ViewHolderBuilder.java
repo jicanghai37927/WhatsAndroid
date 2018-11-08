@@ -8,6 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.List;
+
 public abstract class ViewHolderBuilder<T, VH extends RecyclerView.ViewHolder> {
 
     ClazzAdapter adapter;
@@ -40,4 +42,16 @@ public abstract class ViewHolderBuilder<T, VH extends RecyclerView.ViewHolder> {
     public abstract VH onCreateViewHolder(@NonNull View view);
 
     public abstract void onBindViewHolder(VH holder, T item, int position);
+
+    public void onBindViewHolder(@NonNull VH holder, T item, int position, @NonNull List<Object> payloads) {
+        onBindViewHolder(holder, item, position);
+    }
+
+    public void onViewAttachedToWindow(@NonNull VH holder) {
+
+    }
+
+    public void onViewDetachedFromWindow(@NonNull VH holder) {
+
+    }
 }

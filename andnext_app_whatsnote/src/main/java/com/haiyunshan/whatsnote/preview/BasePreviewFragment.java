@@ -12,7 +12,7 @@ import com.haiyunshan.preview.PreviewMessage;
 
 public abstract class BasePreviewFragment extends Fragment {
 
-    PreviewMessage entity;
+    PreviewMessage message;
 
     /**
      *
@@ -35,12 +35,12 @@ public abstract class BasePreviewFragment extends Fragment {
      *
      * @return
      */
-    PreviewMessage getEntity() {
-        if (entity == null) {
-            entity = PreviewMessage.create(this.getArguments());
+    PreviewMessage getMessage() {
+        if (message == null) {
+            message = PreviewMessage.create(this.getArguments());
         }
 
-        return entity;
+        return message;
     }
 
     @Nullable

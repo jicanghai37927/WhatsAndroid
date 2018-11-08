@@ -6,29 +6,25 @@ import java.util.ArrayList;
 
 public class Document {
 
-    ArrayList<DocumentEntity> entityList;
+    ArrayList<DocumentEntity> list;
 
     Article article;
     RecordEntity record;
 
-    DocumentManager documentManager;
-
-    private Document(Article article, RecordEntity record, DocumentManager mgr) {
+    private Document(Article article, RecordEntity record) {
         this.article = article;
         this.record = record;
 
-        this.documentManager = mgr;
-
-        this.entityList = new ArrayList<>(article.size());
+        this.list = new ArrayList<>(article.size());
 
         {
-            EntityFactory factory = mgr.getFactory();
+            EntityFactory factory = getManager().getFactory();
 
             for (int i = 0, size = article.size(); i < size; i++) {
                 ArticleEntry e = article.get(i);
-                DocumentEntity entity = factory.create(e);
+                DocumentEntity entity = factory.create(this, e);
                 if (entity != null) {
-                    entityList.add(entity);
+                    list.add(entity);
                 }
             }
         }
@@ -39,27 +35,74 @@ public class Document {
     }
 
     public DocumentEntity get(int index) {
-        return entityList.get(index);
+        return list.get(index);
     }
 
     public int size() {
-        return entityList.size();
+        return list.size();
+    }
+
+    public void add(DocumentEntity entity) {
+        this.add(size(), entity);
+    }
+
+    public void add(int index, DocumentEntity entity) {
+        list.add(index, entity);
+
+        // add entity stuff
+        this.getStuff().add(entity);
+    }
+
+    public int remove(DocumentEntity entity) {
+        int index = list.indexOf(entity);
+        if (index < 0) {
+            return index;
+        }
+
+        list.remove(index);
+
+        // remove entity stuff
+        this.getStuff().remove(entity);
+
+        return index;
     }
 
     public void save() {
-        for (DocumentEntity e : entityList) {
+        for (DocumentEntity e : list) {
             e.save();
         }
 
-        documentManager.save(this.getId(), article);
+        {
+            article.clear();
+            for (DocumentEntity entity : list) {
+                article.add(entity.getEntry());
+            }
+        }
+
+        {
+            getManager().save(this.getId(), article);
+        }
     }
 
-    public static final Document obtain(String id) {
+
+    StuffWorker getStuff() {
+        return getManager().getStuffWorker();
+    }
+
+    Article getArticle() {
+        return article;
+    }
+
+    DocumentManager getManager() {
+        return DocumentManager.getInstance();
+    }
+
+    public static final Document create(String id) {
         DocumentManager mgr = DocumentManager.getInstance();
 
         Article article = mgr.create(id, "", System.currentTimeMillis());
         RecordEntity record = RecordEntity.create(id, RecordEntity.TYPE_EMPTY);
-        Document doc = new Document(article, record, mgr);
+        Document doc = new Document(article, record);
 
         return doc;
     }

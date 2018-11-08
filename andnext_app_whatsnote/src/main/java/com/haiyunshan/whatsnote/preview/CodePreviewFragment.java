@@ -75,7 +75,7 @@ public class CodePreviewFragment extends BasePreviewFragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        PreviewMessage entity = this.getEntity();
+        PreviewMessage entity = this.getMessage();
         this.codePage = new CodePage(this, entity);
 
         {

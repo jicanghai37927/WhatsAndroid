@@ -12,10 +12,13 @@ class EntityFactory {
 
         this.map = new HashMap<>();
 
-        map.put(ParagraphEntry.class, ParagraphEntity.class);
     }
 
-    DocumentEntity create(ArticleEntry entry) {
+    void put(Class<? extends ArticleEntry> entry, Class<? extends DocumentEntity> entity) {
+        map.put(entry, entity);
+    }
+
+    DocumentEntity create(Document d, ArticleEntry entry) {
         Class<? extends DocumentEntity> entityClass = map.get(entry.getClass());
         if (entityClass == null) {
             throw new NotFoundException("Did't found entity for " + entry.getClass());
@@ -24,10 +27,10 @@ class EntityFactory {
         DocumentEntity entity = null;
 
         try {
-            Constructor c = entityClass.getConstructor(entry.getClass());
+            Constructor c = entityClass.getConstructor(d.getClass(), entry.getClass());
             c.setAccessible(true);
 
-            entity = (DocumentEntity)c.newInstance(entry);
+            entity = (DocumentEntity)c.newInstance(d, entry);
 
         } catch (NoSuchMethodException e) {
             e.printStackTrace();

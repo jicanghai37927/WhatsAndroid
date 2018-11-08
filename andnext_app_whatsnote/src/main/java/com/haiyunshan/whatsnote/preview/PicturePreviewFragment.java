@@ -6,25 +6,26 @@ import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import club.andnext.markdown.MarkdownWebView;
+import com.davemorrissey.labs.subscaleview.ImageSource;
+import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
 import com.haiyunshan.preview.PreviewMessage;
 import com.haiyunshan.whatsnote.R;
 
-public class MarkdownPreviewFragment extends BasePreviewFragment {
+public class PicturePreviewFragment extends BasePreviewFragment {
 
-    MarkdownWebView markdownView;
+    SubsamplingScaleImageView pictureView;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_markdown_preview, container, false);
+        return inflater.inflate(R.layout.fragment_picture_preview, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 
         {
-            this.markdownView = view.findViewById(R.id.wv_markdown);
+            this.pictureView = view.findViewById(R.id.iv_picture);
         }
 
     }
@@ -33,9 +34,7 @@ public class MarkdownPreviewFragment extends BasePreviewFragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        PreviewMessage entity = this.getMessage();
-        String text = entity.getText(getActivity());
-        markdownView.setText(text);
-
+        PreviewMessage msg = this.getMessage();
+        pictureView.setImage(ImageSource.uri(msg.getUri()));
     }
 }

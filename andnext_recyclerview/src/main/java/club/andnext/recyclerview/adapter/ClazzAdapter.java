@@ -6,6 +6,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
+import java.util.List;
+
 public class ClazzAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     ViewTypePool pool;
@@ -84,4 +86,36 @@ public class ClazzAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     public int getItemCount() {
         return provider.size();
     }
+
+    @Override
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position, @NonNull List<Object> payloads) {
+        ViewHolderBuilder delegate = pool.getDelegate(holder.getItemViewType());
+        if (delegate == null) {
+            delegate = this.notFoundDelegate;
+        }
+
+        Object obj = provider.get(position);
+        delegate.onBindViewHolder(holder, obj, position, payloads);
+    }
+
+    @Override
+    public void onViewAttachedToWindow(@NonNull RecyclerView.ViewHolder holder) {
+        ViewHolderBuilder delegate = pool.getDelegate(holder.getItemViewType());
+        if (delegate == null) {
+            delegate = this.notFoundDelegate;
+        }
+
+        delegate.onViewAttachedToWindow(holder);
+    }
+
+    @Override
+    public void onViewDetachedFromWindow(@NonNull RecyclerView.ViewHolder holder) {
+        ViewHolderBuilder delegate = pool.getDelegate(holder.getItemViewType());
+        if (delegate == null) {
+            delegate = this.notFoundDelegate;
+        }
+
+        delegate.onViewDetachedFromWindow(holder);
+    }
+
 }

@@ -34,7 +34,7 @@ public class PackagePreviewFragment extends BasePreviewFragment implements View.
 
     @Override
     public boolean canPreview(Context context) {
-        PreviewMessage data = this.getEntity();
+        PreviewMessage data = this.getMessage();
         String path = data.getFilePath(context);
         if (TextUtils.isEmpty(path)) {
             return false;
@@ -67,7 +67,7 @@ public class PackagePreviewFragment extends BasePreviewFragment implements View.
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        PreviewMessage entity = this.getEntity();
+        PreviewMessage entity = this.getMessage();
         CharSequence text = this.getPackageInfo(getActivity(), entity.getFilePath(getActivity()));
 
         textView.setText(text);
@@ -76,7 +76,7 @@ public class PackagePreviewFragment extends BasePreviewFragment implements View.
     @Override
     public void onClick(View v) {
         if (v == installBtn) {
-            String path = getEntity().getFilePath(getActivity());
+            String path = getMessage().getFilePath(getActivity());
 
             PackageUtils.install(getActivity(), new File(path));
         }

@@ -11,10 +11,13 @@ import java.io.File;
 class DocumentManager {
 
     static final String TYPE_ARTICLE = "";
+    static final String TYPE_PICTURE = "picture";
 
     static final String URI_ARTICLE = "article.json";
 
+    EntryDeserializer entryDeserializer;
     EntityFactory entityFactory;
+    StuffWorker stuffWorker;
 
     static DocumentManager instance;
 
@@ -35,8 +38,7 @@ class DocumentManager {
 
         File file = getPath(id, URI_ARTICLE, TYPE_ARTICLE);
         if (file.exists()) {
-            EntityDeserializer typeAdapter = new EntityDeserializer();
-            ds = GsonUtils.fromJson(file, Article.class, new Pair(ArticleEntry.class, typeAdapter));
+            ds = GsonUtils.fromJson(file, Article.class, new Pair(ArticleEntry.class, this.getDeserializer()));
         }
 
         if (ds == null) {
@@ -61,12 +63,73 @@ class DocumentManager {
 
     }
 
+    File getFile(DocumentEntity entity) {
+        File file = null;
+
+        ArticleEntry e = entity.getEntry();
+
+        String uri = "";
+        String type = "";
+
+        if (e instanceof PictureEntry) {
+            PictureEntry entry = (PictureEntry)e;
+
+            uri = e.getId();
+
+            String ext = entry.getExtension();
+            if (!TextUtils.isEmpty(ext)) {
+                uri = uri + "." + entry.getExtension();
+            }
+
+            uri = uri  + ".pic";
+
+            type = TYPE_PICTURE;
+        }
+
+        if (!TextUtils.isEmpty(uri)) {
+            file = getPath(entity.getDocument().getId(), uri, type);
+        }
+
+        return file;
+    }
+
+    StuffWorker getStuffWorker() {
+        if (stuffWorker != null) {
+            return stuffWorker;
+        }
+
+        stuffWorker = new StuffWorker();
+        return stuffWorker;
+    }
+
     EntityFactory getFactory() {
-        if (entityFactory == null) {
-            entityFactory = new EntityFactory();
+        if (entityFactory != null) {
+            return entityFactory;
+        }
+
+        entityFactory = new EntityFactory();
+        {
+            entityFactory.put(ParagraphEntry.class, ParagraphEntity.class);
+            entityFactory.put(PictureEntry.class, PictureEntity.class);
         }
 
         return entityFactory;
+    }
+
+    EntryDeserializer getDeserializer() {
+        if (entryDeserializer != null) {
+            return entryDeserializer;
+        }
+
+        EntryDeserializer typeAdapter = new EntryDeserializer();
+
+        {
+            typeAdapter.put(ParagraphEntry.TYPE, ParagraphEntry.class);
+            typeAdapter.put(PictureEntry.TYPE, PictureEntry.class);
+        }
+
+        this.entryDeserializer = typeAdapter;
+        return entryDeserializer;
     }
 
     File getDir(String id) {
@@ -78,10 +141,13 @@ class DocumentManager {
     }
 
     File getPath(String id, String uri, String type) {
-        File file = null;
+        File file;
 
         File dir = getDir(id);
         if (TextUtils.isEmpty(type)) {
+            file = new File(dir, uri);
+        } else {
+            dir = new File(dir, type);
             file = new File(dir, uri);
         }
 

@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.List;
 
 import club.andnext.recyclerview.adapter.ViewHolderBuilder;
 
@@ -105,4 +106,21 @@ public class BridgeBuilder<T, VH extends BridgeHolder> extends ViewHolderBuilder
         viewHolder.onBind(item, position);
     }
 
+    @Override
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, Object item, int position, @NonNull List payloads) {
+        VH viewHolder = (VH)holder;
+        viewHolder.onBind(item, position, payloads);
+    }
+
+    @Override
+    public void onViewAttachedToWindow(@NonNull RecyclerView.ViewHolder holder) {
+        VH viewHolder = (VH)holder;
+        viewHolder.onViewAttachedToWindow();
+    }
+
+    @Override
+    public void onViewDetachedFromWindow(@NonNull RecyclerView.ViewHolder holder) {
+        VH viewHolder = (VH)holder;
+        viewHolder.onViewDetachedFromWindow();
+    }
 }

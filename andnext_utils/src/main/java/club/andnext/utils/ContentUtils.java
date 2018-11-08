@@ -15,13 +15,68 @@ import android.text.TextUtils;
 import android.util.Log;
 import androidx.core.content.ContextCompat;
 
-import java.io.File;
+import java.io.*;
 import java.util.HashMap;
 import java.util.Locale;
 
 public class ContentUtils {
 
     private static final String TAG = ContentUtils.class.getSimpleName();
+
+    public static final String getExtension(Uri data) {
+        String name = data.getLastPathSegment();
+        int pos = name.lastIndexOf('.');
+        if (pos < 0) {
+            return "";
+        }
+
+        return name.substring(pos + 1);
+    }
+
+    public static final File copy(Context context, Uri source, File target) {
+
+        File result = null;
+
+        InputStream is = null;
+        OutputStream os = null;
+
+        try {
+            target.createNewFile();
+
+            is = context.getContentResolver().openInputStream(source);
+            os = new FileOutputStream(target);
+
+            byte[] buffer = new byte[500 * 1024];
+            int length;
+            while ((length = is.read(buffer)) >= 0) {
+                os.write(buffer, 0, length);
+            }
+
+            result = target;
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (is != null) {
+                try {
+                    is.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            if (os != null) {
+                try {
+                    os.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        return result;
+    }
 
     public static final String getDisplayName(Context context, Uri data) {
 

@@ -52,7 +52,7 @@ public class ClearEditText extends AppCompatEditText {
 			
 //			int paddingRight = getPaddingRight(); 
 			int comPaddingRight = getCompoundPaddingRight(); 
-//			int drawableWidth = mDrawableRight.getBounds().width(); 
+//			int drawableWidth = mDrawableRight.getBounds().targetWidth();
 			
 			float f1 = paramMotionEvent.getX();
 			float f2 = getWidth() - comPaddingRight;

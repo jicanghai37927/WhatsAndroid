@@ -4,7 +4,7 @@ import club.andnext.dataset.BaseDataset;
 
 class Article extends BaseDataset<ArticleEntry> {
 
-    Article() {
+    public Article() {
 
     }
 }

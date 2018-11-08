@@ -33,7 +33,7 @@ public class PlainTextPreviewFragment extends BasePreviewFragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        PreviewMessage entity = this.getEntity();
+        PreviewMessage entity = this.getMessage();
         String text = entity.getText(getActivity());
 
         textView.setText(text);

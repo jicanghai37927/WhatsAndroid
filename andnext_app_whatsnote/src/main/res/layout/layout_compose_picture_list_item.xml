@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:paddingLeft="?listPreferredItemPaddingLeft"
+        android:paddingRight="?listPreferredItemPaddingRight">
+
+    <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+        <club.andnext.widget.TargetSizeImageView
+                android:id="@+id/iv_picture"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:minWidth="240dp"
+                android:layout_gravity="center"
+                android:minHeight="12dp"
+                android:scaleType="fitCenter"/>
+
+        <ImageView
+                android:id="@+id/iv_remove"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_remove_circle_white_24dp"
+                android:tint="#ff0000"
+                android:layout_gravity="right|top"/>
+    </FrameLayout>
+
+    <EditText
+            android:id="@+id/edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="visible"
+            android:gravity="center"
+            android:enabled="false"/>
+
+</LinearLayout>
