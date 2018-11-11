@@ -229,6 +229,10 @@ public class ComposeArticleFragment extends Fragment {
 
     void remove(ComposeViewHolder holder) {
 
+        if (document.indexOf(holder.getEntity()) <= 0) {
+            return;
+        }
+
         if (holder instanceof ParagraphViewHolder) {
 
             removeParagraph((ParagraphViewHolder)holder);
@@ -252,6 +256,9 @@ public class ComposeArticleFragment extends Fragment {
     void removeParagraph(ParagraphViewHolder holder) {
 
         DocumentEntity entity = holder.getEntity();
+        if (document.size() == 1 || document.indexOf(entity) == 0) {
+            return;
+        }
 
         ParagraphViewHolder previous = null;
         int index = recyclerView.indexOfChild(holder.itemView);

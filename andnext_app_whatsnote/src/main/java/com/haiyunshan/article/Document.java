@@ -67,6 +67,10 @@ public class Document {
         return index;
     }
 
+    public int indexOf(DocumentEntity entity) {
+        return list.indexOf(entity);
+    }
+
     public void save() {
         for (DocumentEntity e : list) {
             e.save();

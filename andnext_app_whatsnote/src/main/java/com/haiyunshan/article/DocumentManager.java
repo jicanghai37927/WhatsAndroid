@@ -43,6 +43,9 @@ class DocumentManager {
 
         if (ds == null) {
             ds = new Article();
+        }
+
+        if (ds.size() == 0) {
 
             ParagraphEntry entry = new ParagraphEntry(UUIDUtils.next());
             entry.setCreated(created);

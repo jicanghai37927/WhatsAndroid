@@ -50,8 +50,8 @@ public class TargetSizeImageView extends AppCompatImageView {
         int minWidth = this.getSuggestedMinimumWidth();
         int minHeight = this.getSuggestedMinimumHeight();
 
-        int width = measureWidth;
-        width = (width > targetWidth)? targetWidth : width; // with must not large then targetWidth
+        int width = targetWidth;
+        width = (width > measureWidth)? measureWidth : width; // width must not large then measureWidth
         width = (width < minWidth)? minWidth: width; // and not smaller then minWidth
 
         int height = width * targetHeight / targetWidth; // calculate height from width
@@ -59,8 +59,8 @@ public class TargetSizeImageView extends AppCompatImageView {
             height = minHeight;
             width = height * targetWidth / targetHeight;
 
-            width = (width > measureWidth)? measureWidth: width;
-            width = (width > targetWidth)? targetWidth : width; // with must not large then targetWidth
+            width = (width > targetWidth)? targetWidth: width;
+            width = (width > measureWidth)? measureWidth : width; // width must not large then measureWidth
             width = (width < minWidth)? minWidth: width; // and not smaller then minWidth
         }
 
