@@ -89,6 +89,10 @@ public class PictureViewHolder extends ComposeViewHolder<PictureEntity> implemen
                     .listener(pictureListener)
                     .into(pictureView);
         }
+
+        {
+            Log.v(TAG, "uri = " + item.getUri() + ", width = " + item.getWidth() + ", height = " + item.getHeight());
+        }
     }
 
     @Override

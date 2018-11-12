@@ -1,0 +1,15 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+              android:orientation="vertical"
+             tools:context="com.haiyunshan.test.bitmap.TestBitmapFactoryFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+    <Button
+            android:id="@+id/btn_test_in_bitmap"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="测试inBitmap"/>
+
+</LinearLayout>
