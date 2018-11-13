@@ -2,6 +2,7 @@ package com.haiyunshan.record;
 
 import android.text.TextUtils;
 
+import javax.swing.tree.TreeNode;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +18,7 @@ public class RecordEntity {
     public static final String ROOT_TRASH   = RecordManager.ROOT_TRASH;
 
     String id;
+    String name;
     RecordEntry entry;
 
     ArrayList<RecordEntity> childList;
@@ -41,13 +43,19 @@ public class RecordEntity {
     }
 
     public String getName() {
-        return getName(this.entry);
+        if (entry != null) {
+            return getName(this.entry);
+        }
+
+        return (this.name == null)? "": name;
     }
 
     public void setName(String name) {
         if (entry != null) {
             entry.setName(name);
         }
+
+        this.name = name;
     }
 
     public RecordEntity get(String id) {
@@ -80,16 +88,48 @@ public class RecordEntity {
         return childList.size();
     }
 
-    public int remove(RecordEntity entity) {
+    public void moveTo(String parent) {
+        if (entry == null) {
+            return;
+        }
+
+        entry.setParent(parent);
+    }
+
+    public int remove(String id, boolean delete) {
+        RecordEntity entity = this.get(id);
+        return remove(entity, delete);
+    }
+
+    public int remove(RecordEntity entity, boolean delete) {
         int index = this.indexOf(entity);
         if (index < 0) {
             return index;
         }
 
-        getManager().remove(entity.entry);
         childList.remove(entity);
 
+        if (delete) {
+            getManager().remove(entity.entry);
+        }
+
         return index;
+    }
+
+    public boolean isDescendantOf(String id) {
+        RecordEntry ancestor = this.entry;
+        if (ancestor == null) {
+            return false;
+        }
+
+        do {
+            if (ancestor.getId().equals(id)) {
+                return true;
+            }
+        } while((ancestor = getManager().getParent(ancestor)) != null);
+
+        return false;
+
     }
 
     public int indexOf(RecordEntity entity) {

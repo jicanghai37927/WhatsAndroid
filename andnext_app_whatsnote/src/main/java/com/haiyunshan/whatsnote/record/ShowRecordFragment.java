@@ -195,10 +195,30 @@ public class ShowRecordFragment extends BaseRecordFragment {
     @Override
     void requestDelete(RecordEntity entity) {
 
-        int index = recordEntity.remove(entity);
+        int index = recordEntity.remove(entity, true);
         if (index >= 0) {
             adapter.notifyItemRemoved(index);
         }
+    }
+
+    @Override
+    boolean move(String id, String target) {
+        boolean result = super.move(id, target);
+        if (!result) {
+            return result;
+        }
+
+        int index = recordEntity.remove(id, false);
+        if (index >= 0) {
+            adapter.notifyItemRemoved(index);
+        }
+
+        return result;
+    }
+
+    @Override
+    RecordEntity getEntity(String id) {
+        return recordEntity.get(id);
     }
 
     /**

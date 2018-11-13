@@ -29,10 +29,11 @@ import com.haiyunshan.whatsnote.article.ComposeArticleFragment;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class BaseRecordFragment extends Fragment implements View.OnClickListener {
+public abstract class BaseRecordFragment extends Fragment implements View.OnClickListener {
 
     static final int REQUEST_CREATE_FOLDER  = 1001;
     static final int REQUEST_CREATE_NOTE    = 1002;
+    static final int REQUEST_MOVE           = 1003;
     static final int REQUEST_RENAME         = 2001;
     static final int REQUEST_TAG            = 3001;
     static final int REQUEST_COMPOSE        = 4001;
@@ -147,6 +148,18 @@ public class BaseRecordFragment extends Fragment implements View.OnClickListener
 
                 break;
             }
+            case REQUEST_MOVE: {
+                if (resultCode == Activity.RESULT_OK && data != null) {
+
+                    String id = data.getStringExtra(TargetFolderFragment.KEY_ID);
+                    String target = data.getStringExtra(TargetFolderFragment.KEY_TARGET);
+                    if (!TextUtils.isEmpty(id) && !TextUtils.isEmpty(target)) {
+                        move(id, target);
+                    }
+                }
+
+                break;
+            }
 
         }
     }
@@ -233,4 +246,30 @@ public class BaseRecordFragment extends Fragment implements View.OnClickListener
 
     }
 
+    void requestMove(@NonNull RecordEntity entity) {
+        if (entity.isTrash()) {
+            return;
+        }
+
+        Intent intent = new Intent(getActivity(), PackActivity.class);
+
+        intent.putExtra(PackActivity.KEY_FRAGMENT, TargetFolderFragment.class.getName());
+
+        intent.putExtra(TargetFolderFragment.KEY_ID, entity.getId());
+
+        this.startActivityForResult(intent, REQUEST_MOVE);
+    }
+
+    @CallSuper
+    boolean move(String id, String target) {
+        RecordEntity entity = this.getEntity(id);
+        if (entity == null || entity.getParent().equals(target)) {
+            return false;
+        }
+
+        entity.moveTo(target);
+        return true;
+    }
+
+    abstract RecordEntity getEntity(String id);
 }

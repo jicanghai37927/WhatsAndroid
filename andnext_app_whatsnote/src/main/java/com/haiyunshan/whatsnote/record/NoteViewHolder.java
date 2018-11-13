@@ -128,6 +128,10 @@ class NoteViewHolder<F extends BaseRecordFragment> extends SwipeViewHolder<Recor
                 parent.requestFavorite(getEntity());
                 break;
             }
+            case R.id.menu_move: {
+                parent.requestMove(getEntity());
+                break;
+            }
         }
 
         return false;
@@ -140,6 +144,10 @@ class NoteViewHolder<F extends BaseRecordFragment> extends SwipeViewHolder<Recor
 
         if (getEntity().isTrash() || !getEntity().isDirectory()) {
             popup.getMenu().findItem(R.id.menu_favorite).setVisible(false);
+        }
+
+        if (getEntity().isTrash()) {
+            popup.getMenu().findItem(R.id.menu_move).setVisible(false);
         }
 
         popup.show();

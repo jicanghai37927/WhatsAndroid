@@ -120,6 +120,16 @@ class RecordManager {
         return r;
     }
 
+    public RecordEntry getParent(RecordEntry entry) {
+        if (entry == null) {
+            return null;
+        }
+
+        String parentId = entry.getParent();
+        entry = getRecordDataset().get(parentId);
+        return entry;
+    }
+
     public String getRoot(String id) {
         RecordEntry entry = getRecordDataset().get(id);
         if (entry == null) {

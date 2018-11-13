@@ -135,6 +135,11 @@ public class TagRecordFragment extends BaseRecordFragment {
         }
     }
 
+    @Override
+    RecordEntity getEntity(String id) {
+        return tagRecordSet.get(id);
+    }
+
     /**
      *
      */

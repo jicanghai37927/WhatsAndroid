@@ -12,13 +12,14 @@ public class TreeList implements ClazzAdapterProvider {
 
     Node root; // all nodes
 
+    boolean keepExpand = false; // keep child expand state
     ArrayList<Node> expandList; // expanded nodes
 
     ArrayList<Node> nodeList; // visible nodes
 
-    Node lastNode; // cache last node to save time for index
-
     TreeList.Callback callback; // RecyclerView.Adapter callback to notify changed
+
+    Node lastNode; // cache last node to save time for index
 
     public TreeList(TreeList.Callback callback) {
         this.root = new Node(null);
@@ -40,6 +41,14 @@ public class TreeList implements ClazzAdapterProvider {
     @Override
     public int size() {
         return nodeList.size();
+    }
+
+    public void setKeepExpand(boolean value) {
+        this.keepExpand = value;
+    }
+
+    public boolean isKeepExpand() {
+        return keepExpand;
     }
 
     public boolean isLeaf(Object obj) {
@@ -103,7 +112,13 @@ public class TreeList implements ClazzAdapterProvider {
     }
 
     public void add(Object parent, Object child) {
-        Node childNode = new Node(child);
+
+        Node childNode = this.getNode(child);
+        if (childNode != null) {
+            return;
+        }
+
+        childNode = new Node(child);
 
         Node parentNode = null;
         if (lastNode != null && lastNode.getUserObject() == parent) {
@@ -224,37 +239,64 @@ public class TreeList implements ClazzAdapterProvider {
 
     }
 
+    public int indexOf(Object userObject) {
+        if (userObject == null) {
+            return -1;
+        }
+
+        for (int i = 0, size = nodeList.size(); i < size; i++) {
+            if (nodeList.get(i).getUserObject() == userObject) {
+                return i;
+            }
+        }
+
+        return -1;
+    }
+
     void expand(Node node) {
         if (node.isLeaf()) {
             return;
         }
 
         int position = nodeList.indexOf(node);
-
-        // 添加到可见节点
-        {
-            int index = position;
-            if (index >= 0) {
-                Enumeration<Node> enumeration = node.children();
-                while (enumeration.hasMoreElements()) {
-                    ++index;
-
-                    Node n = enumeration.nextElement();
-                    nodeList.add(index, n);
-                }
-            }
-        }
+        int count = nodeList.size();
 
         // 添加到展开节点
         {
             expandList.add(node);
         }
 
-        //
+        // 添加到可见节点
         {
-            callback.onInserted(position + 1, node.getChildCount());
+            int index = position;
+            if (index >= 0) {
+                expand(index, node);
+            }
         }
 
+        //
+        {
+            count = nodeList.size() - count;
+            callback.onInserted(position + 1, count);
+        }
+
+    }
+
+    int expand(int index, Node node) {
+        if (expandList.indexOf(node) < 0) {
+            return index;
+        }
+
+        Enumeration<Node> enumeration = node.children();
+        while (enumeration.hasMoreElements()) {
+            Node n = enumeration.nextElement();
+
+            index += 1;
+            nodeList.add(index, n);
+            index = expand(index, n);
+        }
+
+        return index;
     }
 
     void collapse(Node node) {
@@ -281,7 +323,9 @@ public class TreeList implements ClazzAdapterProvider {
         }
 
         // 删除所有展开节点
-        {
+        if (isKeepExpand()) {
+            expandList.remove(node);
+        } else {
             for (int i = expandList.size() - 1; i >= 0; i--) {
                 Node n = expandList.get(i);
                 if (n.isNodeAncestor(node)) {

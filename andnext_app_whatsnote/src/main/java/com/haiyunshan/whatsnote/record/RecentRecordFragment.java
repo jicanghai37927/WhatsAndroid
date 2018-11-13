@@ -135,6 +135,11 @@ public class RecentRecordFragment extends BaseRecordFragment {
         }
     }
 
+    @Override
+    RecordEntity getEntity(String id) {
+        return recentRecordSet.get(id);
+    }
+
     /**
      *
      */

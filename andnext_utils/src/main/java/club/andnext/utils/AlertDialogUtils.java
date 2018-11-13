@@ -7,14 +7,7 @@ import androidx.appcompat.app.AlertDialog;
 public class AlertDialogUtils {
 
     public static final AlertDialog showMessage(Context context, CharSequence msg) {
-        DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        };
-
-        AlertDialog dialog = showMessage(context, msg, listener);
+        AlertDialog dialog = showMessage(context, msg, null);
         return dialog;
     }
 

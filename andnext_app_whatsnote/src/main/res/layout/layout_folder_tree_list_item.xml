@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content">
+
+    <LinearLayout
+            android:id="@+id/content_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:minHeight="?listPreferredItemHeight"
+            android:background="@drawable/selector_folder_tree_list_item"
+            android:gravity="center_vertical"
+            android:foreground="?selectableItemBackground"
+            android:paddingLeft="?listPreferredItemPaddingLeft"
+            android:paddingRight="?listPreferredItemPaddingRight">
+
+        <TextView
+                android:id="@+id/tv_level"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+        <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_folder_white_24dp"
+                android:tint="#000000"
+                android:layout_marginRight="?listPreferredItemPaddingRight"/>
+
+        <TextView
+                android:id="@+id/tv_name"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="left|center_vertical"
+                android:textAppearance="?android:textAppearanceLarge"
+                />
+
+        <ImageView
+                android:id="@+id/iv_right"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_chevron_right_white_24dp"
+                android:tint="#000000"/>
+    </LinearLayout>
+</FrameLayout>
