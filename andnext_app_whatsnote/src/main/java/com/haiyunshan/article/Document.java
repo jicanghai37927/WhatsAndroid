@@ -1,5 +1,6 @@
 package com.haiyunshan.article;
 
+import android.text.TextUtils;
 import com.haiyunshan.record.RecordEntity;
 
 import java.util.ArrayList;
@@ -67,11 +68,30 @@ public class Document {
         return index;
     }
 
+    public int remove(int index) {
+        if (index < 0 || index >= list.size()) {
+            return -1;
+        }
+
+        DocumentEntity entity = list.get(index);
+
+        list.remove(index);
+
+        // remove entity stuff
+        this.getStuff().remove(entity);
+
+        return index;
+    }
     public int indexOf(DocumentEntity entity) {
         return list.indexOf(entity);
     }
 
     public void save() {
+        String title = this.getTitle(56);
+        if (!TextUtils.isEmpty(title)) {
+            record.setAlias(title);
+        }
+
         for (DocumentEntity e : list) {
             e.save();
         }
@@ -88,6 +108,25 @@ public class Document {
         }
     }
 
+    String getTitle(int max) {
+        DocumentEntity en = this.get(0);
+        if (en.getClass() != ParagraphEntity.class) {
+            return "";
+        }
+
+        ParagraphEntity entity = (ParagraphEntity)en;
+        CharSequence s = entity.getText();
+        if (s.length() > max) {
+            s = s.subSequence(0, max);
+        }
+        String text = s.toString().trim();
+        int pos = text.indexOf('\n');
+        if (pos > 0) {
+            return text.substring(0, pos);
+        }
+
+        return text;
+    }
 
     StuffWorker getStuff() {
         return getManager().getStuffWorker();

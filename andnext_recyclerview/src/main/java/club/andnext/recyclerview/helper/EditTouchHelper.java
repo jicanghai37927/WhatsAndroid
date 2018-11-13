@@ -3,7 +3,6 @@ package club.andnext.recyclerview.helper;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Rect;
-import android.text.Editable;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -104,7 +103,7 @@ public class EditTouchHelper implements RecyclerView.OnItemTouchListener {
                 }
 
                 if (target != null) {
-                    if (hide) {
+                    if (hide || (state != RecyclerView.SCROLL_STATE_IDLE)) {
                         MotionEvent event = this.obtain(e);
                         event.setAction(MotionEvent.ACTION_CANCEL);
 
@@ -188,6 +187,10 @@ public class EditTouchHelper implements RecyclerView.OnItemTouchListener {
             }
         }
 
+        if (view == null) {
+            return null;
+        }
+
         TextView child = findTextView(view);
         if (child != null) {
             rect.set(0, 0, child.getWidth(), child.getHeight());
@@ -201,7 +204,7 @@ public class EditTouchHelper implements RecyclerView.OnItemTouchListener {
         return child;
     }
 
-    TextView findTextView(View child) {
+    protected TextView findTextView(View child) {
         if (child.getVisibility() != View.VISIBLE) {
             return null;
         }

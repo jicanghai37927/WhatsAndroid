@@ -1,5 +1,6 @@
 package com.haiyunshan.whatsnote.article;
 
+import android.text.Editable;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
@@ -51,12 +52,66 @@ public class ParagraphViewHolder extends ComposeViewHolder<ParagraphEntity> {
         entity.setText(editText.getText());
     }
 
+    CharSequence[] split() {
+        if (!editText.isFocused()) {
+            return null;
+        }
+
+        int start = editText.getSelectionStart();
+        int end = editText.getSelectionEnd();
+        if (start != end) {
+            return null;
+        }
+
+        int position = start;
+        CharSequence text = editText.getText();
+
+        CharSequence first;
+        CharSequence second;
+        if ((position > 0) && (text.charAt(position - 1) == '\n')) {
+
+            first = text.subSequence(0, position - 1);
+            second = text.subSequence(position, text.length());
+
+        } else if ((position < text.length()) && (text.charAt(position) == '\n')) {
+
+            first = text.subSequence(0, position);
+            second = text.subSequence(position + 1, text.length());
+
+        } else {
+
+            first = text.subSequence(0, position);
+            second = text.subSequence(position, text.length());
+
+        }
+
+        return new CharSequence[] { first, second };
+    }
+
+    void setText(CharSequence text) {
+        entity.setText(text);
+
+        editText.setText(text);
+    }
+
+    Editable getText() {
+        return editText.getText();
+    }
+
     int length() {
         return editText.length();
     }
 
     void setSelection(int index) {
         editText.setSelection(index);
+    }
+
+    int getSelectionStart() {
+        return editText.getSelectionStart();
+    }
+
+    int getSelectionEnd() {
+        return editText.getSelectionEnd();
     }
 
     void requestFocus() {
@@ -74,7 +129,9 @@ public class ParagraphViewHolder extends ComposeViewHolder<ParagraphEntity> {
             switch (action) {
                 case KeyEvent.ACTION_DOWN: {
                     if (keyCode == KeyEvent.KEYCODE_DEL) {
-                        if (editText.length() == 0) {
+                        int start = getSelectionStart();
+                        int end = getSelectionEnd();
+                        if ((start == end) && (start == 0)) {
                             remove();
                         }
                     }

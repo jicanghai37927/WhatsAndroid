@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import club.andnext.utils.SoftInputUtils;
 import com.google.android.material.textfield.TextInputLayout;
 import com.haiyunshan.whatsnote.R;
 
@@ -89,5 +90,11 @@ public class CreateRecordFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        nameEdit.post(new Runnable() {
+            @Override
+            public void run() {
+                SoftInputUtils.show(getActivity(), nameEdit);
+            }
+        });
     }
 }

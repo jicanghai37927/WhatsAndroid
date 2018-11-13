@@ -8,9 +8,9 @@
             android:id="@+id/edit_paragraph"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:layout_marginBottom="24dp"
-            android:layout_marginLeft="24dp"
-            android:layout_marginRight="24dp"/>
+            android:layout_marginLeft="?listPreferredItemPaddingLeft"
+            android:layout_marginRight="?listPreferredItemPaddingRight"
+            android:background="@null"
+            android:textSize="18sp"/>
 
 </LinearLayout>

@@ -13,6 +13,8 @@ public class LocalStorage {
 
     public static final String PATH_ENTRANCE_DIR = "Preference/entrance";
 
+    public static final String PATH_CAMERA_PHOTO_DIR = "Camera/photo";
+
     static LocalStorage instance;
 
     public static final LocalStorage getInstance() {

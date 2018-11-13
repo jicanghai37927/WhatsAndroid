@@ -1,12 +1,14 @@
 package com.haiyunshan.whatsnote.article;
 
 import android.content.ClipData;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.MenuItem;
+import android.widget.EditText;
+import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
@@ -21,14 +23,17 @@ import club.andnext.recyclerview.bridge.BridgeAdapter;
 import club.andnext.recyclerview.bridge.BridgeAdapterProvider;
 import club.andnext.recyclerview.bridge.BridgeBuilder;
 import club.andnext.utils.SoftInputUtils;
+import club.andnext.utils.UriUtils;
 import com.haiyunshan.article.Document;
 import com.haiyunshan.article.DocumentEntity;
 import com.haiyunshan.article.ParagraphEntity;
 import com.haiyunshan.article.PictureEntity;
 import com.haiyunshan.record.RecentEntity;
+import com.haiyunshan.storage.LocalStorage;
 import com.haiyunshan.whatsnote.R;
 import club.andnext.recyclerview.helper.EditTouchHelper;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,13 +46,16 @@ public class ComposeArticleFragment extends Fragment {
 
     public static final String KEY_ID = "article.id";
 
-    static final int REQUEST_PHOTO  = 1001;
+    static final int REQUEST_CAMERA  = 1001;
+    static final int REQUEST_PHOTO  = 1002;
 
     Toolbar toolbar;
 
     RecyclerView recyclerView;
     BridgeAdapter adapter;
-    EditTouchHelper editTouchHelper;
+    ComposeTouchHelper composeTouchHelper;
+
+    Uri pictureUri;
 
     Document document;
 
@@ -93,8 +101,8 @@ public class ComposeArticleFragment extends Fragment {
         }
 
         {
-            this.editTouchHelper = new EditTouchHelper();
-            editTouchHelper.attach(recyclerView);
+            this.composeTouchHelper = new ComposeTouchHelper();
+            composeTouchHelper.attach(recyclerView);
         }
 
         {
@@ -109,11 +117,51 @@ public class ComposeArticleFragment extends Fragment {
             recyclerView.setAdapter(adapter);
         }
 
+        {
+            boolean showSoftInput = false;
+
+            if (document.size() == 1) {
+                DocumentEntity e = document.get(0);
+                if (e.getClass() == ParagraphEntity.class) {
+                    ParagraphEntity entity = (ParagraphEntity) e;
+                    if (entity.getText().length() == 0) {
+                        showSoftInput = true;
+                    }
+                }
+            }
+
+            if (showSoftInput) {
+                recyclerView.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        EditText edit = findEditText(recyclerView);
+                        if (edit != null) {
+                            SoftInputUtils.show(getActivity(), edit);
+                        }
+                    }
+                });
+            }
+        }
+
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
+            case REQUEST_CAMERA: {
+                if ((resultCode == RESULT_OK) && (data != null)) {
+                    if (pictureUri != null) {
+                        ArrayList<Uri> list = new ArrayList<>();
+                        list.add(pictureUri);
+
+                        this.insertPhotos(list);
+                    }
+
+                }
+
+                pictureUri = null;
+                break;
+            }
             case REQUEST_PHOTO: {
                 if ((resultCode == RESULT_OK) && (data != null)) {
 
@@ -169,6 +217,24 @@ public class ComposeArticleFragment extends Fragment {
 
     }
 
+    EditText findEditText(View view) {
+        if (view instanceof EditText) {
+            return (EditText)view;
+        }
+
+        if (view instanceof ViewGroup) {
+            ViewGroup layout = (ViewGroup)view;
+            for (int i = 0, size = layout.getChildCount(); i < size; i++) {
+                EditText edit = findEditText(layout.getChildAt(i));
+                if (edit != null) {
+                    return edit;
+                }
+            }
+        }
+
+        return null;
+    }
+
     ComposeViewHolder getViewHolder(int index) {
         View child = recyclerView.getChildAt(index);
         RecyclerView.ViewHolder h = recyclerView.findContainingViewHolder(child);
@@ -177,6 +243,37 @@ public class ComposeArticleFragment extends Fragment {
         }
 
         return null;
+    }
+
+    boolean requestCamera() {
+        SoftInputUtils.hide(getActivity());
+
+        Uri imageUri;
+        {
+            File file = LocalStorage.getInstance().getDirectory(getActivity(), LocalStorage.PATH_CAMERA_PHOTO_DIR);
+            file = new File(file, "IMG_" + System.currentTimeMillis() + ".jpg");
+            imageUri = UriUtils.fromFile(getActivity(), file);
+        }
+
+        Intent intent = new Intent();
+        {
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+            intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+        }
+
+        try {
+
+            this.startActivityForResult(intent, REQUEST_CAMERA);
+            this.pictureUri = imageUri;
+
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return false;
     }
 
     boolean requestPhoto() {
@@ -204,27 +301,141 @@ public class ComposeArticleFragment extends Fragment {
             return;
         }
 
-        int position = document.size();
-        int count = 0;
-        for (Uri uri : list) {
-            PictureEntity pic = PictureEntity.create(document, uri);
-            if (pic != null) {
-                document.add(pic);
-                ++count;
+        ParagraphEntity result = null;
 
-                ParagraphEntity en = ParagraphEntity.create(document, "");
-                document.add(en);
-                ++count;
+        ParagraphViewHolder holder = null;
+
+        // check current focus holder is ParagraphViewHolder or not?
+        {
+            View focus = getActivity().getCurrentFocus();
+            if (focus != null) {
+                RecyclerView.ViewHolder h = recyclerView.findContainingViewHolder(focus);
+                if (h instanceof ParagraphViewHolder) {
+                    holder = (ParagraphViewHolder) h;
+                }
             }
         }
 
+        // we may split Paragraph text and inert photos
+        if (holder != null) {
+
+            ParagraphEntity entity = holder.getEntity();
+            int index = document.indexOf(entity);
+            boolean isPreviousParagraph = (index == 0)? false: (document.get(index - 1).getClass() == ParagraphEntity.class);
+
+            if (holder.length() == 0) {
+
+                if (isPreviousParagraph) {
+                    insertPhotos(index, null, list);
+                    result = entity;
+                } else {
+                    result = insertPhotos(index + 1, "", list);
+                }
+
+            } else {
+
+                int start = holder.getSelectionStart();
+                int end = holder.getSelectionEnd();
+                if (start == end) {
+
+                    int position = start;
+                    if (position == 0) {
+                        if (isPreviousParagraph) {
+                            insertPhotos(index, null, list);
+                            result = entity;
+                        }
+                    } else if (position == holder.length()) {
+                        boolean isNextParagraph = (index + 1 >= document.size())? false: (document.get(index + 1).getClass() == ParagraphEntity.class);
+                        if (isNextParagraph) {
+                            insertPhotos(index + 1, null, list);
+
+                            result = (ParagraphEntity)(document.get(index + 1));
+                        }
+                    }
+                }
+            }
+
+            if (result == null) {
+                CharSequence[] array = holder.split();
+                if (array != null && array.length == 2) {
+                    int position = document.indexOf(holder.getEntity());
+                    if (position >= 0) {
+                        result = insertPhotos(position + 1, array[1], list);
+                        if (result != null) {
+                            holder.setText(array[0]);
+                            holder.setSelection(holder.length());
+                        }
+                    }
+                }
+            }
+        }
+
+        // if current focus is not Paragraph, we just append at last
+        if (holder == null) {
+            result = insertPhotos(document.size(), "", list);
+        }
+
+        // move to new position
+        if (result != null) {
+            final int index = document.indexOf(result);
+            if (index >= 0) {
+                recyclerView.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        int position = index;
+                        recyclerView.smoothScrollToPosition(position);
+
+                        RecyclerView.ViewHolder h = recyclerView.findViewHolderForAdapterPosition(position);
+                        if (h != null && h instanceof ParagraphViewHolder) {
+                            ParagraphViewHolder holder = (ParagraphViewHolder)h;
+                            holder.setSelection(0);
+                            holder.requestFocus();
+                        }
+                    }
+                });
+            }
+        }
+
+        // save document
+        if (result != null) {
+            document.save();
+        }
+    }
+
+    ParagraphEntity insertPhotos(int position, CharSequence text, List<Uri> list) {
+        if ((list == null) || list.isEmpty()) {
+            return null;
+        }
+
+        ParagraphEntity entity = null;
+
+        int index = position;
+        for (int i = 0, size = list.size(); i < size; i++) {
+            Uri uri = list.get(i);
+
+            PictureEntity pic = PictureEntity.create(document, uri);
+            if (pic != null) {
+                document.add(index, pic);
+                ++index;
+
+                CharSequence s = ((i + 1) == size)? text: "";
+                if (text != null) {
+                    ParagraphEntity en = ParagraphEntity.create(document, s);
+
+                    document.add(index, en);
+                    ++index;
+
+                    entity = en;
+                }
+            }
+        }
+
+        int count = (index - position);
         if (count > 0) {
             adapter.notifyItemRangeInserted(position, count);
         }
 
-        if (count > 0) {
-            document.save();
-        }
+        return entity;
     }
 
     void remove(ComposeViewHolder holder) {
@@ -237,7 +448,12 @@ public class ComposeArticleFragment extends Fragment {
 
             removeParagraph((ParagraphViewHolder)holder);
 
+        } else if (holder instanceof PictureViewHolder) {
+
+            removePicture((PictureViewHolder)holder);
+
         } else {
+
             DocumentEntity entity = holder.getEntity();
 
             int index = document.remove(entity);
@@ -251,6 +467,60 @@ public class ComposeArticleFragment extends Fragment {
         }
 
 
+    }
+
+    /**
+     * when insert photos, we insert a paragraph after it.
+     * so if we remove pictures, we should remove paragraph too.
+     *
+     * @param holder
+     */
+    void removePicture(PictureViewHolder holder) {
+        DocumentEntity entity = holder.getEntity();
+
+        int index = document.indexOf(entity);
+        if (index >= 0) {
+            int position = index;
+            int count = 1;
+
+            // next one
+            index = position + 1;
+            if (index < document.size()) {
+                DocumentEntity e = document.get(index);
+                if (e.getClass() == ParagraphEntity.class) {
+                    ParagraphEntity en = (ParagraphEntity)e;
+                    if (en.getText().length() == 0) {
+                        count += 1;
+                    }
+                }
+            }
+
+            // if the last paragraph did't removed, we try the previous one
+            index = position - 1;
+            if ((count == 1) && (index > 0)) { // cannot remove first paragraph
+                DocumentEntity e = document.get(index);
+                if (e.getClass() == ParagraphEntity.class) {
+                    ParagraphEntity en = (ParagraphEntity)e;
+                    if (en.getText().length() == 0) {
+                        count += 1;
+
+                        position -= 1;
+                    }
+                }
+            }
+
+            // remove them
+            for (int i = 0; i < count; i++) {
+                document.remove(position);
+            }
+
+            // notify changed
+            adapter.notifyItemRangeRemoved(position, count);
+        }
+
+        if (index >= 0) {
+            document.save();
+        }
     }
 
     void removeParagraph(ParagraphViewHolder holder) {
@@ -272,7 +542,15 @@ public class ComposeArticleFragment extends Fragment {
         if (previous != null) {
             index = document.remove(entity);
             if (index >= 0) {
-                previous.setSelection(previous.length());
+                int position = previous.length();
+
+                CharSequence s = holder.getText();
+                if (s.length() != 0) {
+                    s = previous.getText().append(s);
+                    previous.setText(s);
+                }
+
+                previous.setSelection(position);
                 previous.requestFocus();
             }
 
@@ -290,12 +568,35 @@ public class ComposeArticleFragment extends Fragment {
     /**
      *
      */
+    private class ComposeTouchHelper extends EditTouchHelper {
+
+        @Override
+        protected TextView findTextView(View child) {
+            RecyclerView.ViewHolder h = recyclerView.findContainingViewHolder(child);
+
+            // only handle touch for ParagraphViewHolder
+            if ((h != null) && (!(h instanceof ParagraphViewHolder))) {
+                return null;
+            }
+
+            return super.findTextView(child);
+        }
+    }
+
+    /**
+     *
+     */
     private class ComposeMenuItemListener implements Toolbar.OnMenuItemClickListener {
 
         @Override
         public boolean onMenuItemClick(MenuItem item) {
             int itemId = item.getItemId();
             switch (itemId) {
+                case R.id.menu_add_photo: {
+                    requestCamera();
+
+                    break;
+                }
                 case R.id.menu_insert_photo: {
                     requestPhoto();
 

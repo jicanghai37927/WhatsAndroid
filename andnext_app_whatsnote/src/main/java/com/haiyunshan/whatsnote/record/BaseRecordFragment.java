@@ -184,12 +184,19 @@ public abstract class BaseRecordFragment extends Fragment implements View.OnClic
     }
 
     void requestCreateNote() {
-        Intent intent = new Intent(getActivity(), PackActivity.class);
-        intent.putExtra(PackActivity.KEY_FRAGMENT, CreateRecordFragment.class.getName());
-        intent.putExtra(CreateRecordFragment.KEY_HINT, "新建笔记");
-        intent.putExtra(CreateRecordFragment.KEY_NAME, "空白笔记");
 
-        this.startActivityForResult(intent, REQUEST_CREATE_NOTE);
+        {
+            this.create(RecordEntity.TYPE_NOTE, "空白笔记");
+        }
+
+        if (false) {
+            Intent intent = new Intent(getActivity(), PackActivity.class);
+            intent.putExtra(PackActivity.KEY_FRAGMENT, CreateRecordFragment.class.getName());
+            intent.putExtra(CreateRecordFragment.KEY_HINT, "新建笔记");
+            intent.putExtra(CreateRecordFragment.KEY_NAME, "空白笔记");
+
+            this.startActivityForResult(intent, REQUEST_CREATE_NOTE);
+        }
     }
 
     void requestRename(RecordEntity entity) {

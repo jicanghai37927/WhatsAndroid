@@ -10,7 +10,8 @@
 
     <FrameLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:clickable="true">
 
         <club.andnext.widget.TargetSizeImageView
                 android:id="@+id/iv_picture"
@@ -19,7 +20,8 @@
                 android:minWidth="240dp"
                 android:layout_gravity="center"
                 android:minHeight="12dp"
-                android:scaleType="fitCenter"/>
+                android:scaleType="fitCenter"
+                android:clickable="true"/>
 
         <ImageView
                 android:id="@+id/iv_remove"
@@ -36,6 +38,6 @@
             android:layout_height="wrap_content"
             android:visibility="visible"
             android:gravity="center"
-            android:enabled="false"/>
+            android:enabled="true"/>
 
 </LinearLayout>

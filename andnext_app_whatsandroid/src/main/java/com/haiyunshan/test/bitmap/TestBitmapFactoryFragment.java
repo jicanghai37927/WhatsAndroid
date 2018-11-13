@@ -3,6 +3,7 @@ package com.haiyunshan.test.bitmap;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Interpolator;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -64,12 +65,20 @@ public class TestBitmapFactoryFragment extends Fragment {
             int h = (int) (height * 0.8);
             Bitmap bitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
             options.inBitmap = bitmap;
+
+            options.inDensity = Integer.MAX_VALUE / options.inSampleSize;
+            options.inTargetDensity = Integer.MAX_VALUE * w / width;
+            options.inScaled = true;
+            options.inMutable = true;
+            
         }
 
         try {
 
             Bitmap bitmap = BitmapFactory.decodeStream(getActivity().getContentResolver().openInputStream(Uri.parse(uriString)), null, options);
-            Log.v("AA", "bitmap width = " + bitmap.getWidth() + ", height = " + bitmap.getHeight());
+            if (bitmap != null) {
+                Log.v("AA", "bitmap width = " + bitmap.getWidth() + ", height = " + bitmap.getHeight());
+            }
 
             if (options.inBitmap != null) {
                 Log.v("AA", "in bitmap width = " + options.inBitmap.getWidth() + ", height = " + options.inBitmap.getHeight());

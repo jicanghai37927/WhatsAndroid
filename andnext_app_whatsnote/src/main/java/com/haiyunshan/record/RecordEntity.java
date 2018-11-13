@@ -2,7 +2,6 @@ package com.haiyunshan.record;
 
 import android.text.TextUtils;
 
-import javax.swing.tree.TreeNode;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,6 +55,12 @@ public class RecordEntity {
         }
 
         this.name = name;
+    }
+
+    public void setAlias(String name) {
+        if (entry != null) {
+            entry.setAlias(name);
+        }
     }
 
     public RecordEntity get(String id) {

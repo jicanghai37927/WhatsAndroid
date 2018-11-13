@@ -14,8 +14,8 @@ android {
         applicationId "com.haiyunshan.whatsnote"
         minSdkVersion 22
         targetSdkVersion 28
-        versionCode 1010
-        versionName '1.1.0'
+        versionCode 1011
+        versionName '1.1.1'
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 

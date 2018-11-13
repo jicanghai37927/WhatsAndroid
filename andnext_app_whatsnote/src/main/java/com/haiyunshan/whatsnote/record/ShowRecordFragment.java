@@ -147,7 +147,8 @@ public class ShowRecordFragment extends BaseRecordFragment {
         RecordEntity entity;
 
         {
-            entity = recordEntity.add(RecordEntity.TYPE_NOTE, "新的摘抄");
+            String name = getTitle(content, 56);
+            entity = recordEntity.add(RecordEntity.TYPE_NOTE, name);
             entity.setCreated(created);
 
             int position = recordEntity.indexOf(entity);
@@ -162,12 +163,30 @@ public class ShowRecordFragment extends BaseRecordFragment {
 
     }
 
+    String getTitle(String content, int max) {
+        String text = content.trim();
+        if (text.length() > max) {
+            text = text.substring(0, max).trim();
+        }
+
+        int pos = text.indexOf('\n');
+        if (pos > 0) {
+            return text.substring(0, pos);
+        }
+
+        return text;
+    }
+
     @Override
     void create(int type, String name) {
         RecordEntity entity = recordEntity.add(type, name);
         int position = recordEntity.indexOf(entity);
         if (position >= 0) {
             adapter.notifyItemInserted(position);
+        }
+
+        if (type == RecordEntity.TYPE_NOTE) {
+            requestCompose(entity);
         }
     }
 
