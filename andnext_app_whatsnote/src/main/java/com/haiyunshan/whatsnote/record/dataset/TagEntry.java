@@ -1,9 +1,6 @@
 package com.haiyunshan.whatsnote.record.dataset;
 
-import android.graphics.Color;
-import android.text.TextUtils;
 import club.andnext.dataset.BaseEntry;
-import club.andnext.utils.ColorUtils;
 import com.google.gson.annotations.SerializedName;
 
 /**
@@ -17,40 +14,25 @@ public class TagEntry extends BaseEntry {
     @SerializedName("color")
     String color;
 
-    transient Integer colorValue;
-
-    public TagEntry(String id, String name, int color) {
+    public TagEntry(String id, String name, String color) {
         this.id = id;
         this.name = name;
-        this.color = ColorUtils.format(color);
-
-        this.colorValue = color;
+        this.color = color;
     }
 
     public String getName() {
-        return name;
+        return name == null? "": name;
     }
 
     public void setName(String name) {
         this.name = name;
     }
 
-    public int getColor() {
-        if (colorValue == null) {
-            if (TextUtils.isEmpty(color)) {
-                colorValue = Color.TRANSPARENT;
-            } else {
-                colorValue = ColorUtils.parse(color);
-            }
-        }
-
-        return colorValue;
+    public String getColor() {
+        return color == null? "": color;
     }
 
-    public void setColor(int color) {
-        if (colorValue == null || colorValue != color) {
-            this.color = ColorUtils.format(color);
-            colorValue = color;
-        }
+    public void setColor(String color) {
+        this.color = color;
     }
 }

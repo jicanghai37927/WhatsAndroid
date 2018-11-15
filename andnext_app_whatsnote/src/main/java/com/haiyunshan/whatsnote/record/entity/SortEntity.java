@@ -1,30 +1,29 @@
 package com.haiyunshan.whatsnote.record.entity;
 
 import android.content.Context;
-import com.haiyunshan.whatsnote.record.dataset.SortDataset;
 import com.haiyunshan.whatsnote.record.dataset.SortEntry;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-public class SortEntity {
+public class SortEntity extends BaseEntitySet<SortEntity> {
+
+    public static final String ID_NAME      = "name";
+    public static final String ID_CREATED   = "created";
+    public static final String ID_MODIFIED  = "modified";
+    public static final String ID_SIZE      = "size";
+    public static final String ID_TAG       = "tag";
 
     SortEntry entry;
     boolean reverse;
     Comparator<RecordEntity>[] array;
 
-    ArrayList<SortEntity> childList;
-
-    Context context;
-
     SortEntity(Context context, SortEntry entry) {
-        this.context = context.getApplicationContext();
+        super(context);
 
         this.entry = entry;
 
         this.array = new Comparator[2];
-        this.childList = null;
     }
 
     public String getId() {
@@ -65,16 +64,9 @@ public class SortEntity {
         return array[index];
     }
 
-    public int size() {
-        if (childList == null) {
-            return 0;
-        }
 
-        return childList.size();
+    @Override
+    public void save() {
+
     }
-
-    public SortEntity get(int index) {
-        return childList.get(index);
-    }
-
 }

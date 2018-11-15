@@ -2,18 +2,12 @@ package com.haiyunshan.whatsnote.record.entity;
 
 import android.content.Context;
 
-import java.util.ArrayList;
-
-public class TagRecordSet {
+public class TagRecordSet extends BaseEntitySet<RecordEntity> {
 
     TagEntity tagEntity;
 
-    ArrayList<RecordEntity> recordList;
-
-    Context context;
-
     TagRecordSet(Context context, TagEntity tag) {
-        this.context = context.getApplicationContext();
+        super(context);
 
         this.tagEntity = tag;
     }
@@ -23,33 +17,17 @@ public class TagRecordSet {
     }
 
     public RecordEntity get(String id) {
-        if (recordList == null || recordList.isEmpty()) {
+        if (childList == null || childList.isEmpty()) {
             return null;
         }
 
-        for (RecordEntity e : recordList) {
+        for (RecordEntity e : childList) {
             if (e.getId().equals(id)) {
                 return e;
             }
         }
 
         return null;
-    }
-
-    public RecordEntity get(int index) {
-        if (recordList == null) {
-            return null;
-        }
-
-        return recordList.get(index);
-    }
-
-    public int size() {
-        if (recordList == null) {
-            return 0;
-        }
-
-        return recordList.size();
     }
 
     public int remove(RecordEntity entity) {
@@ -59,25 +37,14 @@ public class TagRecordSet {
         }
 
         getManager().remove(entity.entry);
-        recordList.remove(entity);
+        childList.remove(entity);
 
         return index;
     }
 
-    public int indexOf(RecordEntity entity) {
-        if (recordList == null) {
-            return -1;
-        }
-
-        return recordList.indexOf(entity);
-    }
-
+    @Override
     public void save() {
         getManager().save(RecordManager.DS_RECENT);
-    }
-
-    RecordManager getManager() {
-        return RecordManager.getInstance(context);
     }
 
 }

@@ -7,10 +7,9 @@ import com.haiyunshan.whatsnote.record.dataset.RecordEntry;
 import org.joda.time.DateTime;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
-public class RecordEntity {
+public class RecordEntity extends BaseEntitySet<RecordEntity> {
 
     public static final int TYPE_FOLDER = RecordManager.TYPE_FOLDER;
     public static final int TYPE_NOTE   = RecordManager.TYPE_NOTE;
@@ -21,8 +20,6 @@ public class RecordEntity {
     public static final String ROOT_EXTRACT   = RecordManager.ROOT_EXTRACT;
     public static final String ROOT_TRASH   = RecordManager.ROOT_TRASH;
 
-    static final List<RecordEntity> EMPTY_LIST = Collections.emptyList();
-
     String id;
     String name;
 
@@ -32,18 +29,12 @@ public class RecordEntity {
 
     RecordEntry entry;
 
-    ArrayList<RecordEntity> list;
-
-    Context context;
-
     RecordEntity(Context context, String id, RecordEntry entry) {
-        this.context = context.getApplicationContext();
+        super(context);
 
         this.id = id;
-        this.name = RecordFactory.getName(entry);
+        this.name = RecordEntity.getName(entry);
         this.entry = entry;
-
-        this.list = null;
     }
 
     public String getId() {
@@ -77,29 +68,17 @@ public class RecordEntity {
     }
 
     public RecordEntity get(String id) {
-        if (list == null) {
+        if (childList == null) {
             return null;
         }
 
-        for (RecordEntity e : list) {
+        for (RecordEntity e : childList) {
             if (e.getId().equals(id)) {
                 return e;
             }
         }
 
         return null;
-    }
-
-    public RecordEntity get(int index) {
-        return getList().get(index);
-    }
-
-    public List<RecordEntity> getList() {
-        return list == null? EMPTY_LIST: list;
-    }
-
-    public int size() {
-        return getList().size();
     }
 
     public void moveTo(String parent) {
@@ -118,7 +97,7 @@ public class RecordEntity {
             return index;
         }
 
-        list.remove(entity);
+        childList.remove(entity);
 
         if (delete) {
             getManager().remove(entity.entry);
@@ -143,10 +122,6 @@ public class RecordEntity {
 
     }
 
-    public int indexOf(RecordEntity entity) {
-        return getList().indexOf(entity);
-    }
-
     public RecordEntity add(int type, String name) {
         RecordEntry entry = getManager().create(this.id, type);
         name = getManager().getName(entry, name);
@@ -156,42 +131,6 @@ public class RecordEntity {
         this.add(entity);
 
         return entity;
-    }
-
-    public DateTime getCreated() {
-        if (entry == null) {
-            return null;
-        }
-
-        if (created != null) {
-            return created;
-        }
-
-        String time = entry.getCreated();
-        if (TextUtils.isEmpty(time)) {
-            time = DateTime.now().toString();
-
-            entry.setCreated(time);
-            entry.setModified(time);
-        }
-
-        if (time.indexOf('T') > 0) {
-            created = DateTime.parse(time);
-        } else {
-            created = new DateTime(Long.parseLong(time));
-            entry.setCreated(created.toString());
-        }
-
-        return created;
-    }
-
-    public void setCreated(long time) {
-        if (entry == null) {
-            return;
-        }
-
-        this.created = new DateTime(time);
-        entry.setCreated(created.toString());
     }
 
     public void addTag(String tag) {
@@ -288,21 +227,100 @@ public class RecordEntity {
         return !(isTrash() || isExtract());
     }
 
-    void add(RecordEntity entity) {
-        if (list == null) {
-            list = new ArrayList<>();
+    public DateTime getCreated() {
+        if (created != null) {
+            return created;
         }
 
-        list.add(entity);
+        if (entry == null) {
+            created = DateTime.now();
+            return created;
+        }
+
+        String time = entry.getCreated();
+        if (TextUtils.isEmpty(time)) {
+            time = DateTime.now().toString();
+
+            entry.setCreated(time);
+            entry.setModified(time);
+        }
+
+        if (time.indexOf('T') > 0) {
+            created = DateTime.parse(time);
+        } else {
+            created = new DateTime(Long.parseLong(time));
+            entry.setCreated(created.toString());
+        }
+
+        return created;
     }
 
+    public void setCreated(long time) {
+        if (entry == null) {
+            return;
+        }
+
+        this.created = new DateTime(time);
+        entry.setCreated(created.toString());
+    }
+
+    public DateTime getModified() {
+
+        if (modified != null) {
+            return modified;
+        }
+
+        if (entry == null) {
+            modified = DateTime.now();
+
+            return modified;
+        }
+
+        String time = entry.getModified();
+        if (TextUtils.isEmpty(time)) {
+            time = DateTime.now().toString();
+
+            entry.setModified(time);
+        }
+
+        if (time.indexOf('T') > 0) {
+            modified = DateTime.parse(time);
+        } else {
+            modified = new DateTime(Long.parseLong(time));
+            entry.setModified(modified.toString());
+        }
+
+        return modified;
+    }
+
+    public void setModified(long time) {
+        if (entry == null) {
+            return;
+        }
+
+        this.modified = new DateTime(time);
+        entry.setModified(modified.toString());
+    }
+
+    @Override
     public void save() {
         getManager().save(RecordManager.DS_ALL);
     }
 
-    RecordManager getManager() {
-        return RecordManager.getInstance(context);
-    }
+    static final String getName(RecordEntry e) {
+        if (e == null) {
+            return "";
+        }
 
+        if (!TextUtils.isEmpty(e.getName())) {
+            return e.getName();
+        }
+
+        if (!TextUtils.isEmpty(e.getAlias())) {
+            return e.getAlias();
+        }
+
+        return "";
+    }
 
 }

@@ -8,11 +8,18 @@ public class SortEntry extends BaseEntry {
     @SerializedName("name")
     String name;
 
+    @SerializedName("visible")
+    boolean visible;
+
     public SortEntry() {
 
     }
 
     public String getName() {
         return name;
+    }
+
+    public boolean isVisible() {
+        return visible;
     }
 }

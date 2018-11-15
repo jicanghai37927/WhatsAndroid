@@ -7,7 +7,7 @@ import club.andnext.dataset.BaseDataset;
 import club.andnext.utils.GsonUtils;
 import club.andnext.utils.UUIDUtils;
 import com.haiyunshan.whatsnote.record.dataset.*;
-import com.haiyunshan.whatsnote.storage.LocalStorage;
+import com.haiyunshan.whatsnote.directory.DirectoryManager;
 import org.joda.time.DateTime;
 
 import java.io.File;
@@ -60,7 +60,7 @@ class RecordManager {
     private RecordManager(Context context) {
         this.fileMap = new HashMap<>();
 
-        File dir = LocalStorage.getInstance().getDirectory(context, LocalStorage.PATH_NOTE_DIR);
+        File dir = DirectoryManager.getInstance().getDirectory(context, DirectoryManager.DIR_NOTE);
 
         fileMap.put(RecordDataset.class, new File(dir, "record_ds.json"));
         fileMap.put(TagDataset.class, new File(dir, "tag_ds.json"));
@@ -212,7 +212,7 @@ class RecordManager {
     int indexOfName(String name, List<RecordEntry> list) {
         for (int i = 0, size = list.size(); i < size; i++) {
             RecordEntry e = list.get(i);
-            if (RecordFactory.getName(e).equals(name)) {
+            if (RecordEntity.getName(e).equals(name)) {
                 return i;
             }
         }

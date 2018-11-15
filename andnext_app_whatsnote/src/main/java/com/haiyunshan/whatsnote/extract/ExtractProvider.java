@@ -11,7 +11,7 @@ import android.net.Uri;
 import android.text.TextUtils;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import com.haiyunshan.whatsnote.storage.LocalStorage;
+import com.haiyunshan.whatsnote.directory.DirectoryManager;
 import com.haiyunshan.whatsnote.extract.dataset.ExtractColumns;
 import com.haiyunshan.whatsnote.extract.dataset.ExtractOpenHelper;
 
@@ -40,7 +40,7 @@ public class ExtractProvider extends ContentProvider {
 
     @Override
     public boolean onCreate() {
-        File file = LocalStorage.getInstance().getDirectory(getContext(), LocalStorage.PATH_EXTRACT_DIR);
+        File file = DirectoryManager.getInstance().getDirectory(getContext(), DirectoryManager.DIR_EXTRACT);
         file = new File(file, "extract_ds.db");
 
         ExtractOpenHelper helper = new ExtractOpenHelper(getContext(), file.getAbsolutePath(), null, 1);

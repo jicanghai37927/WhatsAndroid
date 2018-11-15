@@ -27,8 +27,13 @@ public class SortFactory {
         entity.childList = new ArrayList<>(ds.size());
 
         for (int i = 0, size = ds.size(); i < size; i++) {
-            SortEntity e = new SortEntity(context, ds.get(i));
-            entity.childList.add(e);
+            SortEntry e = ds.get(i);
+            if (!e.isVisible()) {
+                continue;
+            }
+
+            SortEntity en = new SortEntity(context, e);
+            entity.childList.add(en);
         }
 
         return entity;

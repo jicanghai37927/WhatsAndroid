@@ -89,6 +89,29 @@ class ComparatorFactory {
     /**
      *
      */
+    public static class Modified implements Comparator<RecordEntity> {
+
+        public Modified() {
+
+        }
+
+        @Override
+        public int compare(RecordEntity o1, RecordEntity o2) {
+            DateTime c1 = o1.getModified();
+            DateTime c2 = o2.getModified();
+
+            int result = 0;
+            if (!c1.isEqual(c2)) {
+                result = (c1.isBefore(c2))? -1: 1;
+            }
+
+            return result;
+        }
+    }
+
+    /**
+     *
+     */
     public static class Size implements Comparator<RecordEntity> {
 
         public Size() {

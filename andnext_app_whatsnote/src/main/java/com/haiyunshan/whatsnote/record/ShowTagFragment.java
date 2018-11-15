@@ -99,9 +99,8 @@ public class ShowTagFragment extends Fragment {
         {
             this.sortedList = new SortedList<>(TagEntity.class, new SortedCallback(adapter));
             sortedList.add(tagEntity);
-            if (tagEntity.getList() != null) {
-                sortedList.addAll(tagEntity.getList());
-            }
+            sortedList.addAll(tagEntity.getCollection());
+
         }
 
         {

@@ -28,7 +28,7 @@ import com.haiyunshan.whatsnote.article.entity.DocumentEntity;
 import com.haiyunshan.whatsnote.article.entity.ParagraphEntity;
 import com.haiyunshan.whatsnote.article.entity.PictureEntity;
 import com.haiyunshan.whatsnote.record.entity.RecentFactory;
-import com.haiyunshan.whatsnote.storage.LocalStorage;
+import com.haiyunshan.whatsnote.directory.DirectoryManager;
 import com.haiyunshan.whatsnote.R;
 import club.andnext.recyclerview.helper.EditTouchHelper;
 
@@ -249,7 +249,7 @@ public class ComposeArticleFragment extends Fragment {
 
         Uri imageUri;
         {
-            File file = LocalStorage.getInstance().getDirectory(getActivity(), LocalStorage.PATH_CAMERA_PHOTO_DIR);
+            File file = DirectoryManager.getInstance().getDirectory(getActivity(), DirectoryManager.DIR_CAMERA_PHOTO);
             file = new File(file, "IMG_" + System.currentTimeMillis() + ".jpg");
             imageUri = UriUtils.fromFile(getActivity(), file);
         }

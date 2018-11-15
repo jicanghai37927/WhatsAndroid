@@ -3,19 +3,28 @@
   [
     {
       "id": "name",
-      "name": "名称"
+      "name": "名称",
+      "visible": true
     },
     {
       "id": "created",
-      "name": "日期"
+      "name": "日期",
+      "visible": true
+    },
+    {
+      "id": "modified",
+      "name": "日期",
+      "visible": false
     },
     {
       "id": "size",
-      "name": "大小"
+      "name": "大小",
+      "visible": true
     },
     {
       "id": "tag",
-      "name": "标签"
+      "name": "标签",
+      "visible": true
     }
 
   ]

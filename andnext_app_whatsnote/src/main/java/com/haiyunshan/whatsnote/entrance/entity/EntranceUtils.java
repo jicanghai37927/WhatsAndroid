@@ -6,7 +6,6 @@ import android.text.TextUtils;
 import androidx.fragment.app.Fragment;
 import com.haiyunshan.whatsnote.PackActivity;
 import com.haiyunshan.whatsnote.ShowRecordActivity;
-import com.haiyunshan.whatsnote.entrance.entity.EntranceEntity;
 import com.haiyunshan.whatsnote.record.RecentRecordFragment;
 import com.haiyunshan.whatsnote.record.TagRecordFragment;
 import com.haiyunshan.whatsnote.entrance.dataset.EntranceEntry;

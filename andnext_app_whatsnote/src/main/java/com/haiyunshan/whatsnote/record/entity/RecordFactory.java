@@ -1,10 +1,8 @@
 package com.haiyunshan.whatsnote.record.entity;
 
 import android.content.Context;
-import android.text.TextUtils;
 import com.haiyunshan.whatsnote.record.dataset.RecordEntry;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static com.haiyunshan.whatsnote.record.entity.RecordEntity.TYPE_ALL;
@@ -29,32 +27,14 @@ public class RecordFactory {
 
             List<RecordEntry> list = mgr.getList(id, childFlags, null);
             if (list != null && list.size() > 0) {
-                entity.list = new ArrayList<>(list.size());
-
                 for (RecordEntry e : list) {
-                    entity.list.add(new RecordEntity(context, e.getId(), e));
+                    entity.add(new RecordEntity(context, e.getId(), e));
                 }
             }
 
         }
 
         return entity;
-    }
-
-    static final String getName(RecordEntry e) {
-        if (e == null) {
-            return "";
-        }
-
-        if (!TextUtils.isEmpty(e.getName())) {
-            return e.getName();
-        }
-
-        if (!TextUtils.isEmpty(e.getAlias())) {
-            return e.getAlias();
-        }
-
-        return "";
     }
 
     static final int getType(RecordEntry entry) {

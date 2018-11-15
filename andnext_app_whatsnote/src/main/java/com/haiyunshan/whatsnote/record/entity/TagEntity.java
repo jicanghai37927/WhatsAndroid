@@ -1,35 +1,27 @@
 package com.haiyunshan.whatsnote.record.entity;
 
 import android.content.Context;
-import android.graphics.Color;
+import club.andnext.utils.ColorUtils;
 import club.andnext.utils.UUIDUtils;
-import com.haiyunshan.whatsnote.record.dataset.TagDataset;
 import com.haiyunshan.whatsnote.record.dataset.TagEntry;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.awt.*;
 
-public class TagEntity {
+public class TagEntity extends BaseEntitySet<TagEntity> {
 
-    String id;
+    Color color;
+
     TagEntry entry;
 
-    ArrayList<TagEntity> childList;
+    TagEntity(Context context, TagEntry entry) {
+        super(context);
 
-    Context context;
-
-    TagEntity(Context context, String id, TagEntry entry) {
-        this.context = context.getApplicationContext();
-
-        this.id = id;
         this.entry = entry;
-
-        this.childList = null;
     }
 
     public String getId() {
         if (entry == null) {
-            return id;
+            return "";
         }
 
         return entry.getId();
@@ -37,10 +29,16 @@ public class TagEntity {
 
     public int getColor() {
         if (entry == null) {
-            return Color.TRANSPARENT;
+            return android.graphics.Color.TRANSPARENT;
         }
 
-        return entry.getColor();
+        if (color != null) {
+            return color.getRGB();
+        }
+
+        String text = entry.getColor();
+        this.color = new Color(ColorUtils.parse(text), true);
+        return color.getRGB();
     }
 
     public String getName() {
@@ -51,46 +49,18 @@ public class TagEntity {
         return entry.getName();
     }
 
-    public List<TagEntity> getList() {
-        return childList;
-    }
-
-    public TagEntity get(int index) {
-        if (childList == null) {
-            return null;
-        }
-
-        return childList.get(index);
-    }
-
-    public int size() {
-        if (childList == null) {
-            return 0;
-        }
-
-        return childList.size();
-    }
-
-    public int indexOf(TagEntity entity) {
-        return childList.indexOf(entity);
-    }
-
     public TagEntity add(String name, int color) {
         int index = 0;
 
-        TagEntry entry = new TagEntry(UUIDUtils.next(), name, color);
+        TagEntry entry = new TagEntry(UUIDUtils.next(), name, ColorUtils.format(color));
 
         {
             getManager().getTagDataset().add(index, entry);
         }
 
         {
-            TagEntity entity = new TagEntity(this.context, entry.getId(), entry);
-            if (childList == null) {
-                childList = new ArrayList<>();
-            }
-
-            childList.add(index, entity);
+            TagEntity entity = new TagEntity(this.context, entry);
+            this.add(index, entity);
 
             return entity;
         }
@@ -102,12 +72,9 @@ public class TagEntity {
         return TagUtils.getDisplayColor(context, color);
     }
 
+    @Override
     public void save() {
         getManager().save(RecordManager.DS_TAG);
-    }
-
-    RecordManager getManager() {
-        return RecordManager.getInstance(context);
     }
 
 }

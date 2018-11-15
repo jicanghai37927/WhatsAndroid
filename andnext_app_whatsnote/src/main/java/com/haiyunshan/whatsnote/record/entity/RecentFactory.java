@@ -45,7 +45,6 @@ public class RecentFactory {
         RecentDataset ds = mgr.getRecentDataset();
         int size = ds.size();
         if (size > 0) {
-            rs.recordList = new ArrayList<>(size);
             for (int i = 0; i < size; i++) {
                 RecentEntry e = ds.get(i);
                 RecordEntry en = mgr.getRecordDataset().get(e.getId());
@@ -64,7 +63,7 @@ public class RecentFactory {
                     continue;
                 }
 
-                rs.recordList.add(r);
+                rs.add(r);
             }
         }
 

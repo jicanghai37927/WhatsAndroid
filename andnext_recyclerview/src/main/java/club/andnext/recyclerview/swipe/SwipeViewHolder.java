@@ -1,6 +1,8 @@
 package club.andnext.recyclerview.swipe;
 
 import android.graphics.Canvas;
+import android.telecom.Call;
+import androidx.annotation.CallSuper;
 import androidx.annotation.NonNull;
 import android.view.View;
 
@@ -22,6 +24,7 @@ public abstract class SwipeViewHolder<T> extends BridgeHolder<T> implements Swip
     public abstract void onViewCreated(@NonNull View view);
 
     @Override
+    @CallSuper
     public void onBind(T item, int position) {
         if (swipeHolder != null) {
             swipeHolder.reset();

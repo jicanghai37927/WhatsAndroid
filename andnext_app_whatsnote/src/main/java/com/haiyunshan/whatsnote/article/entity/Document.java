@@ -6,7 +6,6 @@ import com.haiyunshan.whatsnote.article.dataset.Article;
 import com.haiyunshan.whatsnote.article.dataset.ArticleEntry;
 import com.haiyunshan.whatsnote.record.entity.RecordEntity;
 import com.haiyunshan.whatsnote.record.entity.RecordFactory;
-import org.joda.time.DateTime;
 
 import java.util.ArrayList;
 
@@ -14,16 +13,16 @@ public class Document {
 
     ArrayList<DocumentEntity> list;
 
-    Article article;
     RecordEntity record;
+    Article article;
 
     Context context;
 
-    private Document(Context context, Article article, RecordEntity record) {
+    private Document(Context context, RecordEntity record, Article article) {
         this.context = context.getApplicationContext();
 
-        this.article = article;
         this.record = record;
+        this.article = article;
 
         this.list = new ArrayList<>(article.size());
 
@@ -46,6 +45,10 @@ public class Document {
 
     public String getId() {
         return record.getId();
+    }
+
+    public RecordEntity getRecord() {
+        return record;
     }
 
     public DocumentEntity get(int index) {
@@ -100,19 +103,26 @@ public class Document {
     }
 
     public void save() {
-        String title = this.getTitle(56);
-        if (!TextUtils.isEmpty(title)) {
-            record.setAlias(title);
-        }
 
-        for (DocumentEntity e : list) {
-            e.save();
+        {
+            String title = this.getTitle(56);
+            if (!TextUtils.isEmpty(title)) {
+                record.setAlias(title);
+            }
+
+            record.setModified(System.currentTimeMillis());
         }
 
         {
-            article.clear();
-            for (DocumentEntity entity : list) {
-                article.add(entity.getEntry());
+            for (DocumentEntity e : list) {
+                e.save();
+            }
+
+            {
+                article.clear();
+                for (DocumentEntity entity : list) {
+                    article.add(entity.getEntry());
+                }
             }
         }
 
@@ -156,10 +166,10 @@ public class Document {
     public static final Document create(Context context, String id) {
         DocumentManager mgr = DocumentManager.getInstance(context);
 
-        Article article = mgr.create(id, "", DateTime.now());
         RecordEntity record = RecordFactory.create(context, id, RecordEntity.TYPE_EMPTY);
-        Document doc = new Document(context, article, record);
+        Article article = mgr.create(id, "");
 
+        Document doc = new Document(context, record, article);
         return doc;
     }
 
@@ -167,7 +177,7 @@ public class Document {
 
         DocumentManager mgr = DocumentManager.getInstance(context);
 
-        Article article = mgr.create(record.getId(), content, record.getCreated());
+        Article article = mgr.create(record.getId(), content);
         mgr.save(record.getId(), article);
 
         return true;

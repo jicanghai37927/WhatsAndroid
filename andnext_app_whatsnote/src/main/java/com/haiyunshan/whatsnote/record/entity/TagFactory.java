@@ -40,7 +40,6 @@ public class TagFactory {
         RecordDataset ds = mgr.getRecordDataset();
         int size = ds.size();
         if (size > 0) {
-            rs.recordList = new ArrayList<>(size);
             for (int i = 0; i < size; i++) {
                 RecordEntry en = ds.get(i);
 
@@ -55,7 +54,7 @@ public class TagFactory {
                     continue;
                 }
 
-                rs.recordList.add(r);
+                rs.add(r);
             }
         }
 
@@ -64,11 +63,10 @@ public class TagFactory {
 
     static final TagEntity create(Context context) {
 
-        String id = "/";
         TagEntry entry = null;
         RecordManager mgr = RecordManager.getInstance(context);
 
-        TagEntity entity = new TagEntity(context, id, entry);
+        TagEntity entity = new TagEntity(context, entry);
         TagDataset ds = mgr.getTagDataset();
         int size = ds.size();
         if (size != 0) {
@@ -77,7 +75,7 @@ public class TagFactory {
             for (int i = 0; i < size; i++) {
                 TagEntry e = ds.get(i);
 
-                TagEntity en = new TagEntity(context, e.getId(), e);
+                TagEntity en = new TagEntity(context, e);
                 entity.childList.add(en);
             }
         }
@@ -93,7 +91,7 @@ public class TagFactory {
             return null;
         }
 
-        TagEntity entity = new TagEntity(context, id, entry);
+        TagEntity entity = new TagEntity(context, entry);
         return entity;
     }
 }

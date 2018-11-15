@@ -2,23 +2,20 @@ package com.haiyunshan.whatsnote.record;
 
 
 import android.os.Bundle;
-import android.view.MenuItem;
 import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
-import club.andnext.recyclerview.bridge.*;
+import com.haiyunshan.whatsnote.R;
 import com.haiyunshan.whatsnote.record.entity.RecordEntity;
+import com.haiyunshan.whatsnote.record.entity.SortEntity;
 import com.haiyunshan.whatsnote.record.entity.TagFactory;
 import com.haiyunshan.whatsnote.record.entity.TagRecordSet;
-import com.haiyunshan.whatsnote.record.entity.SortEntity;
-import com.haiyunshan.whatsnote.R;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class TagRecordFragment extends BaseRecordFragment {
+public class TagRecordFragment extends RecordListFragment {
 
     public static final String KEY_TAG = "recent.tag";
 
@@ -31,11 +28,6 @@ public class TagRecordFragment extends BaseRecordFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        {
-            toolbar.inflateMenu(R.menu.menu_record);
-            toolbar.setOnMenuItemClickListener(new FolderMenuItemListener(this));
-        }
     }
 
     @Override
@@ -45,28 +37,8 @@ public class TagRecordFragment extends BaseRecordFragment {
         {
             String tag = getArguments().getString(KEY_TAG, "");
             this.tagRecordSet = TagFactory.createRecordSet(getActivity(), tag);
-        }
 
-        {
-            this.adapter = new BridgeAdapter(getActivity(), new RecordProvider());
-
-            adapter.bind(RecordEntity.class,
-                    new BridgeBuilder(FolderViewHolder.class, FolderViewHolder.LAYOUT_RES_ID, this),
-                    new BridgeBuilder(NoteViewHolder.class, NoteViewHolder.LAYOUT_RES_ID, this));
-            adapter.bind(RecordEntity.class, new BridgeFilter<RecordEntity>() {
-                @Override
-                public Class<? extends BridgeHolder> getHolder(RecordEntity obj) {
-                    if (obj.isDirectory()) {
-                        return FolderViewHolder.class;
-                    }
-
-                    return NoteViewHolder.class;
-                }
-            });
-        }
-
-        {
-            recyclerView.setAdapter(adapter);
+            this.addAll(tagRecordSet.getCollection());
         }
 
         {
@@ -88,130 +60,53 @@ public class TagRecordFragment extends BaseRecordFragment {
     }
 
     @Override
-    public void onClick(View v) {
-        if (v == createFolderBtn) {
-
-            swipeActionHelper.clear();
-
-            requestCreateFolder();
-        } else if (v == createNoteBtn) {
-
-            swipeActionHelper.clear();
-
-            requestCreateNote();
-        } else {
-            super.onClick(v);
-        }
-    }
-
-    @Override
-    void create(int type, String name) {
-
-    }
-
-    @Override
-    void rename(String id, String name) {
-        RecordEntity entity = tagRecordSet.get(id);
-        if (entity == null) {
-            return;
-        }
-
-        boolean equals = entity.getName().equals(name);
-        if (equals) {
-            return;
-        }
-
-        entity.setName(name);
-        int position = tagRecordSet.indexOf(entity);
-        if (position < 0) {
-            return;
-        }
-
-        adapter.notifyItemChanged(position);
-    }
-
-    @Override
-    void requestDelete(RecordEntity entity) {
-
-        int index = tagRecordSet.remove(entity);
-        if (index >= 0) {
-            adapter.notifyItemRemoved(index);
-        }
-    }
-
-    void sort(SortEntity entity) {
-
-    }
-
-    @Override
-    RecordEntity getEntity(String id) {
-        return tagRecordSet.get(id);
+    protected Callback createCallback() {
+        return new RecordListCallback();
     }
 
     /**
      *
      */
-    private class RecordProvider implements BridgeAdapterProvider<RecordEntity> {
+    private class RecordListCallback extends RecordListFragment.Callback {
 
         @Override
-        public RecordEntity get(int position) {
-            return tagRecordSet.get(position);
+        public RecordEntity onCreate(int type, String name) {
+            return null;
         }
 
         @Override
-        public int size() {
-            return tagRecordSet.size();
-        }
-    }
+        public RecordEntity onRename(RecordEntity entity, String name) {
 
-    /**
-     *
-     */
-    private static class FolderViewHolder extends NoteViewHolder {
-
-        public FolderViewHolder(TagRecordFragment f, View itemView) {
-            super(f, itemView);
-        }
-    }
-
-    /**
-     *
-     */
-    private static class NoteViewHolder extends com.haiyunshan.whatsnote.record.NoteViewHolder<TagRecordFragment> {
-
-        public NoteViewHolder(TagRecordFragment f, View itemView) {
-            super(f, itemView);
-        }
-
-    }
-
-    /**
-     *
-     */
-    private static class FolderMenuItemListener implements Toolbar.OnMenuItemClickListener {
-
-        final TagRecordFragment parent;
-
-        public FolderMenuItemListener(TagRecordFragment f) {
-            this.parent = f;
-        }
-
-        @Override
-        public boolean onMenuItemClick(MenuItem item) {
-            parent.swipeActionHelper.clear();
-
-            int id = item.getItemId();
-            switch (id) {
-                case R.id.menu_create_note: {
-
-                    parent.requestCreateNote();
-
-                    break;
-                }
+            boolean equals = entity.getName().equals(name);
+            if (equals) {
+                return null;
             }
 
-            return false;
+            entity.setName(name);
+            return entity;
+        }
+
+        @Override
+        RecordEntity onDelete(RecordEntity entity) {
+
+            int index = tagRecordSet.remove(entity);
+            if (index < 0) {
+                return null;
+            }
+
+            return entity;
+        }
+
+        @Override
+        public RecordEntity onMove(RecordEntity entity) {
+            return null;
+        }
+
+        @Override
+        public void onSort() {
+            replaceAll(tagRecordSet.getCollection());
         }
     }
+
 
 }

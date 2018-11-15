@@ -4,8 +4,7 @@ import android.content.Context;
 import club.andnext.utils.GsonUtils;
 import com.haiyunshan.whatsnote.entrance.dataset.EntranceDataset;
 import com.haiyunshan.whatsnote.entrance.dataset.EntranceEntry;
-import com.haiyunshan.whatsnote.storage.LocalStorage;
-import com.haiyunshan.whatsnote.WhatsApp;
+import com.haiyunshan.whatsnote.directory.DirectoryManager;
 
 import java.io.File;
 
@@ -29,7 +28,7 @@ class EntranceManager {
     private EntranceManager(Context context) {
         this.context = context.getApplicationContext();
 
-        File dir = LocalStorage.getInstance().getDirectory(context, LocalStorage.PATH_ENTRANCE_DIR);
+        File dir = DirectoryManager.getInstance().getDirectory(context, DirectoryManager.DIR_ENTRANCE);
         this.entranceFile = new File(dir, "entrance_ds.json");
     }
 

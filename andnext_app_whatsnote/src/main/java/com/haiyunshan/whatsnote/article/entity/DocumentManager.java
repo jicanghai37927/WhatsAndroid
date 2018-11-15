@@ -5,7 +5,7 @@ import android.text.TextUtils;
 import android.util.Pair;
 import club.andnext.utils.GsonUtils;
 import club.andnext.utils.UUIDUtils;
-import com.haiyunshan.whatsnote.storage.LocalStorage;
+import com.haiyunshan.whatsnote.directory.DirectoryManager;
 import com.haiyunshan.whatsnote.article.dataset.Article;
 import com.haiyunshan.whatsnote.article.dataset.ArticleEntry;
 import com.haiyunshan.whatsnote.article.dataset.ParagraphEntry;
@@ -41,7 +41,7 @@ class DocumentManager {
         this.context = context.getApplicationContext();
     }
 
-    Article create(String id, String content, DateTime created) {
+    Article create(String id, String content) {
         Article ds = null;
 
         File file = getPath(id, URI_ARTICLE, TYPE_ARTICLE);
@@ -56,7 +56,6 @@ class DocumentManager {
         if (ds.size() == 0) {
 
             ParagraphEntry entry = new ParagraphEntry(UUIDUtils.next());
-            entry.setCreated(created.toString());
             entry.setText(content);
 
             ds.add(entry); // 默认一个段落
@@ -144,7 +143,7 @@ class DocumentManager {
     }
 
     File getDir(String id) {
-        File dir = LocalStorage.getInstance().getDirectory(context, LocalStorage.PATH_NOTE_DIR);
+        File dir = DirectoryManager.getInstance().getDirectory(context, DirectoryManager.DIR_NOTE);
         dir = new File(dir, "files");
         dir = new File(dir, id + ".note");
 

@@ -29,6 +29,15 @@ public class RecordEntry extends BaseEntry {
     @SerializedName("tag_list")
     List<String> tagList;
 
+    @SerializedName("created")
+    String created;
+
+    @SerializedName("modified")
+    String modified;
+
+    @SerializedName("deleted")
+    String deleted;
+
     public RecordEntry(String id, String parent, String type) {
         this.id = id;
         this.parent = parent;
@@ -96,5 +105,29 @@ public class RecordEntry extends BaseEntry {
         }
 
         return tagList.indexOf(tag);
+    }
+
+    public String getCreated() {
+        return created == null? "": created;
+    }
+
+    public void setCreated(String utc) {
+        this.created = utc;
+    }
+
+    public String getModified() {
+        return modified == null? "": modified;
+    }
+
+    public void setModified(String utc) {
+        this.modified = utc;
+    }
+
+    public String getDeleted() {
+        return deleted == null? "": deleted;
+    }
+
+    public void setDeleted(String utc) {
+        this.deleted = utc;
     }
 }

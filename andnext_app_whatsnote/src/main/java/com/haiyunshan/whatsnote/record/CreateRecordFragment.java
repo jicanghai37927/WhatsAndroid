@@ -23,7 +23,7 @@ import com.haiyunshan.whatsnote.R;
 public class CreateRecordFragment extends Fragment {
 
     public static final String KEY_ID       = "record.id";
-    public static final String KEY_PARENT   = "record.parent";
+    public static final String KEY_PARENT   = "record.callback";
     public static final String KEY_NAME     = "record.name";
     public static final String KEY_HINT     = "record.hint";
 

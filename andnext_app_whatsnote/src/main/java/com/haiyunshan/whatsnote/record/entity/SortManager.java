@@ -51,10 +51,12 @@ class SortManager {
         }
 
         comparatorFactory = new ComparatorFactory();
-        comparatorFactory.register("name", ComparatorFactory.Name.class);
-        comparatorFactory.register("created", ComparatorFactory.Created.class);
-        comparatorFactory.register("size", ComparatorFactory.Size.class);
-        comparatorFactory.register("tag", ComparatorFactory.Tag.class);
+
+        comparatorFactory.register(SortEntity.ID_NAME,      ComparatorFactory.Name.class);
+        comparatorFactory.register(SortEntity.ID_CREATED,   ComparatorFactory.Created.class);
+        comparatorFactory.register(SortEntity.ID_MODIFIED,  ComparatorFactory.Modified.class);
+        comparatorFactory.register(SortEntity.ID_SIZE,      ComparatorFactory.Size.class);
+        comparatorFactory.register(SortEntity.ID_TAG,       ComparatorFactory.Tag.class);
 
         return comparatorFactory;
     }

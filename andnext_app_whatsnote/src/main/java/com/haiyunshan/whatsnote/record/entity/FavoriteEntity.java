@@ -4,23 +4,14 @@ import android.content.Context;
 import com.haiyunshan.whatsnote.record.dataset.FavoriteEntry;
 import com.haiyunshan.whatsnote.record.dataset.RecordEntry;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class FavoriteEntity {
+public class FavoriteEntity extends BaseEntitySet<FavoriteEntity> {
 
     FavoriteEntry entry;
 
-    ArrayList<FavoriteEntity> childList;
-
-    Context context;
-
     FavoriteEntity(Context context, FavoriteEntry entry) {
-        this.context = context.getApplicationContext();
+        super(context);
 
         this.entry = entry;
-
-        this.childList = null;
     }
 
     public String getId() {
@@ -37,27 +28,7 @@ public class FavoriteEntity {
         }
 
         RecordEntry e = getManager().getRecordDataset().get(entry.getId());
-        return RecordFactory.getName(e);
-    }
-
-    public List<FavoriteEntity> getList() {
-        return childList;
-    }
-
-    public FavoriteEntity get(int index) {
-        if (childList == null) {
-            return null;
-        }
-
-        return childList.get(index);
-    }
-
-    public int size() {
-        if (childList == null) {
-            return 0;
-        }
-
-        return childList.size();
+        return RecordEntity.getName(e);
     }
 
     public FavoriteEntity add(String id) {
@@ -72,22 +43,15 @@ public class FavoriteEntity {
 
         {
             FavoriteEntity entity = new FavoriteEntity(this.context, entry);
-            if (childList == null) {
-                childList = new ArrayList<>();
-            }
-
-            childList.add(index, entity);
+            this.add(index, entity);
 
             return entity;
         }
     }
 
+    @Override
     public void save() {
         getManager().save(RecordManager.DS_FAVORITE);
-    }
-
-    RecordManager getManager() {
-        return RecordManager.getInstance(context);
     }
 
 }
