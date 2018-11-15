@@ -18,7 +18,7 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
 import com.bumptech.glide.signature.ObjectKey;
-import com.haiyunshan.article.PictureEntity;
+import com.haiyunshan.whatsnote.article.entity.PictureEntity;
 import com.haiyunshan.whatsnote.R;
 
 /**

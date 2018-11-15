@@ -70,4 +70,5 @@ dependencies {
     implementation project(':andnext_overscroll')
     implementation project(':andnext_widget')
     implementation 'me.kareluo.ui:popmenu:1.1.0'
+    implementation files('libs/joda-time-2.10.1.jar')
 }

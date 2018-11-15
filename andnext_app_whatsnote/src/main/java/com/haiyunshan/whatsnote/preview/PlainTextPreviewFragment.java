@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import com.haiyunshan.preview.PreviewMessage;
+import com.haiyunshan.whatsnote.preview.entity.PreviewMessage;
 import com.haiyunshan.whatsnote.R;
 
 public class PlainTextPreviewFragment extends BasePreviewFragment {

@@ -28,7 +28,7 @@
         </provider>
 
         <provider
-                android:name="com.haiyunshan.extract.ExtractProvider"
+                android:name=".extract.ExtractProvider"
                 android:authorities="com.haiyunshan.whatsnote.extractprovider"
                 android:exported="false"
                 />

@@ -11,7 +11,7 @@ import club.andnext.recyclerview.swipe.SwipeHolder;
 import club.andnext.recyclerview.swipe.SwipeViewHolder;
 import club.andnext.recyclerview.swipe.runner.RightActionRunner;
 import club.andnext.utils.PrettyTimeUtils;
-import com.haiyunshan.record.RecordEntity;
+import com.haiyunshan.whatsnote.record.entity.RecordEntity;
 import com.haiyunshan.whatsnote.R;
 import com.haiyunshan.whatsnote.ShowRecordActivity;
 
@@ -24,10 +24,7 @@ class NoteViewHolder<F extends BaseRecordFragment> extends SwipeViewHolder<Recor
     TextView nameView;
     TextView infoView;
 
-    View renameBtn;
     View deleteBtn;
-
-    RecordEntity recordEntity;
 
     F parent;
 
@@ -56,9 +53,6 @@ class NoteViewHolder<F extends BaseRecordFragment> extends SwipeViewHolder<Recor
         }
 
         {
-            this.renameBtn = view.findViewById(R.id.btn_rename);
-            renameBtn.setOnClickListener(this);
-
             this.deleteBtn = view.findViewById(R.id.btn_delete);
             deleteBtn.setOnClickListener(this);
         }
@@ -67,7 +61,7 @@ class NoteViewHolder<F extends BaseRecordFragment> extends SwipeViewHolder<Recor
             SwipeHolder holder = new SwipeHolder(parent.swipeActionHelper, view, contentLayout);
 
             {
-                RightActionRunner r = new RightActionRunner(renameBtn, deleteBtn);
+                RightActionRunner r = new RightActionRunner(deleteBtn);
                 holder.add(r);
             }
 
@@ -79,13 +73,12 @@ class NoteViewHolder<F extends BaseRecordFragment> extends SwipeViewHolder<Recor
     @Override
     @CallSuper
     public void onBind(RecordEntity item, int position) {
-        this.recordEntity = item;
 
         iconView.setImageResource(item.isDirectory()? R.drawable.ic_folder_white_24dp: R.drawable.ic_note_white_24dp);
 
         nameView.setText(item.getName());
 
-        infoView.setText(PrettyTimeUtils.format(item.getCreated()));
+        infoView.setText(PrettyTimeUtils.format(item.getCreated().toDate()));
     }
 
     @Override
@@ -93,16 +86,14 @@ class NoteViewHolder<F extends BaseRecordFragment> extends SwipeViewHolder<Recor
         parent.swipeActionHelper.clear();
 
         if (v == contentLayout) {
-            RecordEntity entity = getEntity();
+            RecordEntity entity = getItem();
             if (entity.isDirectory()) {
-                ShowRecordActivity.start(parent.getActivity(), getEntity().getId());
+                ShowRecordActivity.start(parent.getActivity(), getItem().getId());
             } else {
                 parent.requestCompose(entity);
             }
-        } else if (v == renameBtn) {
-            parent.requestRename(getEntity());
         } else if (v == deleteBtn) {
-            parent.requestDelete(getEntity());
+            parent.requestDelete(getItem());
         }
     }
 
@@ -120,16 +111,20 @@ class NoteViewHolder<F extends BaseRecordFragment> extends SwipeViewHolder<Recor
     public boolean onMenuItemClick(MenuItem item) {
         int id = item.getItemId();
         switch (id) {
+            case R.id.menu_rename: {
+                parent.requestRename(getItem());
+                break;
+            }
             case R.id.menu_tag: {
-                parent.requestTag(getEntity());
+                parent.requestTag(getItem());
                 break;
             }
             case R.id.menu_favorite: {
-                parent.requestFavorite(getEntity());
+                parent.requestFavorite(getItem());
                 break;
             }
             case R.id.menu_move: {
-                parent.requestMove(getEntity());
+                parent.requestMove(getItem());
                 break;
             }
         }
@@ -142,18 +137,14 @@ class NoteViewHolder<F extends BaseRecordFragment> extends SwipeViewHolder<Recor
         popup.inflate(R.menu.menu_record_list_item);
         popup.setOnMenuItemClickListener(this);
 
-        if (getEntity().isTrash() || !getEntity().isDirectory()) {
+        if (getItem().isTrash() || !getItem().isDirectory()) {
             popup.getMenu().findItem(R.id.menu_favorite).setVisible(false);
         }
 
-        if (getEntity().isTrash()) {
+        if (getItem().isTrash()) {
             popup.getMenu().findItem(R.id.menu_move).setVisible(false);
         }
 
         popup.show();
-    }
-
-    RecordEntity getEntity() {
-        return recordEntity;
     }
 }

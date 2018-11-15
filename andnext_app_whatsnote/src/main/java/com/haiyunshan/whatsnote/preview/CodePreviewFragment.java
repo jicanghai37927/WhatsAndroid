@@ -20,7 +20,7 @@ import androidx.core.widget.NestedScrollView;
 import club.andnext.overscroll.HorizontalOverScrollHelper;
 import club.andnext.overscroll.OverScrollHelper;
 import club.andnext.utils.buffer.IntBuffer;
-import com.haiyunshan.preview.PreviewMessage;
+import com.haiyunshan.whatsnote.preview.entity.PreviewMessage;
 import com.haiyunshan.whatsnote.R;
 import prettify.PrettifyParser;
 import prettify.parser.Prettify;

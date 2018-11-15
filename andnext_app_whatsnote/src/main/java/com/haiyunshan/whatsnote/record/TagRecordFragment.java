@@ -9,8 +9,10 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import club.andnext.recyclerview.bridge.*;
-import com.haiyunshan.record.RecordEntity;
-import com.haiyunshan.record.TagRecordSet;
+import com.haiyunshan.whatsnote.record.entity.RecordEntity;
+import com.haiyunshan.whatsnote.record.entity.TagFactory;
+import com.haiyunshan.whatsnote.record.entity.TagRecordSet;
+import com.haiyunshan.whatsnote.record.entity.SortEntity;
 import com.haiyunshan.whatsnote.R;
 
 /**
@@ -42,7 +44,7 @@ public class TagRecordFragment extends BaseRecordFragment {
 
         {
             String tag = getArguments().getString(KEY_TAG, "");
-            this.tagRecordSet = TagRecordSet.create(tag);
+            this.tagRecordSet = TagFactory.createRecordSet(getActivity(), tag);
         }
 
         {
@@ -96,7 +98,9 @@ public class TagRecordFragment extends BaseRecordFragment {
 
             swipeActionHelper.clear();
 
-            requestCreateNote();;
+            requestCreateNote();
+        } else {
+            super.onClick(v);
         }
     }
 
@@ -133,6 +137,10 @@ public class TagRecordFragment extends BaseRecordFragment {
         if (index >= 0) {
             adapter.notifyItemRemoved(index);
         }
+    }
+
+    void sort(SortEntity entity) {
+
     }
 
     @Override

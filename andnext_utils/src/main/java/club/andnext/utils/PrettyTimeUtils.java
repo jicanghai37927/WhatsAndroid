@@ -20,4 +20,10 @@ public class PrettyTimeUtils {
 
         return str;
     }
+
+    public static final String format(Date time) {
+        String str = sInstance.format(time);
+
+        return str;
+    }
 }

@@ -14,7 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import club.andnext.utils.PackageUtils;
-import com.haiyunshan.preview.PreviewMessage;
+import com.haiyunshan.whatsnote.preview.entity.PreviewMessage;
 import com.haiyunshan.whatsnote.R;
 
 import java.io.File;

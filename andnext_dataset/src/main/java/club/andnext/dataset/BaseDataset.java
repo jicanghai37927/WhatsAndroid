@@ -14,6 +14,10 @@ public class BaseDataset<E extends BaseEntry> {
     }
 
     public E get(String id) {
+        if (id == null) {
+            return null;
+        }
+
         int index = this.indexOf(id);
         if (index >= 0) {
             return list.get(index);

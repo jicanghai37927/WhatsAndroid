@@ -12,5 +12,5 @@
             android:tag="swipe"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:name="com.haiyunshan.test.bitmap.TestBitmapFactoryFragment"/>
+            android:name="com.haiyunshan.test.time.TestTimeFragment"/>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

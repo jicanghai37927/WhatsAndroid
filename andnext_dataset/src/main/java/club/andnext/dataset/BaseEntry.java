@@ -8,45 +8,43 @@ public class BaseEntry {
     protected String id;
 
     @SerializedName("created")
-    protected long created;
+    protected String created;
 
     @SerializedName("modified")
-    protected long modified;
+    protected String modified;
 
     @SerializedName("deleted")
-    protected long deleted;
+    protected String deleted;
 
     public BaseEntry() {
-        this.created = System.currentTimeMillis();
-        this.modified = this.created;
+
     }
 
     public String getId() {
         return id;
     }
 
-    public long getCreated() {
-        return created;
+    public String getCreated() {
+        return created == null? "": created;
     }
 
-    public void setCreated(long created) {
-        this.created = created;
-        this.modified = created;
+    public void setCreated(String utc) {
+        this.created = utc;
     }
 
-    public long getModified() {
-        return modified;
+    public String getModified() {
+        return modified == null? "": modified;
     }
 
-    public void setModified(long modified) {
-        this.modified = modified;
+    public void setModified(String utc) {
+        this.modified = utc;
     }
 
-    public long getDeleted() {
-        return deleted;
+    public String getDeleted() {
+        return deleted == null? "": deleted;
     }
 
-    public void setDeleted(long deleted) {
-        this.deleted = deleted;
+    public void setDeleted(String utc) {
+        this.deleted = utc;
     }
 }

@@ -1,16 +1,13 @@
 package com.haiyunshan.whatsnote.record;
 
 
-import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -23,7 +20,7 @@ import club.andnext.utils.ColorUtils;
 import club.andnext.utils.GsonUtils;
 import club.andnext.utils.SoftInputUtils;
 import com.google.gson.annotations.SerializedName;
-import com.haiyunshan.record.TagUtils;
+import com.haiyunshan.whatsnote.record.entity.TagUtils;
 import com.haiyunshan.whatsnote.R;
 import club.andnext.widget.CircleColorButton;
 
@@ -101,7 +98,7 @@ public class CreateTagFragment extends Fragment implements View.OnClickListener 
                 int resource = R.layout.layout_tag_color_button;
                 CircleColorButton button = (CircleColorButton)(getLayoutInflater().inflate(resource, colorLayout, false));
                 button.setColor(c);
-                button.setReplaceColor(TagUtils.getReplaceColor());
+                button.setReplaceColor(TagUtils.getReplaceColor(getActivity()));
                 button.setOnClickListener(listener);
 
                 colorLayout.addView(button);
@@ -140,7 +137,7 @@ public class CreateTagFragment extends Fragment implements View.OnClickListener 
             return;
         }
 
-        if (TagUtils.exist(name)) {
+        if (TagUtils.exist(getActivity(), name)) {
             context.onBackPressed();
             return;
         }

@@ -22,8 +22,9 @@ import club.andnext.recyclerview.bridge.BridgeHolder;
 import club.andnext.recyclerview.tree.TreeList;
 import club.andnext.recyclerview.tree.TreeListAdapterCallback;
 import club.andnext.utils.AlertDialogUtils;
-import com.haiyunshan.record.RecordEntity;
+import com.haiyunshan.whatsnote.record.entity.RecordEntity;
 import com.haiyunshan.whatsnote.R;
+import com.haiyunshan.whatsnote.record.entity.RecordFactory;
 
 import java.util.HashMap;
 
@@ -82,7 +83,7 @@ public class TargetFolderFragment extends Fragment implements View.OnClickListen
 
         {
             String id = this.getArguments().getString(KEY_ID, RecordEntity.ROOT_NOTE);
-            this.entity = RecordEntity.create(id, RecordEntity.TYPE_EMPTY);
+            this.entity = RecordFactory.create(getActivity(), id, RecordEntity.TYPE_EMPTY);
         }
 
         {
@@ -143,7 +144,7 @@ public class TargetFolderFragment extends Fragment implements View.OnClickListen
             return entity;
         }
 
-        entity = RecordEntity.create(id, RecordEntity.TYPE_FOLDER);
+        entity = RecordFactory.create(getActivity(), id, RecordEntity.TYPE_FOLDER);
         recordMap.put(id, entity);
         return entity;
     }

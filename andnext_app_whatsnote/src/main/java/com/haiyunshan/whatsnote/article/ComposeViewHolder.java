@@ -4,7 +4,7 @@ import android.view.View;
 import androidx.annotation.CallSuper;
 import androidx.annotation.NonNull;
 import club.andnext.recyclerview.bridge.BridgeHolder;
-import com.haiyunshan.article.DocumentEntity;
+import com.haiyunshan.whatsnote.article.entity.DocumentEntity;
 
 public abstract class ComposeViewHolder<E extends DocumentEntity> extends BridgeHolder<E> {
 

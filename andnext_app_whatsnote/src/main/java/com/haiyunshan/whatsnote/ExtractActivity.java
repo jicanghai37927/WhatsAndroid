@@ -11,7 +11,7 @@ import android.util.Log;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import club.andnext.utils.PackageUtils;
-import com.haiyunshan.extract.ExtractProvider;
+import com.haiyunshan.whatsnote.extract.ExtractProvider;
 
 public class ExtractActivity extends AppCompatActivity {
 

@@ -1,0 +1,22 @@
+{
+  "list":
+  [
+    {
+      "id": "name",
+      "name": "名称"
+    },
+    {
+      "id": "created",
+      "name": "日期"
+    },
+    {
+      "id": "size",
+      "name": "大小"
+    },
+    {
+      "id": "tag",
+      "name": "标签"
+    }
+
+  ]
+}

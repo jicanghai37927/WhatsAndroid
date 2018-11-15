@@ -1,7 +1,6 @@
 package com.haiyunshan.whatsnote.article;
 
 import android.content.ClipData;
-import android.content.ContentValues;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -24,12 +23,12 @@ import club.andnext.recyclerview.bridge.BridgeAdapterProvider;
 import club.andnext.recyclerview.bridge.BridgeBuilder;
 import club.andnext.utils.SoftInputUtils;
 import club.andnext.utils.UriUtils;
-import com.haiyunshan.article.Document;
-import com.haiyunshan.article.DocumentEntity;
-import com.haiyunshan.article.ParagraphEntity;
-import com.haiyunshan.article.PictureEntity;
-import com.haiyunshan.record.RecentEntity;
-import com.haiyunshan.storage.LocalStorage;
+import com.haiyunshan.whatsnote.article.entity.Document;
+import com.haiyunshan.whatsnote.article.entity.DocumentEntity;
+import com.haiyunshan.whatsnote.article.entity.ParagraphEntity;
+import com.haiyunshan.whatsnote.article.entity.PictureEntity;
+import com.haiyunshan.whatsnote.record.entity.RecentFactory;
+import com.haiyunshan.whatsnote.storage.LocalStorage;
 import com.haiyunshan.whatsnote.R;
 import club.andnext.recyclerview.helper.EditTouchHelper;
 
@@ -93,11 +92,11 @@ public class ComposeArticleFragment extends Fragment {
         {
             Bundle args = this.getArguments();
             String id = args.getString(KEY_ID, "demo");
-            this.document = Document.create(id);
+            this.document = Document.create(getActivity(), id);
         }
 
         {
-            RecentEntity.put(document.getId());
+            RecentFactory.put(getActivity(), document.getId());
         }
 
         {

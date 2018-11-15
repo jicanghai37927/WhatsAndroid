@@ -5,22 +5,6 @@
               android:minHeight="?listPreferredItemHeight">
 
     <FrameLayout
-            android:id="@+id/btn_rename"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="#838383"
-            android:foreground="?selectableItemBackground">
-
-        <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="重命名"
-                android:layout_gravity="left|center_vertical"
-                android:paddingLeft="?listPreferredItemPaddingLeft"
-                android:paddingRight="?listPreferredItemPaddingRight"/>
-    </FrameLayout>
-
-    <FrameLayout
             android:id="@+id/btn_delete"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

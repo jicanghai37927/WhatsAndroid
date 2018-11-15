@@ -8,7 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.davemorrissey.labs.subscaleview.ImageSource;
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
-import com.haiyunshan.preview.PreviewMessage;
+import com.haiyunshan.whatsnote.preview.entity.PreviewMessage;
 import com.haiyunshan.whatsnote.R;
 
 public class PicturePreviewFragment extends BasePreviewFragment {

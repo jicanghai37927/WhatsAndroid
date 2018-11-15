@@ -2,12 +2,15 @@ package com.haiyunshan.whatsnote.record;
 
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.widget.TextView;
 import androidx.annotation.CallSuper;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
@@ -20,8 +23,7 @@ import club.andnext.recyclerview.bridge.BridgeAdapter;
 import club.andnext.recyclerview.decoration.MarginDividerDecoration;
 import club.andnext.recyclerview.swipe.SwipeActionHelper;
 import com.google.android.material.snackbar.Snackbar;
-import com.haiyunshan.record.FavoriteEntity;
-import com.haiyunshan.record.RecordEntity;
+import com.haiyunshan.whatsnote.record.entity.*;
 import com.haiyunshan.whatsnote.PackActivity;
 import com.haiyunshan.whatsnote.R;
 import com.haiyunshan.whatsnote.article.ComposeArticleFragment;
@@ -39,6 +41,8 @@ public abstract class BaseRecordFragment extends Fragment implements View.OnClic
     static final int REQUEST_COMPOSE        = 4001;
 
     protected Toolbar toolbar;
+
+    protected TextView sortBtn;
 
     protected View createNoteBtn;
     protected View createFolderBtn;
@@ -68,9 +72,8 @@ public abstract class BaseRecordFragment extends Fragment implements View.OnClic
         }
 
         {
-            this.recyclerView = view.findViewById(R.id.recycler_list_view);
-            LinearLayoutManager layout = new LinearLayoutManager(getActivity());
-            recyclerView.setLayoutManager(layout);
+            this.sortBtn = view.findViewById(R.id.tv_sort);
+            sortBtn.setOnClickListener(this);
         }
 
         {
@@ -80,6 +83,13 @@ public abstract class BaseRecordFragment extends Fragment implements View.OnClic
             this.createNoteBtn = view.findViewById(R.id.btn_create_note);
             createNoteBtn.setOnClickListener(this);
         }
+
+        {
+            this.recyclerView = view.findViewById(R.id.recycler_list_view);
+            LinearLayoutManager layout = new LinearLayoutManager(getActivity());
+            recyclerView.setLayoutManager(layout);
+        }
+
     }
 
     @Override
@@ -165,9 +175,43 @@ public abstract class BaseRecordFragment extends Fragment implements View.OnClic
     }
 
     @Override
+    @CallSuper
     public void onClick(View v) {
-
+        if (v == sortBtn) {
+            this.requestSort();
+        }
     }
+
+    void requestSort() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+        {
+            builder.setTitle("排序方式：");
+        }
+
+        {
+            final SortEntity entity = SortFactory.all(getActivity());
+            String[] items = new String[entity.size()];
+            for (int i = 0, size = items.length; i < size; i++) {
+                items[i] = entity.get(i).getName();
+            }
+
+            builder.setItems(items, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    sort(entity.get(which));
+                }
+            });
+        }
+
+        {
+            builder.setPositiveButton(android.R.string.ok, null);
+        }
+
+        builder.show();
+    }
+
+    abstract void sort(SortEntity entity);
 
     void requestCreateFolder() {
 
@@ -246,7 +290,7 @@ public abstract class BaseRecordFragment extends Fragment implements View.OnClic
         }
 
         String id = entity.getId();
-        FavoriteEntity result = FavoriteEntity.obtain().add(id);
+        FavoriteEntity result = FavoriteFactory.obtain(getActivity()).add(id);
 
         String text = (result != null)? "已收藏": "不能收藏";
         Snackbar.make(recyclerView, text, Snackbar.LENGTH_SHORT).show();

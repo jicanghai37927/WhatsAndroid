@@ -3,6 +3,11 @@
       xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+            android:id="@+id/menu_rename"
+            android:title="重新命名"
+            app:showAsAction="always"/>
+
+    <item
             android:id="@+id/menu_move"
             android:title="移动"
             app:showAsAction="always"/>
@@ -15,5 +20,10 @@
     <item
             android:id="@+id/menu_favorite"
             android:title="收藏"
+            app:showAsAction="always"/>
+
+    <item
+            android:id="@+id/menu_info"
+            android:title="简介"
             app:showAsAction="always"/>
 </menu>

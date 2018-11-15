@@ -4,7 +4,7 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import com.haiyunshan.whatsnote.record.RecordMainFragment;
+import com.haiyunshan.whatsnote.entrance.RecordMainFragment;
 
 public class MainActivity extends AppCompatActivity {
 

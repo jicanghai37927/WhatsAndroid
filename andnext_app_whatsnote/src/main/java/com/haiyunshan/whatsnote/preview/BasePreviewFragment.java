@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import com.haiyunshan.preview.PreviewMessage;
+import com.haiyunshan.whatsnote.preview.entity.PreviewMessage;
 
 public abstract class BasePreviewFragment extends Fragment {
 

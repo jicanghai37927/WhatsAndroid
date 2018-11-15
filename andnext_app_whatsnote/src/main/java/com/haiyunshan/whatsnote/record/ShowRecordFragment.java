@@ -1,6 +1,7 @@
 package com.haiyunshan.whatsnote.record;
 
 
+import android.app.Activity;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -11,20 +12,30 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.SortedList;
+import androidx.recyclerview.widget.SortedListAdapterCallback;
 import club.andnext.recyclerview.bridge.*;
-import com.haiyunshan.article.Document;
-import com.haiyunshan.extract.ExtractProvider;
-import com.haiyunshan.record.RecordEntity;
+import com.haiyunshan.whatsnote.article.entity.Document;
+import com.haiyunshan.whatsnote.extract.ExtractProvider;
+import com.haiyunshan.whatsnote.record.entity.RecordEntity;
+import com.haiyunshan.whatsnote.record.entity.RecordFactory;
+import com.haiyunshan.whatsnote.record.entity.SortEntity;
 import com.haiyunshan.whatsnote.R;
+import com.haiyunshan.whatsnote.record.entity.SortFactory;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class ShowRecordFragment extends BaseRecordFragment {
 
-    public static final String KEY_PARENT = "parent";
+    public static final String KEY_PARENT = "record.parent";
 
-    RecordEntity recordEntity;
+    SortedList<RecordEntity> sortedList;
+    RecordSortedCallback sortedCallback;
+
+    RecordEntity folderEntity;
+    SortEntity sortEntity;
 
     public ShowRecordFragment() {
 
@@ -51,16 +62,12 @@ public class ShowRecordFragment extends BaseRecordFragment {
         super.onActivityCreated(savedInstanceState);
 
         {
-            String parent = getArguments().getString(KEY_PARENT, RecordEntity.ROOT_NOTE);
-            this.recordEntity = RecordEntity.create(parent);
-        }
-
-        {
-            this.adapter = new BridgeAdapter(getActivity(), new FileProvider());
+            this.adapter = new BridgeAdapter(getActivity(), new RecordProvider());
 
             adapter.bind(RecordEntity.class,
                     new BridgeBuilder(FolderViewHolder.class, FolderViewHolder.LAYOUT_RES_ID, this),
                     new BridgeBuilder(NoteViewHolder.class, NoteViewHolder.LAYOUT_RES_ID, this));
+
             adapter.bind(RecordEntity.class, new BridgeFilter<RecordEntity>() {
                 @Override
                 public Class<? extends BridgeHolder> getHolder(RecordEntity obj) {
@@ -74,10 +81,45 @@ public class ShowRecordFragment extends BaseRecordFragment {
         }
 
         {
+            this.sortedCallback = new RecordSortedCallback(adapter);
+            this.sortedList = new SortedList<>(RecordEntity.class, sortedCallback, 1024);
+        }
+
+        {
             recyclerView.setAdapter(adapter);
         }
 
-        if (recordEntity.isTrash() || recordEntity.isExtract()) {
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        {
+            if (sortEntity == null) {
+                sortEntity = SortFactory.create(getActivity(), null);
+            }
+
+            {
+                String text = String.format("已按%1$s排序", sortEntity.getName());
+                sortBtn.setText(text);
+            }
+        }
+
+        {
+            String parent = getArguments().getString(KEY_PARENT, RecordEntity.ROOT_NOTE);
+            this.folderEntity = RecordFactory.create(getActivity(), parent);
+
+            if (folderEntity.isExtract()) {
+                checkExtract(getActivity(), folderEntity);
+            }
+        }
+
+        {
+            sortedList.addAll(folderEntity.getList());
+        }
+
+        if (folderEntity.isTrash() || folderEntity.isExtract()) {
             getView().findViewById(R.id.btn_create_folder).setVisibility(View.GONE);
             getView().findViewById(R.id.btn_create_note).setVisibility(View.GONE);
 
@@ -88,17 +130,13 @@ public class ShowRecordFragment extends BaseRecordFragment {
     @Override
     public void onResume() {
         super.onResume();
-
-        if (recordEntity.isExtract()) {
-            checkExtract();
-        }
     }
 
     @Override
     public void onPause() {
         super.onPause();
 
-        recordEntity.save();
+        folderEntity.save();
     }
 
     @Override
@@ -112,14 +150,105 @@ public class ShowRecordFragment extends BaseRecordFragment {
 
             swipeActionHelper.clear();
 
-            requestCreateNote();;
+            requestCreateNote();
+        } else {
+            super.onClick(v);
         }
     }
 
-    void checkExtract() {
+    @Override
+    void create(int type, String name) {
+        RecordEntity entity = folderEntity.add(type, name);
+        int position = folderEntity.indexOf(entity);
+        if (position >= 0 && entity.isDirectory()) {
+            sortedList.add(entity);
+        }
+
+        if (type == RecordEntity.TYPE_NOTE) {
+            requestCompose(entity);
+        }
+    }
+
+    @Override
+    void rename(String id, String name) {
+        RecordEntity entity = folderEntity.get(id);
+        if (entity == null) {
+            return;
+        }
+
+        boolean equals = entity.getName().equals(name);
+        if (equals) {
+            return;
+        }
+
+        entity.setName(name);
+        int index = sortedList.indexOf(entity);
+        if (index >= 0) {
+            sortedList.updateItemAt(index, entity);
+        }
+    }
+
+    @Override
+    void requestDelete(RecordEntity entity) {
+
+        int index = folderEntity.remove(entity.getId(), true);
+        if (index >= 0) {
+            sortedList.remove(entity);
+        }
+    }
+
+    @Override
+    boolean move(String id, String target) {
+        boolean result = super.move(id, target);
+        if (!result) {
+            return result;
+        }
+
+        RecordEntity entity = folderEntity.get(id);
+        if (entity == null) {
+            return result;
+        }
+
+        int index = folderEntity.remove(entity.getId(), false);
+        if (index >= 0) {
+            sortedList.remove(entity);
+        }
+
+        return result;
+    }
+
+    @Override
+    RecordEntity getEntity(String id) {
+        return folderEntity.get(id);
+    }
+
+    @Override
+    void sort(SortEntity entity) {
+        if (sortEntity.getId().equals(entity.getId())) {
+            sortEntity.toggle();
+        } else {
+            sortEntity = entity;
+        }
+
+        {
+            sortedList.replaceAll(folderEntity.getList());
+            recyclerView.scrollToPosition(0);
+        }
+
+        {
+            String text = String.format("已按%1$s排序", sortEntity.getName());
+            sortBtn.setText(text);
+        }
+    }
+
+    static void checkExtract(Activity context, RecordEntity target) {
+        if (!target.isExtract()) {
+            return;
+        }
+
         int count = 0;
 
-        Cursor cursor = getActivity().getContentResolver().query(ExtractProvider.obtainUri(), null, null, null, null);
+        Cursor cursor = context.getContentResolver().query(ExtractProvider.obtainUri(), null, null, null, null);
         if (cursor != null) {
             count = cursor.getCount();
 
@@ -129,7 +258,13 @@ public class ShowRecordFragment extends BaseRecordFragment {
                     String content = cursor.getString(1);
                     long created = cursor.getLong(2);
 
-                    addExtract(content, created);
+                    {
+                        String name = getTitle(content, 56);
+                        RecordEntity entity = target.add(RecordEntity.TYPE_NOTE, name);
+                        entity.setCreated(created);
+
+                        Document.create(context, entity, content);
+                    }
 
                 } while (cursor.moveToNext());
             }
@@ -138,32 +273,11 @@ public class ShowRecordFragment extends BaseRecordFragment {
         }
 
         if (count != 0) {
-            getActivity().getContentResolver().delete(ExtractProvider.obtainUri(), null, null);
+            context.getContentResolver().delete(ExtractProvider.obtainUri(), null, null);
         }
     }
 
-    void addExtract(String content, long created) {
-
-        RecordEntity entity;
-
-        {
-            String name = getTitle(content, 56);
-            entity = recordEntity.add(RecordEntity.TYPE_NOTE, name);
-            entity.setCreated(created);
-
-            int position = recordEntity.indexOf(entity);
-            if (position >= 0) {
-                adapter.notifyItemInserted(position);
-            }
-        }
-
-        if (entity != null) {
-            Document.create(entity, content);
-        }
-
-    }
-
-    String getTitle(String content, int max) {
+    static String getTitle(String content, int max) {
         String text = content.trim();
         if (text.length() > max) {
             text = text.substring(0, max).trim();
@@ -177,82 +291,47 @@ public class ShowRecordFragment extends BaseRecordFragment {
         return text;
     }
 
-    @Override
-    void create(int type, String name) {
-        RecordEntity entity = recordEntity.add(type, name);
-        int position = recordEntity.indexOf(entity);
-        if (position >= 0) {
-            adapter.notifyItemInserted(position);
+    /**
+     *
+     */
+    private class RecordSortedCallback extends SortedListAdapterCallback<RecordEntity> {
+
+        public RecordSortedCallback(RecyclerView.Adapter adapter) {
+            super(adapter);
         }
 
-        if (type == RecordEntity.TYPE_NOTE) {
-            requestCompose(entity);
-        }
-    }
+        @Override
+        public int compare(RecordEntity o1, RecordEntity o2) {
 
-    @Override
-    void rename(String id, String name) {
-        RecordEntity entity = recordEntity.get(id);
-        if (entity == null) {
-            return;
-        }
+            int result = sortEntity.getComparator().compare(o1, o2);
 
-        boolean equals = entity.getName().equals(name);
-        if (equals) {
-            return;
-        }
-
-        entity.setName(name);
-        int position = recordEntity.indexOf(entity);
-        if (position < 0) {
-            return;
-        }
-
-        adapter.notifyItemChanged(position);
-    }
-
-    @Override
-    void requestDelete(RecordEntity entity) {
-
-        int index = recordEntity.remove(entity, true);
-        if (index >= 0) {
-            adapter.notifyItemRemoved(index);
-        }
-    }
-
-    @Override
-    boolean move(String id, String target) {
-        boolean result = super.move(id, target);
-        if (!result) {
             return result;
         }
 
-        int index = recordEntity.remove(id, false);
-        if (index >= 0) {
-            adapter.notifyItemRemoved(index);
+        @Override
+        public boolean areContentsTheSame(RecordEntity oldItem, RecordEntity newItem) {
+            return oldItem.equals(newItem);
         }
 
-        return result;
-    }
-
-    @Override
-    RecordEntity getEntity(String id) {
-        return recordEntity.get(id);
+        @Override
+        public boolean areItemsTheSame(RecordEntity item1, RecordEntity item2) {
+            return item1.getId().equals(item2.getId());
+        }
     }
 
     /**
      *
      */
-    private class FileProvider implements BridgeAdapterProvider {
+    private class RecordProvider implements BridgeAdapterProvider<RecordEntity> {
 
         @Override
-        public Object get(int position) {
-            return recordEntity.get(position);
+        public RecordEntity get(int position) {
+            return sortedList.get(position);
         }
 
         @Override
         public int size() {
-            return recordEntity.size();
+            return sortedList.size();
         }
     }
 

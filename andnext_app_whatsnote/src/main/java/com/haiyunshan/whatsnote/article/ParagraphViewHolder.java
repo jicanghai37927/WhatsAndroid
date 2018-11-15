@@ -6,7 +6,7 @@ import android.view.View;
 import android.widget.EditText;
 import androidx.annotation.NonNull;
 import club.andnext.helper.ClearAssistMenuHelper;
-import com.haiyunshan.article.ParagraphEntity;
+import com.haiyunshan.whatsnote.article.entity.ParagraphEntity;
 import com.haiyunshan.whatsnote.R;
 
 public class ParagraphViewHolder extends ComposeViewHolder<ParagraphEntity> {

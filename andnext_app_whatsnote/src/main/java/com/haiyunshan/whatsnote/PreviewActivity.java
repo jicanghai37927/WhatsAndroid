@@ -8,8 +8,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import club.andnext.utils.GsonUtils;
-import com.haiyunshan.preview.ExtensionDataset;
-import com.haiyunshan.preview.PreviewMessage;
+import com.haiyunshan.whatsnote.preview.dataset.ExtensionDataset;
+import com.haiyunshan.whatsnote.preview.entity.PreviewMessage;
 import com.haiyunshan.whatsnote.preview.BasePreviewFragment;
 import com.haiyunshan.whatsnote.preview.PlainTextPreviewFragment;
 

@@ -22,10 +22,12 @@ import androidx.recyclerview.widget.SortedListAdapterCallback;
 import club.andnext.recyclerview.bridge.*;
 import club.andnext.utils.ColorUtils;
 import club.andnext.widget.CircleColorButton;
-import com.haiyunshan.record.RecordEntity;
-import com.haiyunshan.record.TagEntity;
+import com.haiyunshan.whatsnote.record.entity.RecordEntity;
+import com.haiyunshan.whatsnote.record.entity.RecordFactory;
+import com.haiyunshan.whatsnote.record.entity.TagEntity;
 import com.haiyunshan.whatsnote.PackActivity;
 import com.haiyunshan.whatsnote.R;
+import com.haiyunshan.whatsnote.record.entity.TagFactory;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -71,8 +73,8 @@ public class ShowTagFragment extends Fragment {
         {
             String id = getArguments().getString(KEY_ID);
 
-            this.recordEntity = RecordEntity.create(id, RecordEntity.TYPE_EMPTY);
-            this.tagEntity = TagEntity.obtain();
+            this.recordEntity = RecordFactory.create(getActivity(), id, RecordEntity.TYPE_EMPTY);
+            this.tagEntity = TagFactory.obtain(getActivity());
         }
 
         {
