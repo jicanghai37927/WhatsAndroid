@@ -101,6 +101,20 @@ github风格的markdown样式。
 
 
 
+## 9. joda-time
+
+强大的时间处理库。
+
+Java8以前，joda-time是最好的处理时间的选择，远比Date和Calendar强大得多。
+
+Java8以后，Android 8.0 API 26，可以使用java.time处理时间。
+
+目前，**WhatsNote**至少需要兼容Android 7.0，甚至Android 5.1，所以选择joda-time来处理时间。
+
+* joda-time官方网站：https://www.joda.org/joda-time/
+
+
+
 ## 未完，待续
 
 

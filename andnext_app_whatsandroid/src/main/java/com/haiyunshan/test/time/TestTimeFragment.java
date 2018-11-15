@@ -16,6 +16,8 @@ import org.joda.time.LocalDateTime;
 import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.ISODateTimeFormat;
 
+import java.time.Clock;
+
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -57,6 +59,10 @@ public class TestTimeFragment extends Fragment {
         {
             DateTime dateTime = DateTime.parse("2018-11-15T10:40:58.391+08:00");
             Log.w("AA", dateTime.toString());
+        }
+
+        {
+            Clock.systemUTC();
         }
     }
 }
