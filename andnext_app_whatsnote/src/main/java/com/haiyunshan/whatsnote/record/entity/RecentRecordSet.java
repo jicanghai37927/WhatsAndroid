@@ -13,6 +13,11 @@ public class RecentRecordSet extends BaseEntitySet<RecordEntity> {
         this.tagEntity = tag;
     }
 
+    @Override
+    public String getId() {
+        return "";
+    }
+
     public TagEntity getTag() {
         return tagEntity;
     }

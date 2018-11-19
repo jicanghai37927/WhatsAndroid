@@ -39,4 +39,5 @@ class FavoriteFactory {
 
         return entity;
     }
+
 }

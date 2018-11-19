@@ -21,6 +21,11 @@ public class OptionEntity extends BaseEntitySet<OptionEntity> {
         this.entry = entry;
     }
 
+    @Override
+    public String getId() {
+        return "";
+    }
+
     public SortEntity getSort() {
         if (sort == null) {
             String id = entry.getSortId();

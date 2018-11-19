@@ -16,6 +16,15 @@ public class RecentEntity extends BaseEntitySet<RecentEntity> {
     }
 
     @Override
+    public String getId() {
+        if (entry == null) {
+            return "";
+        }
+
+        return entry.getId();
+    }
+
+    @Override
     public void save() {
 
     }

@@ -11,7 +11,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.LifecycleObserver;
+import androidx.lifecycle.OnLifecycleEvent;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.ListUpdateCallback;
 import androidx.recyclerview.widget.RecyclerView;
 import club.andnext.recyclerview.bridge.BridgeAdapter;
 import club.andnext.recyclerview.bridge.BridgeAdapterProvider;
@@ -29,7 +34,7 @@ import java.util.ArrayList;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class RecordMainFragment extends Fragment {
+public class EntranceFragment extends Fragment {
 
     RecyclerView recyclerView;
     BridgeAdapter adapter;
@@ -39,14 +44,14 @@ public class RecordMainFragment extends Fragment {
     FavoriteSection favoriteSection;
     TagSection tagSection;
 
-    public RecordMainFragment() {
+    public EntranceFragment() {
 
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_record_main, container, false);
+        return inflater.inflate(R.layout.fragment_entrance, container, false);
     }
 
     @Override
@@ -66,8 +71,13 @@ public class RecordMainFragment extends Fragment {
 
         {
             this.entranceSection = new EntranceSection(this, "位置", OptionEntity.SECTION_ENTRANCE);
+            this.getLifecycle().addObserver(entranceSection);
+
             this.favoriteSection = new FavoriteSection(this, "个人收藏", OptionEntity.SECTION_FAVORITE);
+            this.getLifecycle().addObserver(favoriteSection);
+
             this.tagSection = new TagSection(this, "标签", OptionEntity.SECTION_TAG);
+            this.getLifecycle().addObserver(tagSection);
         }
 
         {
@@ -148,9 +158,9 @@ public class RecordMainFragment extends Fragment {
         ImageView chevronView;
 
         BaseSection entity;
-        RecordMainFragment parent;
+        EntranceFragment parent;
 
-        public SectionViewHolder(RecordMainFragment f, View itemView) {
+        public SectionViewHolder(EntranceFragment f, View itemView) {
             super(itemView);
 
             this.parent = f;
@@ -210,9 +220,9 @@ public class RecordMainFragment extends Fragment {
 
         EntranceEntity entity;
 
-        RecordMainFragment parent;
+        EntranceFragment parent;
 
-        public EntranceViewHolder(RecordMainFragment f, View itemView) {
+        public EntranceViewHolder(EntranceFragment f, View itemView) {
             super(itemView);
 
             this.parent = f;
@@ -252,9 +262,9 @@ public class RecordMainFragment extends Fragment {
 
         FavoriteEntity entity;
 
-        RecordMainFragment parent;
+        EntranceFragment parent;
 
-        public FavoriteViewHolder(RecordMainFragment f, View itemView) {
+        public FavoriteViewHolder(EntranceFragment f, View itemView) {
             super(itemView);
 
             this.parent = f;
@@ -294,9 +304,9 @@ public class RecordMainFragment extends Fragment {
 
         TagEntity entity;
 
-        RecordMainFragment parent;
+        EntranceFragment parent;
 
-        public TagViewHolder(RecordMainFragment f, View itemView) {
+        public TagViewHolder(EntranceFragment f, View itemView) {
             super(itemView);
 
             this.parent = f;
@@ -337,7 +347,7 @@ public class RecordMainFragment extends Fragment {
 
         EntranceEntity entranceEntity;
 
-        EntranceSection(RecordMainFragment f, String name, String key) {
+        EntranceSection(EntranceFragment f, String name, String key) {
             super(f, name, key);
 
             this.entranceEntity = EntranceEntity.obtain(f.getActivity());
@@ -371,7 +381,7 @@ public class RecordMainFragment extends Fragment {
         FavoriteEntity data;
         FavoriteEntity oldData;
 
-        FavoriteSection(RecordMainFragment f, String name, String key) {
+        FavoriteSection(EntranceFragment f, String name, String key) {
             super(f, name, key);
 
             this.data = FavoriteEntity.obtain();
@@ -388,6 +398,28 @@ public class RecordMainFragment extends Fragment {
             return data.size();
         }
 
+        @Override
+        void onStart() {
+            if (parent.sectionList.isExpand(this)) {
+                if (data != null && oldData != null) {
+                    DiffUtil.calculateDiff(new DiffCallback(data, oldData))
+                            .dispatchUpdatesTo(new DiffListUpdateCallback(parent.sectionList, this));
+                }
+
+                oldData = null;
+            }
+        }
+
+        @Override
+        void onStop() {
+            if (parent.sectionList.isExpand(this)) {
+                oldData = FavoriteEntity.copy();
+            } else {
+                oldData = null;
+            }
+
+        }
+
     }
 
     /**
@@ -398,7 +430,7 @@ public class RecordMainFragment extends Fragment {
         TagEntity data;
         TagEntity oldData;
 
-        TagSection(RecordMainFragment f, String name, String key) {
+        TagSection(EntranceFragment f, String name, String key) {
             super(f, name, key);
 
             this.data = TagEntity.obtain();
@@ -414,19 +446,40 @@ public class RecordMainFragment extends Fragment {
         public int size() {
             return data.size();
         }
+
+        @Override
+        void onStart() {
+            if (parent.sectionList.isExpand(this)) {
+                if (data != null && oldData != null) {
+                    DiffUtil.calculateDiff(new DiffCallback(data, oldData))
+                            .dispatchUpdatesTo(new DiffListUpdateCallback(parent.sectionList, this));
+                }
+
+                oldData = null;
+            }
+        }
+
+        @Override
+        void onStop() {
+            if (parent.sectionList.isExpand(this)) {
+                oldData = TagEntity.copy();
+            } else {
+                oldData = null;
+            }
+        }
     }
 
     /**
      *
      */
-    private static class BaseSection {
+    private static class BaseSection implements LifecycleObserver {
 
         String name;
         String key;
 
-        RecordMainFragment parent;
+        EntranceFragment parent;
 
-        BaseSection(RecordMainFragment f, String name, String key) {
+        BaseSection(EntranceFragment f, String name, String key) {
             this.parent = f;
             this.name = name;
             this.key = key;
@@ -437,5 +490,89 @@ public class RecordMainFragment extends Fragment {
         }
 
         String getKey() { return key; }
+
+        @OnLifecycleEvent(Lifecycle.Event.ON_START)
+        void onStart() {
+
+        }
+
+        @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
+        void onStop() {
+
+        }
+    }
+
+    /**
+     *
+     */
+    private static class DiffListUpdateCallback implements ListUpdateCallback {
+
+        SectionList sectionList;
+        BaseSection section;
+
+        DiffListUpdateCallback(SectionList sectionList, BaseSection section) {
+            this.sectionList = sectionList;
+            this.section = section;
+        }
+
+        @Override
+        public void onInserted(int position, int count) {
+            sectionList.notifyInserted(section, position, count);
+        }
+
+        @Override
+        public void onRemoved(int position, int count) {
+            sectionList.notifyRemoved(section, position, count);
+        }
+
+        @Override
+        public void onMoved(int fromPosition, int toPosition) {
+            sectionList.notifyMoved(section, fromPosition, toPosition);
+        }
+
+        @Override
+        public void onChanged(int position, int count, @Nullable Object payload) {
+            sectionList.notifyChanged(section, position, count, payload);
+        }
+    }
+
+    /**
+     *
+     */
+    private static class DiffCallback extends DiffUtil.Callback {
+
+        BaseEntitySet data;
+        BaseEntitySet oldData;
+
+        DiffCallback(BaseEntitySet data, BaseEntitySet oldData) {
+            this.data = data;
+            this.oldData = oldData;
+        }
+
+        @Override
+        public int getOldListSize() {
+            return oldData.size();
+        }
+
+        @Override
+        public int getNewListSize() {
+            return data.size();
+        }
+
+        @Override
+        public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
+            BaseEntity oldItem = oldData.get(oldItemPosition);
+            BaseEntity newItem = data.get(newItemPosition);
+
+            return oldItem.getId().equals(newItem.getId());
+        }
+
+        @Override
+        public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
+            BaseEntity oldItem = oldData.get(oldItemPosition);
+            BaseEntity newItem = data.get(newItemPosition);
+
+            return oldItem.equals(newItem);
+        }
     }
 }

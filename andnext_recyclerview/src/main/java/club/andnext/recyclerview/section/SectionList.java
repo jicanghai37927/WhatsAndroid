@@ -1,5 +1,6 @@
 package club.andnext.recyclerview.section;
 
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.ListUpdateCallback;
 import club.andnext.recyclerview.adapter.ClazzAdapterProvider;
 
@@ -86,6 +87,33 @@ public class SectionList implements ClazzAdapterProvider {
         this.add(section);
 
         return section;
+    }
+
+    public void notifyMoved(Object userObject, int fromPosition, int toPosition) {
+        Section section = getSection(userObject);
+        if (section == null || !section.isExpand()) {
+            return;
+        }
+
+        int pos = positionOf(section);
+        int from = pos + fromPosition;
+        int to = pos + toPosition;
+
+        callback.onMoved(from, to);
+
+    }
+
+    public void notifyChanged(Object userObject, int position, int count, @Nullable Object payload) {
+        Section section = getSection(userObject);
+        if (section == null || !section.isExpand()) {
+            return;
+        }
+
+        int pos = positionOf(section);
+        pos += 1;
+        pos += position;
+
+        callback.onChanged(pos, count, payload);
     }
 
     public void notifyInserted(Object userObject, int position) {

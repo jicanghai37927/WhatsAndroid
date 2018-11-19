@@ -4,7 +4,7 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import com.haiyunshan.whatsnote.entrance.RecordMainFragment;
+import com.haiyunshan.whatsnote.entrance.EntranceFragment;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -12,7 +12,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        RecordMainFragment f = new RecordMainFragment();
+        EntranceFragment f = new EntranceFragment();
         f.setArguments(this.getIntent().getExtras());
 
         FragmentManager fm = this.getSupportFragmentManager();

@@ -5,12 +5,19 @@ import android.content.Context;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
-public abstract class BaseEntitySet<T> {
+public abstract class BaseEntitySet<T extends BaseEntity> extends BaseEntity {
+
+    static List<BaseEntity> EMPTY_LIST;
 
     Context context;
 
     ArrayList<T> childList;
+
+    {
+        EMPTY_LIST = Collections.emptyList();
+    }
 
     BaseEntitySet(Context context) {
         this.context = context.getApplicationContext();
@@ -47,7 +54,7 @@ public abstract class BaseEntitySet<T> {
             return childList;
         }
 
-        return (Collection<T>)(Collections.emptyList());
+        return (Collection<T>)EMPTY_LIST;
     }
 
     public abstract void save();

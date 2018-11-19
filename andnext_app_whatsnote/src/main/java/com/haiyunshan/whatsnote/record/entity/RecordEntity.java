@@ -389,6 +389,11 @@ public class RecordEntity extends BaseEntitySet<RecordEntity> {
         return sb;
     }
 
+    static final String getName(Context context, String id) {
+        RecordEntry e = RecordManager.getInstance(context).getRecordDataset().get(id);
+        return RecordEntity.getName(e);
+    }
+
     static final String getName(RecordEntry e) {
         if (e == null) {
             return "";
