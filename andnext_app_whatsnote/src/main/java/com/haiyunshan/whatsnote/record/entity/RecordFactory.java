@@ -8,7 +8,7 @@ import java.util.List;
 import static com.haiyunshan.whatsnote.record.entity.RecordEntity.TYPE_ALL;
 import static com.haiyunshan.whatsnote.record.entity.RecordManager.TYPE_EMPTY;
 
-public class RecordFactory {
+class RecordFactory {
 
     static final String[] RECORD_ARRAY  = new String[] { RecordManager.RECORD_FOLDER, RecordManager.RECORD_NOTE };
     static final int[] TYPE_ARRAY       = new int[] { RecordManager.TYPE_FOLDER, RecordManager.TYPE_NOTE };

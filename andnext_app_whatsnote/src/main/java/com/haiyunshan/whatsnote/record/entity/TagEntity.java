@@ -3,6 +3,7 @@ package com.haiyunshan.whatsnote.record.entity;
 import android.content.Context;
 import club.andnext.utils.ColorUtils;
 import club.andnext.utils.UUIDUtils;
+import com.haiyunshan.whatsnote.WhatsApp;
 import com.haiyunshan.whatsnote.record.dataset.TagEntry;
 
 import java.awt.*;
@@ -49,6 +50,20 @@ public class TagEntity extends BaseEntitySet<TagEntity> {
         return entry.getName();
     }
 
+    public int indexOf(String id) {
+        if (childList == null) {
+            return -1;
+        }
+
+        for (int i = 0, size = childList.size(); i < size; i++) {
+            if (childList.get(i).getId().equals(id)) {
+                return i;
+            }
+        }
+
+        return -1;
+    }
+
     public TagEntity add(String name, int color) {
         int index = 0;
 
@@ -77,4 +92,7 @@ public class TagEntity extends BaseEntitySet<TagEntity> {
         getManager().save(RecordManager.DS_TAG);
     }
 
+    public static final TagEntity obtain() {
+        return TagFactory.obtain(WhatsApp.getContext());
+    }
 }

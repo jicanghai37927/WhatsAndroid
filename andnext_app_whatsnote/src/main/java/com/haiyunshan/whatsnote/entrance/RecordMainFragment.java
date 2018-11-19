@@ -21,11 +21,8 @@ import club.andnext.recyclerview.section.SectionList;
 import club.andnext.recyclerview.section.SectionListAdapterCallback;
 import com.haiyunshan.whatsnote.entrance.entity.EntranceEntity;
 import com.haiyunshan.whatsnote.entrance.entity.EntranceUtils;
-import com.haiyunshan.whatsnote.record.entity.FavoriteEntity;
-import com.haiyunshan.whatsnote.record.entity.FavoriteFactory;
-import com.haiyunshan.whatsnote.record.entity.TagEntity;
+import com.haiyunshan.whatsnote.record.entity.*;
 import com.haiyunshan.whatsnote.R;
-import com.haiyunshan.whatsnote.record.entity.TagFactory;
 
 import java.util.ArrayList;
 
@@ -68,11 +65,9 @@ public class RecordMainFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         {
-            this.entranceSection = new EntranceSection(this, "位置");
-            this.favoriteSection = new FavoriteSection(this, "个人收藏");
-            this.tagSection = new TagSection(this, "标签");
-
-
+            this.entranceSection = new EntranceSection(this, "位置", OptionEntity.SECTION_ENTRANCE);
+            this.favoriteSection = new FavoriteSection(this, "个人收藏", OptionEntity.SECTION_FAVORITE);
+            this.tagSection = new TagSection(this, "标签", OptionEntity.SECTION_TAG);
         }
 
         {
@@ -103,9 +98,21 @@ public class RecordMainFragment extends Fragment {
 
         {
             this.sectionList = new SectionList(new SectionListAdapterCallback(adapter));
-            sectionList.add(entranceSection, true, entranceSection);
-            sectionList.add(favoriteSection, true, favoriteSection);
-            sectionList.add(tagSection, true, tagSection);
+            {
+                String key = entranceSection.getKey();
+                boolean expand = OptionEntity.obtain().isSectionExpand(key);
+                sectionList.add(entranceSection, expand, entranceSection);
+            }
+            {
+                String key = favoriteSection.getKey();
+                boolean expand = OptionEntity.obtain().isSectionExpand(key);
+                sectionList.add(favoriteSection, expand, favoriteSection);
+            }
+            {
+                String key = tagSection.getKey();
+                boolean expand = OptionEntity.obtain().isSectionExpand(key);
+                sectionList.add(tagSection, expand, tagSection);
+            }
         }
 
         {
@@ -185,6 +192,10 @@ public class RecordMainFragment extends Fragment {
                     chevronView.animate().rotation(90);
                 } else {
                     chevronView.animate().rotation(0);
+                }
+
+                {
+                    OptionEntity.obtain().setSectionExpand(entity.getKey(), expand);
                 }
             }
         }
@@ -326,8 +337,8 @@ public class RecordMainFragment extends Fragment {
 
         EntranceEntity entranceEntity;
 
-        EntranceSection(RecordMainFragment f, String name) {
-            super(f, name);
+        EntranceSection(RecordMainFragment f, String name, String key) {
+            super(f, name, key);
 
             this.entranceEntity = EntranceEntity.obtain(f.getActivity());
 
@@ -360,10 +371,10 @@ public class RecordMainFragment extends Fragment {
         FavoriteEntity data;
         FavoriteEntity oldData;
 
-        FavoriteSection(RecordMainFragment f, String name) {
-            super(f, name);
+        FavoriteSection(RecordMainFragment f, String name, String key) {
+            super(f, name, key);
 
-            this.data = FavoriteFactory.obtain(f.getActivity());
+            this.data = FavoriteEntity.obtain();
             this.oldData = null;
         }
 
@@ -387,10 +398,10 @@ public class RecordMainFragment extends Fragment {
         TagEntity data;
         TagEntity oldData;
 
-        TagSection(RecordMainFragment f, String name) {
-            super(f, name);
+        TagSection(RecordMainFragment f, String name, String key) {
+            super(f, name, key);
 
-            this.data = TagFactory.obtain(f.getActivity());
+            this.data = TagEntity.obtain();
             this.oldData = null;
         }
 
@@ -411,16 +422,20 @@ public class RecordMainFragment extends Fragment {
     private static class BaseSection {
 
         String name;
+        String key;
 
         RecordMainFragment parent;
 
-        BaseSection(RecordMainFragment f, String name) {
+        BaseSection(RecordMainFragment f, String name, String key) {
             this.parent = f;
             this.name = name;
+            this.key = key;
         }
 
         String getName() {
             return name;
         }
+
+        String getKey() { return key; }
     }
 }

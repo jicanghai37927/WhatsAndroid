@@ -1,6 +1,7 @@
 package com.haiyunshan.whatsnote.record.entity;
 
 import android.content.Context;
+import com.haiyunshan.whatsnote.WhatsApp;
 
 public class RecentRecordSet extends BaseEntitySet<RecordEntity> {
 
@@ -44,7 +45,11 @@ public class RecentRecordSet extends BaseEntitySet<RecordEntity> {
 
     @Override
     public void save() {
-        getManager().save(RecordManager.DS_RECENT);
+        getManager().save();
+    }
+
+    public static final RecentRecordSet create(String tag) {
+        return RecentFactory.createRecordSet(WhatsApp.getContext(), tag);
     }
 
 }

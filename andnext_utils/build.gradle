@@ -32,5 +32,4 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0-beta02'
     implementation 'com.google.code.gson:gson:2.8.5'
     implementation files('libs/juniversalchardet-2.2.0.jar')
-    implementation 'org.ocpsoft.prettytime:prettytime:4.0.1.Final'
 }

@@ -6,7 +6,7 @@ import com.haiyunshan.whatsnote.record.dataset.SortEntry;
 
 import java.util.ArrayList;
 
-public class SortFactory {
+class SortFactory {
 
     public static final SortEntity create(Context context, String id) {
         SortDataset ds = SortManager.getInstance(context).getDataset();
@@ -16,6 +16,10 @@ public class SortFactory {
         }
 
         return new SortEntity(context, entry);
+    }
+
+    public static final SortEntity create(SortEntity entity) {
+        return new SortEntity(entity);
     }
 
     public static final SortEntity all(Context context) {

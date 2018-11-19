@@ -3,6 +3,8 @@ package com.haiyunshan.whatsnote.article;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
+import android.text.Layout;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -37,8 +39,8 @@ public class PictureViewHolder extends ComposeViewHolder<PictureEntity> implemen
 
     PictureListener pictureListener;
 
-    public PictureViewHolder(ComposeArticleFragment f, View itemView) {
-        super(f, itemView);
+    public PictureViewHolder(Callback callback, View itemView) {
+        super(callback, itemView);
 
         this.pictureListener = new PictureListener();
     }
@@ -64,12 +66,16 @@ public class PictureViewHolder extends ComposeViewHolder<PictureEntity> implemen
         super.onBind(item, position);
 
         {
-            editText.setText(item.getText());
+            // set break strategy to request layout
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                editText.setBreakStrategy(Layout.BREAK_STRATEGY_SIMPLE);
+            }
 
+            editText.setText(item.getText());
         }
 
         {
-            int maxWidth = this.getMaxWidth();
+            int maxWidth = callback.getMaxWidth();
             int width = item.getWidth();
             int height = item.getHeight();
             if (width > maxWidth / 2) {
@@ -83,7 +89,7 @@ public class PictureViewHolder extends ComposeViewHolder<PictureEntity> implemen
         {
             RequestOptions options = createRequestOptions(item);
 
-            Glide.with(parent)
+            Glide.with(callback.getContext())
                     .load(item.getUri())
                     .apply(options)
                     .listener(pictureListener)
@@ -116,8 +122,8 @@ public class PictureViewHolder extends ComposeViewHolder<PictureEntity> implemen
 
         // sample it for 1, 2, 4, 8, ...
         {
-            int maxWidth = this.getMaxWidth();
-            int maxHeight = this.getMaxHeight();
+            int maxWidth = callback.getMaxWidth();
+            int maxHeight = callback.getMaxHeight();
 
             int widthSampleFactor = getSampleFactor(width, maxWidth);
             int heightSampleFactor = getSampleFactor(height, 6 * maxHeight);
@@ -149,30 +155,6 @@ public class PictureViewHolder extends ComposeViewHolder<PictureEntity> implemen
         }
 
         return scale;
-    }
-
-    int getMaxWidth() {
-        int width = parent.recyclerView.getWidth();
-        if (width > 0) {
-            width -= parent.recyclerView.getPaddingLeft();
-            width -= parent.recyclerView.getPaddingRight();
-        }
-
-        if (width <= 0) {
-            width = parent.getResources().getDisplayMetrics().widthPixels;
-        }
-
-        return width;
-    }
-
-    int getMaxHeight() {
-        int width = parent.recyclerView.getHeight();
-
-        if (width <= 0) {
-            width = parent.getResources().getDisplayMetrics().widthPixels;
-        }
-
-        return width;
     }
 
     /**

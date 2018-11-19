@@ -1,7 +1,6 @@
 package club.andnext.recyclerview.bridge;
 
 import android.content.Context;
-import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
@@ -18,7 +17,9 @@ import club.andnext.recyclerview.adapter.ViewHolderBuilder;
 public class BridgeBuilder<T, VH extends BridgeHolder> extends ViewHolderBuilder {
 
     Class<? extends BridgeHolder> holderClazz;
-    Object[] args;
+    Object[] parameters;
+    Class<?>[] parameterTypes;
+
     int resId;
 
     ViewHolderBuilder<T, VH> delegate;
@@ -27,12 +28,18 @@ public class BridgeBuilder<T, VH extends BridgeHolder> extends ViewHolderBuilder
         this.delegate = delegate;
     }
 
-    public BridgeBuilder(@NonNull Class<? extends BridgeHolder> clz, @NonNull int resId, Object... args) {
+    public BridgeBuilder(@NonNull Class<? extends BridgeHolder> clz, @NonNull int resId, Object... parameters) {
         this.holderClazz = clz;
         this.resId = resId;
-        this.args = args;
+        this.parameters = parameters;
 
         this.delegate = null;
+    }
+
+    public BridgeBuilder setParameterTypes(Class<?>... parameterTypes) {
+        this.parameterTypes = parameterTypes;
+
+        return this;
     }
 
     @NonNull
@@ -58,16 +65,20 @@ public class BridgeBuilder<T, VH extends BridgeHolder> extends ViewHolderBuilder
         BridgeHolder holder = null;
 
         {
-            Object[] args = new Object[this.args.length + 1];
-            System.arraycopy(this.args, 0, args, 0, this.args.length);
-            args[this.args.length] = view;
+            Object[] args = new Object[this.parameters.length + 1];
+            System.arraycopy(this.parameters, 0, args, 0, this.parameters.length);
+            args[this.parameters.length] = view;
 
             Class<?>[] classArray = new Class[args.length];
-            for (int i = 0, size = this.args.length; i < size; i++) {
-                classArray[i] = args[i].getClass();
+            if (parameterTypes != null) {
+                System.arraycopy(parameterTypes, 0, classArray, 0, parameterTypes.length);
+            } else {
+                for (int i = 0, size = this.parameters.length; i < size; i++) {
+                    classArray[i] = args[i].getClass();
+                }
             }
 
-            classArray[this.args.length] = View.class;
+            classArray[this.parameters.length] = View.class;
             try {
 
                 Constructor<? extends BridgeHolder> constructor = holderClazz.getConstructor(classArray);

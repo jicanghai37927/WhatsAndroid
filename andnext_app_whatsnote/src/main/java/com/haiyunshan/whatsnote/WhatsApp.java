@@ -5,11 +5,18 @@ import club.andnext.navigation.NavigationHelper;
 
 public class WhatsApp extends Application {
 
+    static WhatsApp instance;
+
     @Override
     public void onCreate() {
         super.onCreate();
+        instance = this;
 
         NavigationHelper.onCreate(this);
+    }
+
+    public static final WhatsApp getContext() {
+        return instance;
     }
 
 }

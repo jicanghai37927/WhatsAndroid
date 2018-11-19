@@ -26,12 +26,14 @@ import androidx.recyclerview.widget.SortedListAdapterCallback;
 import club.andnext.recyclerview.bridge.*;
 import club.andnext.recyclerview.decoration.MarginDividerDecoration;
 import club.andnext.recyclerview.swipe.SwipeActionHelper;
+import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.snackbar.Snackbar;
 import com.haiyunshan.whatsnote.ShowRecordActivity;
 import com.haiyunshan.whatsnote.record.entity.*;
 import com.haiyunshan.whatsnote.PackActivity;
 import com.haiyunshan.whatsnote.R;
 import com.haiyunshan.whatsnote.article.ComposeArticleFragment;
+import org.joda.time.DateTime;
 
 import java.util.Collection;
 
@@ -40,6 +42,9 @@ import java.util.Collection;
  */
 public abstract class RecordListFragment extends Fragment implements View.OnClickListener {
 
+    public static final int TIME_CREATED    = 1;
+    public static final int TIME_MODIFIED   = 2;
+
     static final int REQUEST_CREATE_FOLDER  = 1001;
     static final int REQUEST_MOVE           = 1003;
     static final int REQUEST_RENAME         = 2001;
@@ -47,14 +52,15 @@ public abstract class RecordListFragment extends Fragment implements View.OnClic
     static final int REQUEST_COMPOSE        = 4001;
 
     protected Toolbar toolbar;
+    protected AppBarLayout appBarLayout;
 
     protected TextView sortBtn;
 
     protected View createNoteBtn;
     protected View createFolderBtn;
 
-    private RecyclerView recyclerView;
-    private BridgeAdapter adapter;
+    protected RecyclerView recyclerView;
+    protected BridgeAdapter adapter;
     private MarginDividerDecoration dividerDecoration;
     private SwipeActionHelper swipeActionHelper;
 
@@ -89,6 +95,11 @@ public abstract class RecordListFragment extends Fragment implements View.OnClic
         }
 
         {
+            this.appBarLayout = view.findViewById(R.id.app_bar_layout);
+            appBarLayout.setExpanded(false, false);
+        }
+
+        {
             this.sortBtn = view.findViewById(R.id.tv_sort);
             sortBtn.setOnClickListener(this);
         }
@@ -118,7 +129,7 @@ public abstract class RecordListFragment extends Fragment implements View.OnClic
             this.sortEntity = getCallback().getSort();
 
             if (sortEntity == null) {
-                sortEntity = SortFactory.create(getActivity(), null);
+                sortEntity = OptionEntity.obtain().getSort();
             }
 
             {
@@ -212,6 +223,7 @@ public abstract class RecordListFragment extends Fragment implements View.OnClic
 
                 break;
             }
+
             case REQUEST_TAG: {
                 if (resultCode == Activity.RESULT_OK && data != null) {
                     String id = data.getStringExtra(ShowTagFragment.KEY_ID);
@@ -222,10 +234,12 @@ public abstract class RecordListFragment extends Fragment implements View.OnClic
 
                 break;
             }
+
             case REQUEST_COMPOSE: {
 
                 break;
             }
+
             case REQUEST_MOVE: {
                 if (resultCode == Activity.RESULT_OK && data != null) {
 
@@ -272,10 +286,6 @@ public abstract class RecordListFragment extends Fragment implements View.OnClic
 
     abstract Callback createCallback();
 
-    protected SortEntity createSort() {
-        return null;
-    }
-
     final Callback getCallback() {
         if (callback != null) {
             return callback;
@@ -293,12 +303,12 @@ public abstract class RecordListFragment extends Fragment implements View.OnClic
         this.sortEntity = sort;
     }
 
-    final void addAll(Collection<RecordEntity> items) {
-        sortedList.addAll(items);
-    }
-
     final void replaceAll(Collection<RecordEntity> items) {
-        sortedList.replaceAll(items);
+        if (sortedList.size() == 0) {
+            sortedList.addAll(items);
+        } else {
+            sortedList.replaceAll(items);
+        }
     }
 
     final void requestCreateFolder() {
@@ -328,7 +338,7 @@ public abstract class RecordListFragment extends Fragment implements View.OnClic
         }
 
         {
-            final SortEntity entity = SortFactory.all(getActivity());
+            final SortEntity entity = SortEntity.all();
             String[] items = new String[entity.size()];
             for (int i = 0, size = items.length; i < size; i++) {
                 items[i] = entity.get(i).getName();
@@ -398,7 +408,7 @@ public abstract class RecordListFragment extends Fragment implements View.OnClic
         }
 
         String id = entity.getId();
-        FavoriteEntity result = FavoriteFactory.obtain(getActivity()).add(id);
+        FavoriteEntity result = FavoriteEntity.obtain().add(id);
 
         String text = (result != null)? "已收藏": "不能收藏";
         Snackbar.make(recyclerView, text, Snackbar.LENGTH_SHORT).show();
@@ -513,6 +523,10 @@ public abstract class RecordListFragment extends Fragment implements View.OnClic
             this.listener = new RecordMenuItemListener(this);
         }
 
+        public int getTimeType() {
+            return parent.getCallback().getTimeType();
+        }
+
         @Override
         public SwipeActionHelper getSwipeActionHelper() {
             return parent.swipeActionHelper;
@@ -625,9 +639,42 @@ public abstract class RecordListFragment extends Fragment implements View.OnClic
      */
     static class FolderViewHolder extends RecordViewHolder.Folder {
 
+        RecordItemCallback callback;
+
         public FolderViewHolder(RecordItemCallback callback, View itemView) {
             super(callback, itemView);
+
+            this.callback = callback;
         }
+
+        @Override
+        public void onBind(RecordEntity item, int position) {
+            super.onBind(item, position);
+        }
+
+        @Override
+        CharSequence getInfo(RecordEntity item) {
+            StringBuilder sb = new StringBuilder();
+
+            {
+                DateTime time = (callback.getTimeType() == TIME_CREATED)? item.getCreated(): item.getModified();
+                sb.append(RecordEntity.format(getContext(), time));
+            }
+
+            {
+                sb.append(" - ");
+            }
+
+            {
+                sb.append(item.getSize());
+                sb.append(" 项");
+            }
+
+            return sb;
+        }
+
+
+
     }
 
     /**
@@ -635,8 +682,52 @@ public abstract class RecordListFragment extends Fragment implements View.OnClic
      */
     static class NoteViewHolder extends RecordViewHolder.Note {
 
+        RecordItemCallback callback;
+
         public NoteViewHolder(RecordItemCallback callback, View itemView) {
             super(callback, itemView);
+
+            this.callback = callback;
+        }
+
+        @Override
+        public void onBind(RecordEntity item, int position) {
+            super.onBind(item, position);
+        }
+
+        @Override
+        CharSequence getInfo(RecordEntity item) {
+            StringBuilder sb = new StringBuilder();
+
+            {
+                DateTime time = (callback.getTimeType() == TIME_CREATED) ? item.getCreated() : item.getModified();
+                sb.append(RecordEntity.format(getContext(), time));
+            }
+
+            {
+                sb.append(" - ");
+            }
+
+            {
+                long size = item.getSize();
+                long c = 1024;
+                long b = 1024 * c;
+                long a = 1024 * b;
+                if (size > a) {
+                    sb.append(String.format("%.1f", size * 1.f / a));
+                    sb.append(" GB");
+                } else if (size > b) {
+                    sb.append(String.format("%.1f", size * 1.f / b));
+                    sb.append(" MB");
+                } else if (size > c) {
+                    sb.append(String.format("%.1f", size * 1.f / c));
+                    sb.append(" KB");
+                } else {
+                    sb.append(size);
+                    sb.append(" bytes");
+                }
+            }
+            return sb;
         }
     }
 
@@ -645,29 +736,29 @@ public abstract class RecordListFragment extends Fragment implements View.OnClic
      */
     abstract class Callback {
 
-        abstract RecordEntity onCreate(int type, String name);
+        int timeType = TIME_CREATED;
 
-        abstract RecordEntity onRename(RecordEntity entity, String name);
+        public void setTimeType(int timeType) {
+            this.timeType = timeType;
+        }
 
-        abstract RecordEntity onDelete(RecordEntity entity);
-
-        abstract RecordEntity onMove(RecordEntity entity);
-
-        abstract void onSort();
+        public int getTimeType() {
+            return this.timeType;
+        }
 
         protected SortEntity getSort() {
             return null;
         }
 
         protected void applySort() {
-            if (sortEntity == null) {
-                sortEntity = SortFactory.create(getActivity(), null);
-            }
 
             {
+                sortEntity = OptionEntity.obtain().getSort();
+
                 String text = String.format("已按%1$s排序", sortEntity.getName());
                 sortBtn.setText(text);
             }
+
         }
 
         final RecordEntity onMove(RecordEntity entity, String target) {
@@ -692,8 +783,23 @@ public abstract class RecordListFragment extends Fragment implements View.OnClic
                 sortBtn.setText(text);
             }
 
+            {
+                OptionEntity.obtain().setSort(sortEntity);
+            }
+
             this.onSort();
             return true;
         }
+
+        abstract RecordEntity onCreate(int type, String name);
+
+        abstract RecordEntity onRename(RecordEntity entity, String name);
+
+        abstract RecordEntity onDelete(RecordEntity entity);
+
+        abstract RecordEntity onMove(RecordEntity entity);
+
+        abstract void onSort();
+
     }
 }

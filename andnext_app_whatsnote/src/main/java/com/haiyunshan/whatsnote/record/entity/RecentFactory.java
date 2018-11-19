@@ -6,9 +6,7 @@ import com.haiyunshan.whatsnote.record.dataset.RecentDataset;
 import com.haiyunshan.whatsnote.record.dataset.RecentEntry;
 import com.haiyunshan.whatsnote.record.dataset.RecordEntry;
 
-import java.util.ArrayList;
-
-public class RecentFactory {
+class RecentFactory {
 
     public static final boolean put(Context context, String id) {
         int index = 0;

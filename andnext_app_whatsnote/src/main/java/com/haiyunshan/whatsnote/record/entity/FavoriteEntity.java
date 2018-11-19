@@ -1,6 +1,7 @@
 package com.haiyunshan.whatsnote.record.entity;
 
 import android.content.Context;
+import com.haiyunshan.whatsnote.WhatsApp;
 import com.haiyunshan.whatsnote.record.dataset.FavoriteEntry;
 import com.haiyunshan.whatsnote.record.dataset.RecordEntry;
 
@@ -52,6 +53,10 @@ public class FavoriteEntity extends BaseEntitySet<FavoriteEntity> {
     @Override
     public void save() {
         getManager().save(RecordManager.DS_FAVORITE);
+    }
+
+    public static final FavoriteEntity obtain() {
+        return FavoriteFactory.create(WhatsApp.getContext());
     }
 
 }

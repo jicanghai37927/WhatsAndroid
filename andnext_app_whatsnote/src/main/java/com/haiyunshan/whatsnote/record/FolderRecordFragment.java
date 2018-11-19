@@ -11,7 +11,6 @@ import androidx.fragment.app.Fragment;
 import com.haiyunshan.whatsnote.R;
 import com.haiyunshan.whatsnote.extract.entity.ExtractFactory;
 import com.haiyunshan.whatsnote.record.entity.RecordEntity;
-import com.haiyunshan.whatsnote.record.entity.RecordFactory;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -48,7 +47,7 @@ public class FolderRecordFragment extends RecordListFragment {
 
         {
             String parent = getArguments().getString(KEY_FOLDER, RecordEntity.ROOT_NOTE);
-            this.folderEntity = RecordFactory.create(getActivity(), parent);
+            this.folderEntity = RecordEntity.create(parent);
 
             if (folderEntity.isExtract()) {
                 ExtractFactory.check(getActivity(), folderEntity);
@@ -56,7 +55,7 @@ public class FolderRecordFragment extends RecordListFragment {
         }
 
         {
-            this.addAll(folderEntity.getCollection());
+            this.replaceAll(folderEntity.getCollection());
         }
 
         if (folderEntity.isTrash() || folderEntity.isExtract()) {
@@ -77,7 +76,9 @@ public class FolderRecordFragment extends RecordListFragment {
     public void onPause() {
         super.onPause();
 
-        folderEntity.save();
+        {
+            folderEntity.save();
+        }
     }
 
     @Override

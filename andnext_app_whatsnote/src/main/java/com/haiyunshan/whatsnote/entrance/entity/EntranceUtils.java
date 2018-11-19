@@ -11,7 +11,6 @@ import com.haiyunshan.whatsnote.record.TagRecordFragment;
 import com.haiyunshan.whatsnote.entrance.dataset.EntranceEntry;
 import com.haiyunshan.whatsnote.record.entity.FavoriteEntity;
 import com.haiyunshan.whatsnote.record.entity.RecordEntity;
-import com.haiyunshan.whatsnote.record.entity.RecordFactory;
 import com.haiyunshan.whatsnote.record.entity.TagEntity;
 
 public class EntranceUtils {
@@ -44,7 +43,7 @@ public class EntranceUtils {
         }
 
         Activity context = fragment.getActivity();
-        RecordEntity en = RecordFactory.create(context, id, RecordEntity.TYPE_EMPTY);
+        RecordEntity en = RecordEntity.create(id, RecordEntity.TYPE_EMPTY);
         if (en.isDirectory()) {
             showNote(context, en.getId());
         }

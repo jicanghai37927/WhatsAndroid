@@ -9,7 +9,7 @@ import com.haiyunshan.whatsnote.record.dataset.TagEntry;
 
 import java.util.ArrayList;
 
-public class TagFactory {
+class TagFactory {
 
     public static final TagEntity obtain(Context context) {
         RecordManager mgr = RecordManager.getInstance(context);

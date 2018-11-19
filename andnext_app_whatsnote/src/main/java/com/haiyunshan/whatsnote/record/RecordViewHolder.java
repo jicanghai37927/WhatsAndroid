@@ -9,7 +9,6 @@ import club.andnext.recyclerview.swipe.SwipeActionHelper;
 import club.andnext.recyclerview.swipe.SwipeHolder;
 import club.andnext.recyclerview.swipe.SwipeViewHolder;
 import club.andnext.recyclerview.swipe.runner.RightActionRunner;
-import club.andnext.utils.PrettyTimeUtils;
 import com.haiyunshan.whatsnote.R;
 import com.haiyunshan.whatsnote.record.entity.RecordEntity;
 
@@ -78,7 +77,7 @@ abstract class RecordViewHolder<CB extends RecordViewHolder.Callback> extends Sw
         super.onBind(item, position);
 
         nameView.setText(item.getName());
-        infoView.setText(PrettyTimeUtils.format(item.getCreated().toDate()));
+        infoView.setText(getInfo(item));
     }
 
     @Override
@@ -100,11 +99,13 @@ abstract class RecordViewHolder<CB extends RecordViewHolder.Callback> extends Sw
         return false;
     }
 
+    abstract CharSequence getInfo(RecordEntity item);
+
     /**
      *
      * @param <CB>
      */
-    static class Note<CB extends RecordViewHolder.Callback> extends RecordViewHolder<CB> {
+    static abstract class Note<CB extends RecordViewHolder.Callback> extends RecordViewHolder<CB> {
 
         public Note(CB callback, View itemView) {
             super(callback, itemView);
@@ -132,7 +133,7 @@ abstract class RecordViewHolder<CB extends RecordViewHolder.Callback> extends Sw
      *
      * @param <CB>
      */
-    static class Folder<CB extends RecordViewHolder.Callback> extends RecordViewHolder<CB> {
+    static abstract class Folder<CB extends RecordViewHolder.Callback> extends RecordViewHolder<CB> {
 
         public Folder(CB callback, View itemView) {
             super(callback, itemView);

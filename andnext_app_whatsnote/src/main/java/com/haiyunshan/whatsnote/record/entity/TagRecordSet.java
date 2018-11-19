@@ -1,6 +1,8 @@
 package com.haiyunshan.whatsnote.record.entity;
 
 import android.content.Context;
+import android.widget.TabHost;
+import com.haiyunshan.whatsnote.WhatsApp;
 
 public class TagRecordSet extends BaseEntitySet<RecordEntity> {
 
@@ -44,7 +46,10 @@ public class TagRecordSet extends BaseEntitySet<RecordEntity> {
 
     @Override
     public void save() {
-        getManager().save(RecordManager.DS_RECENT);
+        getManager().save();
     }
 
+    public static final TagRecordSet create(String tag) {
+        return TagFactory.createRecordSet(WhatsApp.getContext(), tag);
+    }
 }

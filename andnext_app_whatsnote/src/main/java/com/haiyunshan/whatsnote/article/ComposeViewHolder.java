@@ -1,5 +1,6 @@
 package com.haiyunshan.whatsnote.article;
 
+import android.app.Activity;
 import android.view.View;
 import androidx.annotation.CallSuper;
 import androidx.annotation.NonNull;
@@ -10,12 +11,12 @@ public abstract class ComposeViewHolder<E extends DocumentEntity> extends Bridge
 
     protected E entity;
 
-    ComposeArticleFragment parent;
+    Callback callback;
 
-    public ComposeViewHolder(ComposeArticleFragment f, View itemView) {
+    public ComposeViewHolder(Callback callback, View itemView) {
         super(itemView);
 
-        this.parent = f;
+        this.callback = callback;
     }
 
     @Override
@@ -43,12 +44,30 @@ public abstract class ComposeViewHolder<E extends DocumentEntity> extends Bridge
     }
 
     void remove() {
-        parent.remove(this);
+        callback.remove(this);
     }
 
     abstract void save();
 
     E getEntity() {
         return entity;
+    }
+
+    /**
+     *
+     */
+    public static abstract class Callback {
+
+        public abstract Activity getContext();
+
+        public abstract void remove(ComposeViewHolder viewHolder);
+
+        public int getMaxWidth() {
+            return getContext().getResources().getDisplayMetrics().widthPixels;
+        }
+
+        public int getMaxHeight() {
+            return getContext().getResources().getDisplayMetrics().heightPixels;
+        }
     }
 }

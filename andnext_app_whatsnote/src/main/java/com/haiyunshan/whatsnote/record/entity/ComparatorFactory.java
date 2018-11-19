@@ -5,6 +5,7 @@ import org.joda.time.DateTime;
 import java.text.Collator;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 
 class ComparatorFactory {
 
@@ -120,7 +121,14 @@ class ComparatorFactory {
 
         @Override
         public int compare(RecordEntity o1, RecordEntity o2) {
-            return 0;
+            long s1 = o1.getSize();
+            long s2 = o2.getSize();
+
+            int result = 0;
+            result = (s1 > s2)? 1: result;
+            result = (s1 < s2)? -1: result;
+
+            return result;
         }
     }
 
@@ -129,13 +137,53 @@ class ComparatorFactory {
      */
     public static class Tag implements Comparator<RecordEntity> {
 
-        public Tag() {
+        TagEntity tagEntity;
 
+        public Tag() {
+            tagEntity = TagEntity.obtain();
         }
 
         @Override
         public int compare(RecordEntity o1, RecordEntity o2) {
-            return 0;
+            List<String> list1 = o1.getTagList();
+            List<String> list2 = o2.getTagList();
+
+            int result = 0;
+
+            if (list1.isEmpty() && list2.isEmpty()) {
+
+            } else if (list1.isEmpty() && !list2.isEmpty()) {
+                result = -1;
+            } else if (!list1.isEmpty() && list2.isEmpty()) {
+                result = 1;
+            } else {
+                int size1 = list1.size();
+                int size2 = list2.size();
+
+                int size = Math.min(size1, size2);
+                for (int i = 0; i < size; i++) {
+                    String tag1 = list1.get(i);
+                    String tag2 = list2.get(i);
+
+                    int a1 = tagEntity.indexOf(tag1);
+                    a1 = (a1 < 0)? Integer.MAX_VALUE: a1;
+                    int a2 = tagEntity.indexOf(tag2);
+                    a2 = (a2 < 0)? Integer.MAX_VALUE: a2;
+
+                    if (a1 != a2) {
+                        result = (a1 > a2)? 1: -1;
+                        break;
+                    }
+                }
+
+                if (result == 0) {
+                    if (size1 != size2) {
+                        result = (size1 > size2)? 1: -1;
+                    }
+                }
+            }
+
+            return result;
         }
     }
 }

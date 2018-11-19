@@ -29,13 +29,16 @@ class RecordManager {
     public static final int DS_TAG          = 0x01 << 1;
     public static final int DS_FAVORITE     = 0x01 << 2;
     public static final int DS_RECENT       = 0x01 << 3;
-    public static final int DS_ALL          = 0xFFFF;
+    public static final int DS_OPTION       = 0x01 << 4;
+    public static final int DS_ALL          = 0xFFFFFF;
 
     public static final String ROOT_NOTE    = ".note";
     public static final String ROOT_TRASH   = ".trash";
     public static final String ROOT_EXTRACT = ".extract";
 
     RecordDataset recordDataset; // 记录集合
+
+    OptionEntity optionEntity;  //
 
     TagDataset tagDataset;       // 标签集合
     TagEntity tagEntity;
@@ -63,9 +66,12 @@ class RecordManager {
         File dir = DirectoryManager.getInstance().getDirectory(context, DirectoryManager.DIR_NOTE);
 
         fileMap.put(RecordDataset.class, new File(dir, "record_ds.json"));
+
         fileMap.put(TagDataset.class, new File(dir, "tag_ds.json"));
         fileMap.put(FavoriteDataset.class, new File(dir, "favorite_ds.json"));
         fileMap.put(RecentDataset.class, new File(dir, "recent_ds.json"));
+
+        fileMap.put(OptionDataset.class, new File(dir, "option_ds.json"));
     }
 
     /**
@@ -292,6 +298,11 @@ class RecordManager {
 
         return recentDataset;
     }
+
+    void save() {
+        save(DS_ALL);
+    }
+
     void save(int flags) {
 
         if (((flags & DS_RECORD) != 0)) {

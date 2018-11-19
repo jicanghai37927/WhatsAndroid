@@ -1,6 +1,8 @@
 package com.haiyunshan.whatsnote.article;
 
+import android.os.Build;
 import android.text.Editable;
+import android.text.Layout;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
@@ -17,8 +19,8 @@ public class ParagraphViewHolder extends ComposeViewHolder<ParagraphEntity> {
 
     ParagraphKeyListener keyListener;
 
-    public ParagraphViewHolder(ComposeArticleFragment f, View itemView) {
-        super(f, itemView);
+    public ParagraphViewHolder(Callback callback, View itemView) {
+        super(callback, itemView);
 
         this.keyListener = new ParagraphKeyListener();
     }
@@ -39,6 +41,11 @@ public class ParagraphViewHolder extends ComposeViewHolder<ParagraphEntity> {
         super.onBind(item, position);
 
         {
+            // set break strategy to request layout
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                editText.setBreakStrategy(Layout.BREAK_STRATEGY_SIMPLE);
+            }
+
             editText.setOnKeyListener(keyListener);
         }
 

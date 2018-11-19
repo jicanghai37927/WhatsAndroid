@@ -2,11 +2,19 @@ package com.haiyunshan.whatsnote.record.entity;
 
 import android.content.Context;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
 import androidx.annotation.Nullable;
+import com.haiyunshan.whatsnote.WhatsApp;
+import com.haiyunshan.whatsnote.article.entity.Document;
+import com.haiyunshan.whatsnote.record.dataset.RecordDataset;
 import com.haiyunshan.whatsnote.record.dataset.RecordEntry;
 import org.joda.time.DateTime;
+import org.joda.time.Days;
+import org.joda.time.LocalDate;
+import org.joda.time.Minutes;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class RecordEntity extends BaseEntitySet<RecordEntity> {
@@ -22,6 +30,8 @@ public class RecordEntity extends BaseEntitySet<RecordEntity> {
 
     String id;
     String name;
+
+    Long size;
 
     DateTime created;
     DateTime modified;
@@ -65,6 +75,28 @@ public class RecordEntity extends BaseEntitySet<RecordEntity> {
         if (entry != null) {
             entry.setAlias(name);
         }
+    }
+
+    public long getSize() {
+        if (this.size != null) {
+            return size;
+        }
+
+        long value = 0;
+        if (this.isDirectory()) {
+            RecordDataset ds = getManager().getRecordDataset();
+            for (int i = 0, size = ds.size(); i < size; i++) {
+                RecordEntry e = ds.get(i);
+                if (e.getParent().equals(this.getId())) {
+                    ++value;
+                }
+            }
+        } else {
+            value = Document.size(context, this.getId());
+        }
+
+        size = Long.valueOf(value);
+        return size;
     }
 
     public RecordEntity get(String id) {
@@ -131,6 +163,19 @@ public class RecordEntity extends BaseEntitySet<RecordEntity> {
         this.add(entity);
 
         return entity;
+    }
+
+    public List<String> getTagList() {
+        List<String> list = null;
+        if (entry != null) {
+            list = entry.getTagList();
+        }
+
+        if (list == null) {
+            list = Collections.emptyList();
+        }
+
+        return list;
     }
 
     public void addTag(String tag) {
@@ -220,6 +265,18 @@ public class RecordEntity extends BaseEntitySet<RecordEntity> {
             result = this.getName().equals(another.getName());
         }
 
+        if (result) {
+            result = this.getSize() == another.getSize();
+        }
+
+        if (result) {
+            result = this.getCreated().equals(another.getCreated());
+        }
+
+        if (result) {
+            result = (Minutes.minutesBetween(this.getModified(), another.getModified()).getMinutes() == 0);
+        }
+
         return result;
     }
 
@@ -304,7 +361,32 @@ public class RecordEntity extends BaseEntitySet<RecordEntity> {
 
     @Override
     public void save() {
-        getManager().save(RecordManager.DS_ALL);
+        getManager().save();
+    }
+
+    public static final CharSequence format(Context context, DateTime time) {
+        StringBuilder sb = new StringBuilder();
+
+        int days = Days.daysBetween(time.toLocalDate(), LocalDate.now()).getDays();
+        if (days == 0) {
+
+            sb.append(String.format("%02d", time.getHourOfDay()));
+            sb.append(':');
+            sb.append(String.format("%02d", time.getMinuteOfHour()));
+
+        } else if (days == 1) {
+            sb.append("昨天");
+        } else if (days == 2) {
+            sb.append("前天");
+        } else {
+            sb.append(time.getYear());
+            sb.append('/');
+            sb.append(time.getMonthOfYear());
+            sb.append('/');
+            sb.append(time.getDayOfMonth());
+        }
+
+        return sb;
     }
 
     static final String getName(RecordEntry e) {
@@ -323,4 +405,11 @@ public class RecordEntity extends BaseEntitySet<RecordEntity> {
         return "";
     }
 
+    public static RecordEntity create(String id) {
+        return create(id, TYPE_ALL);
+    }
+
+    public static RecordEntity create(String id, int childFlags) {
+        return RecordFactory.create(WhatsApp.getContext(), id, childFlags);
+    }
 }

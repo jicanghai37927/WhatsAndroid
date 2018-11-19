@@ -24,6 +24,7 @@
             android:layout_weight="1">
 
         <com.google.android.material.appbar.AppBarLayout
+                android:id="@+id/app_bar_layout"
                 android:layout_width="match_parent"
                 android:layout_height="?actionBarSize"
                 app:expanded="true">
@@ -34,7 +35,7 @@
                     android:paddingLeft="?listPreferredItemPaddingLeft"
                     android:paddingRight="?listPreferredItemPaddingRight"
                     app:layout_scrollFlags="snap|scroll|exitUntilCollapsed"
->
+                    >
 
                 <ImageView
                         android:id="@+id/btn_create_folder"
@@ -44,14 +45,21 @@
                         android:layout_alignParentLeft="true"
                         android:src="@drawable/ic_create_new_folder_white_24dp"/>
 
-                <TextView
-                        android:id="@+id/tv_sort"
+                <FrameLayout
+                        android:id="@+id/sort_layout"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:text="已按名称排序"
-                        android:gravity="center"
-                        android:drawableRight="@drawable/ic_arrow_drop_down_white_24dp"
-                        android:layout_centerInParent="true"/>
+                        android:layout_centerInParent="true">
+
+                    <TextView
+                            android:id="@+id/tv_sort"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:text="已按名称排序"
+                            android:gravity="center"
+                            android:drawableRight="@drawable/ic_arrow_drop_down_white_24dp"/>
+
+                </FrameLayout>
 
                 <ImageView
                         android:id="@+id/btn_toggle"

@@ -6,7 +6,7 @@ import com.haiyunshan.whatsnote.record.dataset.FavoriteEntry;
 
 import java.util.ArrayList;
 
-public class FavoriteFactory {
+class FavoriteFactory {
 
     public static final FavoriteEntity obtain(Context context) {
         RecordManager mgr = RecordManager.getInstance(context);

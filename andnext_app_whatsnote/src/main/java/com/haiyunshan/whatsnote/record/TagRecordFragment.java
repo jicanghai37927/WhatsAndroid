@@ -8,8 +8,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import com.haiyunshan.whatsnote.R;
 import com.haiyunshan.whatsnote.record.entity.RecordEntity;
-import com.haiyunshan.whatsnote.record.entity.SortEntity;
-import com.haiyunshan.whatsnote.record.entity.TagFactory;
 import com.haiyunshan.whatsnote.record.entity.TagRecordSet;
 
 /**
@@ -35,18 +33,26 @@ public class TagRecordFragment extends RecordListFragment {
         super.onActivityCreated(savedInstanceState);
 
         {
-            String tag = getArguments().getString(KEY_TAG, "");
-            this.tagRecordSet = TagFactory.createRecordSet(getActivity(), tag);
-
-            this.addAll(tagRecordSet.getCollection());
-        }
-
-        {
             getView().findViewById(R.id.btn_create_folder).setVisibility(View.GONE);
             getView().findViewById(R.id.btn_create_note).setVisibility(View.GONE);
 
             toolbar.getMenu().findItem(R.id.menu_create_note).setVisible(false);
         }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        {
+            String tag = getArguments().getString(KEY_TAG, "");
+            this.tagRecordSet = TagRecordSet.create(tag);
+        }
+
+        {
+            this.replaceAll(tagRecordSet.getCollection());
+        }
+
     }
 
     @Override
@@ -57,6 +63,10 @@ public class TagRecordFragment extends RecordListFragment {
     @Override
     public void onPause() {
         super.onPause();
+
+        {
+            tagRecordSet.save();
+        }
     }
 
     @Override

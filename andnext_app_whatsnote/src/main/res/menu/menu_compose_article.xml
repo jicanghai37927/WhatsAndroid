@@ -3,6 +3,12 @@
       xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+            android:id="@+id/menu_insert_paragraph"
+            android:title="分页"
+            android:icon="@drawable/ic_insert_paragraph_white"
+            app:showAsAction="always"/>
+
+    <item
             android:id="@+id/menu_add_photo"
             android:title="拍照"
             android:icon="@drawable/ic_add_a_photo_white_24dp"

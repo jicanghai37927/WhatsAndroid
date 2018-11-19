@@ -5,8 +5,8 @@ import android.text.TextUtils;
 import com.haiyunshan.whatsnote.article.dataset.Article;
 import com.haiyunshan.whatsnote.article.dataset.ArticleEntry;
 import com.haiyunshan.whatsnote.record.entity.RecordEntity;
-import com.haiyunshan.whatsnote.record.entity.RecordFactory;
 
+import java.io.File;
 import java.util.ArrayList;
 
 public class Document {
@@ -166,7 +166,7 @@ public class Document {
     public static final Document create(Context context, String id) {
         DocumentManager mgr = DocumentManager.getInstance(context);
 
-        RecordEntity record = RecordFactory.create(context, id, RecordEntity.TYPE_EMPTY);
+        RecordEntity record = RecordEntity.create(id, RecordEntity.TYPE_EMPTY);
         Article article = mgr.create(id, "");
 
         Document doc = new Document(context, record, article);
@@ -182,4 +182,41 @@ public class Document {
 
         return true;
     }
+
+    public static final long size(Context context, String id) {
+        DocumentManager mgr = DocumentManager.getInstance(context);
+        File dir = mgr.getDir(id);
+        if (!dir.exists()) {
+            return 0;
+        }
+
+        return sizeOf(dir);
+    }
+
+    static long sizeOf(final File file) {
+        long size = 0;
+
+        if (!file.exists()) {
+            return size;
+        }
+
+        if (file.isDirectory()) {
+            final File[] files = file.listFiles();
+            if (files != null) {  // null if security restricted
+                for (final File f : files) {
+                    long value = sizeOf(f);
+                    if (value < 0) {
+                        break;
+                    }
+
+                    size += value; // internal method
+                }
+            }
+        } else {
+            size = file.length();
+        }
+
+        return size;
+    }
+
 }
