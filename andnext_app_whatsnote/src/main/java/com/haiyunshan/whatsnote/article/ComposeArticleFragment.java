@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -32,12 +34,15 @@ import com.haiyunshan.whatsnote.directory.DirectoryManager;
 import com.haiyunshan.whatsnote.R;
 import club.andnext.recyclerview.helper.EditTouchHelper;
 import com.haiyunshan.whatsnote.record.entity.RecentEntity;
+import com.haiyunshan.whatsnote.record.entity.RecordEntity;
+import com.haiyunshan.whatsnote.record.entity.SavedStateEntity;
 
 import java.io.File;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -87,6 +92,11 @@ public class ComposeArticleFragment extends Fragment {
             this.recyclerView = view.findViewById(R.id.recycler_list_view);
             LinearLayoutManager layout = new LinearLayoutManager(getActivity());
             recyclerView.setLayoutManager(layout);
+        }
+
+        {
+            ComposeScrollListener scrollListener = new ComposeScrollListener();
+            recyclerView.addOnScrollListener(scrollListener);
         }
 
         {
@@ -157,14 +167,59 @@ public class ComposeArticleFragment extends Fragment {
             }
         }
 
+        {
+            final SavedStateEntity params = document.getRecord().getSavedState();
+
+            final String id = params.getOffsetId();
+            int index = (!TextUtils.isEmpty(id))? (document.indexOf(id)): -1;
+            if (index > 0) {
+                recyclerView.scrollToPosition(index);
+            }
+
+            recyclerView.post(new Runnable() {
+                @Override
+                public void run() {
+                    {
+                        int vertical = params.getOffsetTop();
+                        int textOffset = params.getTextOffset();
+
+                        int y = vertical;
+
+                        if (textOffset > 0) {
+                            ParagraphViewHolder holder = findParagraphViewHolder(id);
+                            if (holder != null) {
+                                y = holder.getVertical(textOffset);
+                            }
+                        }
+
+                        recyclerView.scrollBy(0, y);
+                    }
+
+                    boolean enable = false;
+                    if (enable) {
+                        String id = params.getFocusId();
+                        int start = params.getSelectionStart();
+                        int end = params.getSelectionEnd();
+                        if (!(TextUtils.isEmpty(id)) && start >= 0 && end >= 0) {
+                            ParagraphViewHolder holder = findParagraphViewHolder(id);
+                            if (holder != null) {
+                                holder.setSelection(start, end);
+                                holder.requestFocus();
+                            }
+                        }
+                    }
+                }
+            });
+
+
+        }
+
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
             case REQUEST_CAMERA: {
-
-
 
                 if ((resultCode == RESULT_OK) && (data != null)) {
 
@@ -230,12 +285,18 @@ public class ComposeArticleFragment extends Fragment {
 
     void save() {
 
-        int count = recyclerView.getChildCount();
-        for (int i = 0; i < count; i++) {
-            ComposeViewHolder holder = getViewHolder(i);
-            if (holder != null) {
-                holder.save();
+        {
+            int count = recyclerView.getChildCount();
+            for (int i = 0; i < count; i++) {
+                ComposeViewHolder holder = getViewHolder(i);
+                if (holder != null) {
+                    holder.save();
+                }
             }
+        }
+
+        {
+            this.saveState(document.getRecord().getSavedState());
         }
 
         {
@@ -321,6 +382,100 @@ public class ComposeArticleFragment extends Fragment {
         }
 
         return false;
+    }
+
+    void saveState(SavedStateEntity savedState) {
+        if (recyclerView.getChildCount() == 0) {
+            savedState.clear();
+
+            return;
+        }
+
+        // offset
+        {
+            View child = recyclerView.getChildAt(0);
+            ComposeViewHolder h = (ComposeViewHolder) (recyclerView.findContainingViewHolder(child));
+            DocumentEntity entity = h.getEntity();
+            int index = document.indexOf(entity);
+
+            String id = entity.getId();
+            int top = child.getTop();
+            int textOffset = 0;
+
+            if (h instanceof ParagraphViewHolder) {
+                ParagraphViewHolder holder = (ParagraphViewHolder) h;
+                textOffset = holder.getOffset();
+            }
+
+            if (index == 0 && top >= 0) {
+                id = null;
+            }
+
+            savedState.setOffset(id, Math.abs(top), textOffset);
+        }
+
+        // focus
+        {
+            View view = getActivity().getCurrentFocus();
+            if (view != null) {
+
+                String id = null;
+                int start = -1;
+                int end = -1;
+
+                RecyclerView.ViewHolder h = (recyclerView.findContainingViewHolder(view));
+                if (h != null && h instanceof ParagraphViewHolder) {
+                    ParagraphViewHolder holder = (ParagraphViewHolder)h;
+
+                    id = (holder.getEntity().getId());
+                    start = ((holder.getSelectionStart()));
+                    end = ((holder.getSelectionEnd()));
+                }
+
+                savedState.setFocus(id, start, end);
+            }
+        }
+
+    }
+
+    ParagraphViewHolder findParagraphViewHolder(String id) {
+        for (int i = 0, size = recyclerView.getChildCount(); i < size; i++) {
+            View child = recyclerView.getChildAt(i);
+            RecyclerView.ViewHolder h = recyclerView.findContainingViewHolder(child);
+            if (h instanceof ParagraphViewHolder) {
+                ParagraphViewHolder holder = (ParagraphViewHolder)h;
+                if (holder.getEntity().getId().equals(id)) {
+                    return holder;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     *
+     */
+    private class ComposeScrollListener extends RecyclerView.OnScrollListener {
+
+        int scrollState = RecyclerView.SCROLL_STATE_IDLE;
+
+        @Override
+        public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+            super.onScrollStateChanged(recyclerView, newState);
+
+            if ((scrollState != RecyclerView.SCROLL_STATE_IDLE)
+                && (newState == RecyclerView.SCROLL_STATE_IDLE)) {
+
+            }
+
+            this.scrollState = newState;
+        }
+
+        @Override
+        public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+            super.onScrolled(recyclerView, dx, dy);
+        }
     }
 
     /**

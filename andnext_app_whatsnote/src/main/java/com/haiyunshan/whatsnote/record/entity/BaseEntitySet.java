@@ -11,8 +11,6 @@ public abstract class BaseEntitySet<T extends BaseEntity> extends BaseEntity {
 
     static List<BaseEntity> EMPTY_LIST;
 
-    Context context;
-
     ArrayList<T> childList;
 
     {
@@ -20,7 +18,7 @@ public abstract class BaseEntitySet<T extends BaseEntity> extends BaseEntity {
     }
 
     BaseEntitySet(Context context) {
-        this.context = context.getApplicationContext();
+        super(context);
 
         this.childList = null;
     }
@@ -87,10 +85,6 @@ public abstract class BaseEntitySet<T extends BaseEntity> extends BaseEntity {
         }
 
         childList.add(entity);
-    }
-
-    RecordManager getManager() {
-        return RecordManager.getInstance(context);
     }
 
 }

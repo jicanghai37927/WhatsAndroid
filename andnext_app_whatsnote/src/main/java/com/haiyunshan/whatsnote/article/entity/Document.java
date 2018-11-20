@@ -98,8 +98,20 @@ public class Document {
 
         return index;
     }
+
     public int indexOf(DocumentEntity entity) {
         return list.indexOf(entity);
+    }
+
+    public int indexOf(String id) {
+        for (int i = 0, size = list.size(); i < size; i++) {
+            DocumentEntity en = list.get(i);
+            if (en.getId().equals(id)) {
+                return i;
+            }
+        }
+
+        return -1;
     }
 
     public void save() {
@@ -127,6 +139,7 @@ public class Document {
         }
 
         {
+            record.save();
             getManager().save(this.getId(), article);
         }
     }

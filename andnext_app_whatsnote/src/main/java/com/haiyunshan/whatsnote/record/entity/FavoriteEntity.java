@@ -3,6 +3,7 @@ package com.haiyunshan.whatsnote.record.entity;
 import android.content.Context;
 import androidx.annotation.Nullable;
 import com.haiyunshan.whatsnote.WhatsApp;
+import com.haiyunshan.whatsnote.record.dataset.FavoriteDataset;
 import com.haiyunshan.whatsnote.record.dataset.FavoriteEntry;
 import com.haiyunshan.whatsnote.record.dataset.RecordEntry;
 
@@ -75,7 +76,7 @@ public class FavoriteEntity extends BaseEntitySet<FavoriteEntity> {
 
     @Override
     public void save() {
-        getManager().save(RecordManager.DS_FAVORITE);
+        getManager().save(FavoriteDataset.class);
     }
 
     @Override

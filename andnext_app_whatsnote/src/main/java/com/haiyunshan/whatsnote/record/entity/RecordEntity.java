@@ -8,6 +8,7 @@ import com.haiyunshan.whatsnote.WhatsApp;
 import com.haiyunshan.whatsnote.article.entity.Document;
 import com.haiyunshan.whatsnote.record.dataset.RecordDataset;
 import com.haiyunshan.whatsnote.record.dataset.RecordEntry;
+import com.haiyunshan.whatsnote.record.dataset.SavedStateEntry;
 import org.joda.time.DateTime;
 import org.joda.time.Days;
 import org.joda.time.LocalDate;
@@ -36,6 +37,8 @@ public class RecordEntity extends BaseEntitySet<RecordEntity> {
     DateTime created;
     DateTime modified;
     DateTime deleted;
+
+    SavedStateEntity savedState;
 
     RecordEntry entry;
 
@@ -75,6 +78,14 @@ public class RecordEntity extends BaseEntitySet<RecordEntity> {
         if (entry != null) {
             entry.setAlias(name);
         }
+    }
+
+    public SavedStateEntity getSavedState() {
+        if (savedState == null) {
+            savedState = SavedStateEntity.create(this.getId());
+        }
+
+        return savedState;
     }
 
     public long getSize() {

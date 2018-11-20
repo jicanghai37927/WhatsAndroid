@@ -1,9 +1,11 @@
 package com.haiyunshan.whatsnote.record.dataset;
 
+import androidx.recyclerview.widget.ListUpdateCallback;
 import club.andnext.dataset.BaseEntry;
 import com.google.gson.annotations.SerializedName;
 import org.joda.time.DateTime;
 
+import java.util.Collections;
 import java.util.List;
 
 public class RecordEntry extends BaseEntry {

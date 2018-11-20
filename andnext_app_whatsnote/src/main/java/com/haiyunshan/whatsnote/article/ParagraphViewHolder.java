@@ -1,10 +1,12 @@
 package com.haiyunshan.whatsnote.article;
 
+import android.graphics.Rect;
 import android.os.Build;
 import android.text.Editable;
 import android.text.Layout;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import androidx.annotation.NonNull;
 import club.andnext.helper.ClearAssistMenuHelper;
@@ -113,6 +115,10 @@ public class ParagraphViewHolder extends ComposeViewHolder<ParagraphEntity> {
         editText.setSelection(index);
     }
 
+    void setSelection(int start, int end) {
+        editText.setSelection(start, end);
+    }
+
     int getSelectionStart() {
         return editText.getSelectionStart();
     }
@@ -123,6 +129,50 @@ public class ParagraphViewHolder extends ComposeViewHolder<ParagraphEntity> {
 
     void requestFocus() {
         editText.requestFocus();
+    }
+
+    int getLine() {
+        int top = itemView.getTop();
+        if (top >= 0) {
+            return 0;
+        }
+
+        int vertical = Math.abs(top);
+
+        Rect rect = new Rect();
+        ((ViewGroup)(itemView)).offsetDescendantRectToMyCoords(editText, rect);
+        vertical -= rect.top;
+        if (vertical <= 0) {
+            return 0;
+        }
+
+        Layout layout = editText.getLayout();
+        int line = layout.getLineForVertical(vertical);
+        return line;
+    }
+
+    int getOffset() {
+
+        int line = getLine();
+        if (line == 0) {
+            return 0;
+        }
+
+        int offset = editText.getLayout().getOffsetForHorizontal(line, 0);
+        return offset;
+    }
+
+    int getVertical(int offset) {
+        Layout layout = editText.getLayout();
+
+        int line = layout.getLineForOffset(offset);
+        int top = layout.getLineTop(line);
+
+        Rect rect = new Rect();
+        ((ViewGroup)(itemView)).offsetDescendantRectToMyCoords(editText, rect);
+
+        top += rect.top;
+        return top;
     }
 
     /**

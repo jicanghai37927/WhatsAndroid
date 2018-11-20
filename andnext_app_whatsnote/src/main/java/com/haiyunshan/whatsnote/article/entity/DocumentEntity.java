@@ -13,6 +13,10 @@ public abstract class DocumentEntity<T extends ArticleEntry> {
         this.entry = entry;
     }
 
+    public String getId() {
+        return entry.getId();
+    }
+
     abstract void save();
 
     T getEntry() {

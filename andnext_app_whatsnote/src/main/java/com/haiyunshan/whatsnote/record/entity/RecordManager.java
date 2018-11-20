@@ -2,6 +2,7 @@ package com.haiyunshan.whatsnote.record.entity;
 
 import android.content.Context;
 import android.text.TextUtils;
+import android.view.View;
 import androidx.annotation.NonNull;
 import club.andnext.dataset.BaseDataset;
 import club.andnext.utils.GsonUtils;
@@ -13,6 +14,7 @@ import org.joda.time.DateTime;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 class RecordManager {
@@ -25,32 +27,16 @@ class RecordManager {
     public static final int TYPE_ALL    = TYPE_FOLDER | TYPE_NOTE;
     public static final int TYPE_EMPTY  = 0;
 
-    public static final int DS_RECORD       = 0x01;
-    public static final int DS_TAG          = 0x01 << 1;
-    public static final int DS_FAVORITE     = 0x01 << 2;
-    public static final int DS_RECENT       = 0x01 << 3;
-    public static final int DS_OPTION       = 0x01 << 4;
-    public static final int DS_ALL          = 0xFFFFFF;
-
     public static final String ROOT_NOTE    = ".note";
     public static final String ROOT_TRASH   = ".trash";
     public static final String ROOT_EXTRACT = ".extract";
 
-    RecordDataset recordDataset; // 记录集合
-
     OptionEntity optionEntity;  //
-
-    TagDataset tagDataset;       // 标签集合
     TagEntity tagEntity;
-
-    FavoriteDataset favoriteDataset;
     FavoriteEntity favoriteEntity;
 
-    RecentDataset recentDataset;
-
-    SearchDataset searchDataset;
-
     HashMap<Class<? extends BaseDataset>, File> fileMap;
+    HashMap<Class<? extends BaseDataset>, BaseDataset> datasetMap;
 
     static RecordManager instance;
 
@@ -63,18 +49,25 @@ class RecordManager {
     }
 
     private RecordManager(Context context) {
-        this.fileMap = new HashMap<>();
+        {
+            this.fileMap = new HashMap<>();
 
-        File dir = DirectoryManager.getInstance().getDirectory(context, DirectoryManager.DIR_NOTE);
+            File dir = DirectoryManager.getInstance().getDirectory(context, DirectoryManager.DIR_NOTE);
 
-        fileMap.put(RecordDataset.class, new File(dir, "record_ds.json"));
+            fileMap.put(RecordDataset.class, new File(dir, "record_ds.json"));
 
-        fileMap.put(TagDataset.class, new File(dir, "tag_ds.json"));
-        fileMap.put(FavoriteDataset.class, new File(dir, "favorite_ds.json"));
-        fileMap.put(RecentDataset.class, new File(dir, "recent_ds.json"));
-        fileMap.put(SearchDataset.class, new File(dir, "search_ds.json"));
+            fileMap.put(TagDataset.class, new File(dir, "tag_ds.json"));
+            fileMap.put(FavoriteDataset.class, new File(dir, "favorite_ds.json"));
+            fileMap.put(RecentDataset.class, new File(dir, "recent_ds.json"));
+            fileMap.put(SearchDataset.class, new File(dir, "search_ds.json"));
+            fileMap.put(SavedStateDataset.class, new File(dir, "saved_state_ds.json"));
 
-        fileMap.put(OptionDataset.class, new File(dir, "option_ds.json"));
+            fileMap.put(OptionDataset.class, new File(dir, "option_ds.json"));
+        }
+
+        {
+            this.datasetMap = new HashMap<>();
+        }
     }
 
     /**
@@ -230,13 +223,16 @@ class RecordManager {
     }
 
     RecordDataset getRecordDataset() {
-        if (recordDataset != null) {
-            return recordDataset;
+        if (datasetMap.get(RecordDataset.class) != null) {
+            RecordDataset ds = getDataset(RecordDataset.class);
+
+            return ds;
         }
 
-        recordDataset = createDataset(RecordDataset.class);
-        for (int i = 0, size = recordDataset.size(); i < size; i++) {
-            RecordEntry entry = recordDataset.get(i);
+        RecordDataset ds = getDataset(RecordDataset.class);
+
+        for (int i = 0, size = ds.size(); i < size; i++) {
+            RecordEntry entry = ds.get(i);
             {
                 String time = entry.getCreated();
                 if (!TextUtils.isEmpty(time)) {
@@ -268,70 +264,47 @@ class RecordManager {
             }
         }
 
-        return recordDataset;
+        return ds;
     }
 
     TagDataset getTagDataset() {
-        if (tagDataset != null) {
-            return tagDataset;
-        }
-
-        tagDataset = createDataset(TagDataset.class);
-
-        return tagDataset;
+        TagDataset ds = getDataset(TagDataset.class);
+        return ds;
     }
 
 
     FavoriteDataset getFavoriteDataset() {
-        if (favoriteDataset != null) {
-            return favoriteDataset;
-        }
-
-        favoriteDataset = createDataset(FavoriteDataset.class);
-
-        return favoriteDataset;
+        FavoriteDataset ds = getDataset(FavoriteDataset.class);
+        return ds;
     }
 
     RecentDataset getRecentDataset() {
-        if (recentDataset != null) {
-            return recentDataset;
-        }
-
-        recentDataset = createDataset(RecentDataset.class);
-
-        return recentDataset;
+        RecentDataset ds = getDataset(RecentDataset.class);
+        return ds;
     }
 
     SearchDataset getSearchDataset() {
-        if (searchDataset != null) {
-            return searchDataset;
-        }
+        SearchDataset ds = getDataset(SearchDataset.class);
+        return ds;
+    }
 
-        searchDataset = createDataset(SearchDataset.class);
-
-        return searchDataset;
+    SavedStateDataset getSavedStateDataset() {
+        SavedStateDataset ds = getDataset(SavedStateDataset.class);
+        return ds;
     }
 
     void save() {
-        save(DS_ALL);
+        Iterator<BaseDataset> iter = datasetMap.values().iterator();
+        while (iter.hasNext()) {
+            BaseDataset ds = iter.next();
+            this.save(ds);
+        }
     }
 
-    void save(int flags) {
-
-        if (((flags & DS_RECORD) != 0)) {
-            save(recordDataset);
-        }
-
-        if (((flags & DS_FAVORITE) != 0)) {
-            save(favoriteDataset);
-        }
-
-        if (((flags & DS_TAG) != 0)) {
-            save(tagDataset);
-        }
-
-        if (((flags & DS_RECENT) != 0)) {
-            save(recentDataset);
+    void save(Class<? extends BaseDataset> kind) {
+        BaseDataset ds = datasetMap.get(kind);
+        if (ds != null) {
+            save(ds);
         }
     }
 
@@ -347,6 +320,18 @@ class RecordManager {
         }
 
         GsonUtils.toJson(dataset, file);
+    }
+
+    final <T extends BaseDataset> T getDataset(Class<T> kind) {
+        T ds = (T)datasetMap.get(kind);
+        if (ds != null) {
+            return ds;
+        }
+
+        ds = createDataset(kind);
+        datasetMap.put(kind, ds);
+
+        return ds;
     }
 
     <T> T createDataset(Class<T> type) {

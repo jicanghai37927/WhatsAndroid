@@ -5,6 +5,7 @@ import androidx.annotation.Nullable;
 import club.andnext.utils.ColorUtils;
 import club.andnext.utils.UUIDUtils;
 import com.haiyunshan.whatsnote.WhatsApp;
+import com.haiyunshan.whatsnote.record.dataset.TagDataset;
 import com.haiyunshan.whatsnote.record.dataset.TagEntry;
 
 import java.awt.*;
@@ -122,7 +123,7 @@ public class TagEntity extends BaseEntitySet<TagEntity> {
 
     @Override
     public void save() {
-        getManager().save(RecordManager.DS_TAG);
+        getManager().save(TagDataset.class);
     }
 
     @Override

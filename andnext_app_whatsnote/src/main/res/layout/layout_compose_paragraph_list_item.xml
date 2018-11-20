@@ -10,6 +10,8 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="?listPreferredItemPaddingLeft"
             android:layout_marginRight="?listPreferredItemPaddingRight"
+            android:layout_marginTop="?listPreferredItemPaddingLeft"
+            android:layout_marginBottom="?listPreferredItemPaddingRight"
             android:background="@null"
             android:textSize="18sp"/>
 
