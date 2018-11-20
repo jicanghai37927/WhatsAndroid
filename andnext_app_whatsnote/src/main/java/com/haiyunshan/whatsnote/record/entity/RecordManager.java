@@ -48,6 +48,8 @@ class RecordManager {
 
     RecentDataset recentDataset;
 
+    SearchDataset searchDataset;
+
     HashMap<Class<? extends BaseDataset>, File> fileMap;
 
     static RecordManager instance;
@@ -70,6 +72,7 @@ class RecordManager {
         fileMap.put(TagDataset.class, new File(dir, "tag_ds.json"));
         fileMap.put(FavoriteDataset.class, new File(dir, "favorite_ds.json"));
         fileMap.put(RecentDataset.class, new File(dir, "recent_ds.json"));
+        fileMap.put(SearchDataset.class, new File(dir, "search_ds.json"));
 
         fileMap.put(OptionDataset.class, new File(dir, "option_ds.json"));
     }
@@ -297,6 +300,16 @@ class RecordManager {
         recentDataset = createDataset(RecentDataset.class);
 
         return recentDataset;
+    }
+
+    SearchDataset getSearchDataset() {
+        if (searchDataset != null) {
+            return searchDataset;
+        }
+
+        searchDataset = createDataset(SearchDataset.class);
+
+        return searchDataset;
     }
 
     void save() {

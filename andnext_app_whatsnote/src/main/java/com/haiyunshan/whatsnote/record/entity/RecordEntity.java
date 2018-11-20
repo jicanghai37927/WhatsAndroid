@@ -410,6 +410,14 @@ public class RecordEntity extends BaseEntitySet<RecordEntity> {
         return "";
     }
 
+    static final int getType(RecordEntry entry) {
+        return RecordFactory.getType(entry);
+    }
+
+    static final String getType(int type) {
+        return RecordFactory.getType(type);
+    }
+
     public static RecordEntity create(String id) {
         return create(id, TYPE_ALL);
     }
@@ -417,4 +425,5 @@ public class RecordEntity extends BaseEntitySet<RecordEntity> {
     public static RecordEntity create(String id, int childFlags) {
         return RecordFactory.create(WhatsApp.getContext(), id, childFlags);
     }
+
 }

@@ -36,6 +36,7 @@ public class TagRecordSet extends BaseEntitySet<RecordEntity> {
         return null;
     }
 
+    @Override
     public int remove(RecordEntity entity) {
         int index = this.indexOf(entity);
         if (index < 0) {

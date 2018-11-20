@@ -19,7 +19,7 @@ public class FolderRecordFragment extends RecordListFragment {
 
     public static final String KEY_FOLDER = "record.folder";
 
-    RecordEntity folderEntity;      // record data
+    RecordEntity recordSet;      // record data
 
     public FolderRecordFragment() {
 
@@ -47,18 +47,18 @@ public class FolderRecordFragment extends RecordListFragment {
 
         {
             String parent = getArguments().getString(KEY_FOLDER, RecordEntity.ROOT_NOTE);
-            this.folderEntity = RecordEntity.create(parent);
+            this.recordSet = RecordEntity.create(parent);
 
-            if (folderEntity.isExtract()) {
-                ExtractFactory.check(getActivity(), folderEntity);
+            if (recordSet.isExtract()) {
+                ExtractFactory.check(getActivity(), recordSet);
             }
         }
 
         {
-            this.replaceAll(folderEntity.getCollection());
+            this.replaceAll(recordSet.getCollection());
         }
 
-        if (folderEntity.isTrash() || folderEntity.isExtract()) {
+        if (recordSet.isTrash() || recordSet.isExtract()) {
             getView().findViewById(R.id.btn_create_folder).setVisibility(View.GONE);
             getView().findViewById(R.id.btn_create_note).setVisibility(View.GONE);
 
@@ -77,7 +77,7 @@ public class FolderRecordFragment extends RecordListFragment {
         super.onPause();
 
         {
-            folderEntity.save();
+            recordSet.save();
         }
     }
 
@@ -93,8 +93,8 @@ public class FolderRecordFragment extends RecordListFragment {
 
         @Override
         public RecordEntity onCreate(int type, String name) {
-            RecordEntity entity = folderEntity.add(type, name);
-            int position = folderEntity.indexOf(entity);
+            RecordEntity entity = recordSet.add(type, name);
+            int position = recordSet.indexOf(entity);
             if (position >= 0 && entity.isDirectory()) {
                 return entity;
             }
@@ -122,7 +122,7 @@ public class FolderRecordFragment extends RecordListFragment {
         @Override
         RecordEntity onDelete(RecordEntity entity) {
 
-            int index = folderEntity.remove(entity.getId(), true);
+            int index = recordSet.remove(entity.getId(), true);
             if (index < 0) {
                 return null;
             }
@@ -133,7 +133,7 @@ public class FolderRecordFragment extends RecordListFragment {
         @Override
         public RecordEntity onMove(RecordEntity entity) {
 
-            int index = folderEntity.remove(entity.getId(), false);
+            int index = recordSet.remove(entity.getId(), false);
             if (index < 0) {
                 return null;
             }
@@ -143,7 +143,7 @@ public class FolderRecordFragment extends RecordListFragment {
 
         @Override
         public void onSort() {
-            replaceAll(folderEntity.getCollection());
+            replaceAll(recordSet.getCollection());
         }
     }
 

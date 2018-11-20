@@ -12,10 +12,18 @@
             android:layout_height="wrap_content">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="?actionBarSize"
-                app:layout_scrollFlags="scroll|snap">
-
+                app:layout_scrollFlags="snap">
+            <TextView
+                    android:id="@+id/btn_search"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    style="@style/Base.Widget.AppCompat.EditText"
+                    android:hint="搜索">
+                <requestFocus/>
+            </TextView>
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
 

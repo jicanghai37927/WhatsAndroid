@@ -1,6 +1,7 @@
 package com.haiyunshan.whatsnote.entrance;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -24,8 +25,11 @@ import club.andnext.recyclerview.bridge.BridgeBuilder;
 import club.andnext.recyclerview.bridge.BridgeHolder;
 import club.andnext.recyclerview.section.SectionList;
 import club.andnext.recyclerview.section.SectionListAdapterCallback;
+import com.haiyunshan.whatsnote.PackActivity;
 import com.haiyunshan.whatsnote.entrance.entity.EntranceEntity;
 import com.haiyunshan.whatsnote.entrance.entity.EntranceUtils;
+import com.haiyunshan.whatsnote.record.CreateRecordFragment;
+import com.haiyunshan.whatsnote.record.SearchRecordFragment;
 import com.haiyunshan.whatsnote.record.entity.*;
 import com.haiyunshan.whatsnote.R;
 
@@ -34,7 +38,9 @@ import java.util.ArrayList;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class EntranceFragment extends Fragment {
+public class EntranceFragment extends Fragment implements View.OnClickListener {
+
+    View searchBtn;
 
     RecyclerView recyclerView;
     BridgeAdapter adapter;
@@ -57,6 +63,11 @@ public class EntranceFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        {
+            this.searchBtn = view.findViewById(R.id.btn_search);
+            searchBtn.setOnClickListener(this);
+        }
 
         {
             this.recyclerView = view.findViewById(R.id.recycler_list_view);
@@ -129,6 +140,20 @@ public class EntranceFragment extends Fragment {
             recyclerView.setAdapter(adapter);
         }
 
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (v == searchBtn) {
+            startSearch();
+        }
+    }
+
+    void startSearch() {
+        Intent intent = new Intent(getActivity(), PackActivity.class);
+        intent.putExtra(PackActivity.KEY_FRAGMENT, SearchRecordFragment.class.getName());
+
+        this.startActivity(intent);
     }
 
     /**

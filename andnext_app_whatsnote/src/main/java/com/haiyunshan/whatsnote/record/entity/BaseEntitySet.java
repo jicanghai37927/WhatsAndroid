@@ -49,6 +49,20 @@ public abstract class BaseEntitySet<T extends BaseEntity> extends BaseEntity {
         return childList.size();
     }
 
+    public int remove(T entity) {
+        if (childList == null) {
+            return -1;
+        }
+
+        int index = childList.indexOf(entity);
+        if (index < 0) {
+            return index;
+        }
+
+        childList.remove(index);
+        return index;
+    }
+
     public Collection<T> getCollection() {
         if (childList != null) {
             return childList;

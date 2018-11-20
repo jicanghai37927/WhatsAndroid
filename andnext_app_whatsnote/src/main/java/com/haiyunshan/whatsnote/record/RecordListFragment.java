@@ -311,6 +311,10 @@ public abstract class RecordListFragment extends Fragment implements View.OnClic
         }
     }
 
+    final void remove(RecordEntity entity) {
+        sortedList.remove(entity);
+    }
+
     final void requestCreateFolder() {
 
         Intent intent = new Intent(getActivity(), PackActivity.class);
