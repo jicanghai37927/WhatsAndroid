@@ -9,7 +9,7 @@ import android.widget.TextView;
 import club.andnext.recyclerview.bridge.BridgeAdapter;
 import club.andnext.recyclerview.bridge.BridgeAdapterProvider;
 import club.andnext.recyclerview.bridge.BridgeBuilder;
-import club.andnext.recyclerview.bridge.BridgeHolder;
+import club.andnext.recyclerview.bridge.BridgeViewHolder;
 import club.andnext.recyclerview.decoration.MarginDividerDecoration;
 import club.andnext.recyclerview.itemtouch.ItemSwipeHelper;
 import com.haiyunshan.dataset.PiliDataset;
@@ -57,7 +57,7 @@ public class SimpleDeleteDemoFragment extends BaseSimpleRVDemoFragment {
     /**
      *
      */
-    private static class DemoViewHolder extends BridgeHolder<PiliDataset.PiliEntry> implements View.OnClickListener, ItemSwipeHelper.Adapter, MarginDividerDecoration.Adapter {
+    private static class DemoViewHolder extends BridgeViewHolder<PiliDataset.PiliEntry> implements View.OnClickListener, ItemSwipeHelper.Adapter, MarginDividerDecoration.Adapter {
 
         static final int LAYOUT_RES_ID = R.layout.layout_pili_simple_delete_list_item;
 

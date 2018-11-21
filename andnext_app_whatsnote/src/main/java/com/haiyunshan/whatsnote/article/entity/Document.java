@@ -8,6 +8,7 @@ import com.haiyunshan.whatsnote.record.entity.RecordEntity;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collection;
 
 public class Document {
 
@@ -97,6 +98,10 @@ public class Document {
         this.getStuff().remove(entity);
 
         return index;
+    }
+
+    public Collection<DocumentEntity> getCollection() {
+        return list;
     }
 
     public int indexOf(DocumentEntity entity) {

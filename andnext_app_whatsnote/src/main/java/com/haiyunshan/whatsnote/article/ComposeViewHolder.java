@@ -4,10 +4,10 @@ import android.app.Activity;
 import android.view.View;
 import androidx.annotation.CallSuper;
 import androidx.annotation.NonNull;
-import club.andnext.recyclerview.bridge.BridgeHolder;
+import club.andnext.recyclerview.bridge.BridgeViewHolder;
 import com.haiyunshan.whatsnote.article.entity.DocumentEntity;
 
-public abstract class ComposeViewHolder<E extends DocumentEntity> extends BridgeHolder<E> {
+public abstract class ComposeViewHolder<E extends DocumentEntity> extends BridgeViewHolder<E> {
 
     protected E entity;
 
@@ -58,9 +58,23 @@ public abstract class ComposeViewHolder<E extends DocumentEntity> extends Bridge
      */
     public static abstract class Callback {
 
-        public abstract Activity getContext();
+        boolean enable;
 
-        public abstract void remove(ComposeViewHolder viewHolder);
+        Activity context;
+
+        public Callback(Activity context) {
+            this.context = context;
+
+            this.enable = true;
+        }
+
+        public Activity getContext() {
+            return this.context;
+        }
+
+        public boolean isEnable() {
+            return this.enable;
+        }
 
         public int getMaxWidth() {
             return getContext().getResources().getDisplayMetrics().widthPixels;
@@ -69,5 +83,7 @@ public abstract class ComposeViewHolder<E extends DocumentEntity> extends Bridge
         public int getMaxHeight() {
             return getContext().getResources().getDisplayMetrics().heightPixels;
         }
+
+        public abstract void remove(ComposeViewHolder viewHolder);
     }
 }

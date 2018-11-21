@@ -1,15 +1,14 @@
 package club.andnext.recyclerview.swipe;
 
 import android.graphics.Canvas;
-import android.telecom.Call;
 import androidx.annotation.CallSuper;
 import androidx.annotation.NonNull;
 import android.view.View;
 
-import club.andnext.recyclerview.bridge.BridgeHolder;
+import club.andnext.recyclerview.bridge.BridgeViewHolder;
 import club.andnext.recyclerview.decoration.MarginDividerDecoration;
 
-public abstract class SwipeViewHolder<T> extends BridgeHolder<T> implements SwipeActionHelper.Adapter, MarginDividerDecoration.Adapter {
+public abstract class SwipeViewHolder<T> extends BridgeViewHolder<T> implements SwipeActionHelper.Adapter, MarginDividerDecoration.Adapter {
 
     SwipeHolder swipeHolder;
 

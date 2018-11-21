@@ -18,7 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import club.andnext.recyclerview.adapter.ClazzAdapterProvider;
 import club.andnext.recyclerview.bridge.BridgeAdapter;
 import club.andnext.recyclerview.bridge.BridgeBuilder;
-import club.andnext.recyclerview.bridge.BridgeHolder;
+import club.andnext.recyclerview.bridge.BridgeViewHolder;
 import club.andnext.recyclerview.tree.TreeList;
 import club.andnext.recyclerview.tree.TreeListAdapterCallback;
 import club.andnext.utils.AlertDialogUtils;
@@ -192,7 +192,7 @@ public class TargetFolderFragment extends Fragment implements View.OnClickListen
     /**
      *
      */
-    private static class FolderViewHolder extends BridgeHolder<RecordEntity> implements View.OnClickListener {
+    private static class FolderViewHolder extends BridgeViewHolder<RecordEntity> implements View.OnClickListener {
 
         static final int LAYOUT_RES_ID = R.layout.layout_folder_tree_list_item;
         static final int PADDING = 48;

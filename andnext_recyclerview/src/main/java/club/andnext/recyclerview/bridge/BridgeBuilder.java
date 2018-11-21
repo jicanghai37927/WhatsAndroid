@@ -14,9 +14,9 @@ import java.util.List;
 
 import club.andnext.recyclerview.adapter.ViewHolderBuilder;
 
-public class BridgeBuilder<T, VH extends BridgeHolder> extends ViewHolderBuilder {
+public class BridgeBuilder<T, VH extends BridgeViewHolder> extends ViewHolderBuilder {
 
-    Class<? extends BridgeHolder> holderClazz;
+    Class<? extends BridgeViewHolder> holderClazz;
     Object[] parameters;
     Class<?>[] parameterTypes;
 
@@ -28,7 +28,7 @@ public class BridgeBuilder<T, VH extends BridgeHolder> extends ViewHolderBuilder
         this.delegate = delegate;
     }
 
-    public BridgeBuilder(@NonNull Class<? extends BridgeHolder> clz, @NonNull int resId, Object... parameters) {
+    public BridgeBuilder(@NonNull Class<? extends BridgeViewHolder> clz, @NonNull int resId, Object... parameters) {
         this.holderClazz = clz;
         this.resId = resId;
         this.parameters = parameters;
@@ -54,7 +54,7 @@ public class BridgeBuilder<T, VH extends BridgeHolder> extends ViewHolderBuilder
 
     @NonNull
     @Override
-    public BridgeHolder onCreateViewHolder(@NonNull View view) {
+    public BridgeViewHolder onCreateViewHolder(@NonNull View view) {
         if (delegate != null) {
             VH holder = delegate.onCreateViewHolder(view);
             holder.onViewCreated(view);
@@ -62,7 +62,7 @@ public class BridgeBuilder<T, VH extends BridgeHolder> extends ViewHolderBuilder
             return holder;
         }
 
-        BridgeHolder holder = null;
+        BridgeViewHolder holder = null;
 
         {
             Object[] args = new Object[this.parameters.length + 1];
@@ -81,7 +81,7 @@ public class BridgeBuilder<T, VH extends BridgeHolder> extends ViewHolderBuilder
             classArray[this.parameters.length] = View.class;
             try {
 
-                Constructor<? extends BridgeHolder> constructor = holderClazz.getConstructor(classArray);
+                Constructor<? extends BridgeViewHolder> constructor = holderClazz.getConstructor(classArray);
                 constructor.setAccessible(true);
 
                 holder = constructor.newInstance(args);

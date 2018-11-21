@@ -22,13 +22,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import club.andnext.recyclerview.bridge.BridgeAdapter;
 import club.andnext.recyclerview.bridge.BridgeAdapterProvider;
 import club.andnext.recyclerview.bridge.BridgeBuilder;
-import club.andnext.recyclerview.bridge.BridgeHolder;
+import club.andnext.recyclerview.bridge.BridgeViewHolder;
 import club.andnext.recyclerview.section.SectionList;
 import club.andnext.recyclerview.section.SectionListAdapterCallback;
 import com.haiyunshan.whatsnote.PackActivity;
 import com.haiyunshan.whatsnote.entrance.entity.EntranceEntity;
 import com.haiyunshan.whatsnote.entrance.entity.EntranceUtils;
-import com.haiyunshan.whatsnote.record.CreateRecordFragment;
 import com.haiyunshan.whatsnote.record.SearchRecordFragment;
 import com.haiyunshan.whatsnote.record.entity.*;
 import com.haiyunshan.whatsnote.R;
@@ -175,7 +174,7 @@ public class EntranceFragment extends Fragment implements View.OnClickListener {
     /**
      *
      */
-    private static class SectionViewHolder extends BridgeHolder<BaseSection> implements View.OnClickListener {
+    private static class SectionViewHolder extends BridgeViewHolder<BaseSection> implements View.OnClickListener {
 
         static final int LAYOUT_RES_ID = R.layout.layout_section_list_item;
 
@@ -239,7 +238,7 @@ public class EntranceFragment extends Fragment implements View.OnClickListener {
     /**
      *
      */
-    private static class EntranceViewHolder extends BridgeHolder<EntranceEntity> implements View.OnClickListener {
+    private static class EntranceViewHolder extends BridgeViewHolder<EntranceEntity> implements View.OnClickListener {
 
         static final int LAYOUT_RES_ID = android.R.layout.simple_list_item_1;
 
@@ -281,7 +280,7 @@ public class EntranceFragment extends Fragment implements View.OnClickListener {
     /**
      *
      */
-    private static class FavoriteViewHolder extends BridgeHolder<FavoriteEntity> implements View.OnClickListener {
+    private static class FavoriteViewHolder extends BridgeViewHolder<FavoriteEntity> implements View.OnClickListener {
 
         static final int LAYOUT_RES_ID = android.R.layout.simple_list_item_1;
 
@@ -323,7 +322,7 @@ public class EntranceFragment extends Fragment implements View.OnClickListener {
     /**
      *
      */
-    private static class TagViewHolder extends BridgeHolder<TagEntity> implements View.OnClickListener {
+    private static class TagViewHolder extends BridgeViewHolder<TagEntity> implements View.OnClickListener {
 
         static final int LAYOUT_RES_ID = android.R.layout.simple_list_item_1;
 

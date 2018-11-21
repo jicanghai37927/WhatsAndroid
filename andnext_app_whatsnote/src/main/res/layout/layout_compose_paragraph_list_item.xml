@@ -13,6 +13,7 @@
             android:layout_marginTop="?listPreferredItemPaddingLeft"
             android:layout_marginBottom="?listPreferredItemPaddingRight"
             android:background="@null"
-            android:textSize="18sp"/>
+            android:textSize="18sp"
+            android:textColor="#000000"/>
 
 </LinearLayout>

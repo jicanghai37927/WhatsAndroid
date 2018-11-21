@@ -85,7 +85,7 @@ public class ShowTagFragment extends Fragment {
                     new BridgeBuilder(TagViewHolder.class, TagViewHolder.LAYOUT_RES_ID, this));
             adapter.bind(TagEntity.class, new BridgeFilter() {
                 @Override
-                public Class<? extends BridgeHolder> getHolder(Object obj) {
+                public Class<? extends BridgeViewHolder> getHolder(Object obj) {
                     if (obj == tagEntity) {
                         return CreateViewHolder.class;
                     }
@@ -200,7 +200,7 @@ public class ShowTagFragment extends Fragment {
     /**
      *
      */
-    private static class CreateViewHolder extends BridgeHolder<TagEntity> implements View.OnClickListener {
+    private static class CreateViewHolder extends BridgeViewHolder<TagEntity> implements View.OnClickListener {
 
         static final int LAYOUT_RES_ID = android.R.layout.simple_list_item_1;
 
@@ -238,7 +238,7 @@ public class ShowTagFragment extends Fragment {
     /**
      *
      */
-    private static class TagViewHolder extends BridgeHolder<TagEntity> implements View.OnClickListener {
+    private static class TagViewHolder extends BridgeViewHolder<TagEntity> implements View.OnClickListener {
 
         static final int LAYOUT_RES_ID = R.layout.layout_record_tag_list_item;
 

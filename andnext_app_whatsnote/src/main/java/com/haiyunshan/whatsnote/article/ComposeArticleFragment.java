@@ -26,6 +26,7 @@ import club.andnext.recyclerview.bridge.BridgeAdapterProvider;
 import club.andnext.recyclerview.bridge.BridgeBuilder;
 import club.andnext.utils.SoftInputUtils;
 import club.andnext.utils.UriUtils;
+import com.haiyunshan.whatsnote.PackActivity;
 import com.haiyunshan.whatsnote.article.entity.Document;
 import com.haiyunshan.whatsnote.article.entity.DocumentEntity;
 import com.haiyunshan.whatsnote.article.entity.ParagraphEntity;
@@ -384,6 +385,16 @@ public class ComposeArticleFragment extends Fragment {
         return false;
     }
 
+    void requestShare() {
+        Intent intent = new Intent(getActivity(), PackActivity.class);
+
+        intent.putExtra(PackActivity.KEY_FRAGMENT, ShareArticleFragment.class.getName());
+
+        intent.putExtra(ShareArticleFragment.KEY_ID, document.getId());
+
+        this.startActivity(intent);
+    }
+
     void saveState(SavedStateEntity savedState) {
         if (recyclerView.getChildCount() == 0) {
             savedState.clear();
@@ -523,8 +534,15 @@ public class ComposeArticleFragment extends Fragment {
 
                     break;
                 }
+
                 case R.id.menu_insert_photo: {
                     parent.requestPhoto();
+
+                    break;
+                }
+
+                case R.id.menu_share: {
+                    parent.requestShare();
 
                     break;
                 }
@@ -533,6 +551,7 @@ public class ComposeArticleFragment extends Fragment {
             return false;
         }
     }
+
     /**
      *
      */
@@ -559,7 +578,11 @@ public class ComposeArticleFragment extends Fragment {
         ComposeArticleFragment parent;
 
         ComposeCallback(ComposeArticleFragment f) {
-            this.parent = f;
+            super(f.getActivity());
+
+            {
+                this.parent = f;
+            }
 
             {
                 this.removeMap = new HashMap<>();
@@ -567,11 +590,6 @@ public class ComposeArticleFragment extends Fragment {
                 removeMap.put(PictureViewHolder.class, PictureRemove.class);
             }
 
-        }
-
-        @Override
-        public Activity getContext() {
-            return parent.getActivity();
         }
 
         @Override

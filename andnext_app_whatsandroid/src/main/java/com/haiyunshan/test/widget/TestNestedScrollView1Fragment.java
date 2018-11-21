@@ -17,7 +17,7 @@ import club.andnext.overscroll.OverScrollHelper;
 import club.andnext.recyclerview.bridge.BridgeAdapter;
 import club.andnext.recyclerview.bridge.BridgeAdapterProvider;
 import club.andnext.recyclerview.bridge.BridgeBuilder;
-import club.andnext.recyclerview.bridge.BridgeHolder;
+import club.andnext.recyclerview.bridge.BridgeViewHolder;
 import com.haiyunshan.whatsandroid.R;
 
 /**
@@ -81,7 +81,7 @@ public class TestNestedScrollView1Fragment extends Fragment {
 
     }
 
-    private static class DemoViewHolder extends BridgeHolder<String> {
+    private static class DemoViewHolder extends BridgeViewHolder<String> {
 
         static final int LAYOUT_RES_ID = android.R.layout.simple_list_item_1;
 

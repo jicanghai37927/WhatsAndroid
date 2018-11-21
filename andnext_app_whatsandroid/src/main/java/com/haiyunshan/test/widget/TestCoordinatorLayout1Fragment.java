@@ -17,14 +17,13 @@ import club.andnext.overscroll.OverScrollHelper;
 import club.andnext.recyclerview.bridge.BridgeAdapter;
 import club.andnext.recyclerview.bridge.BridgeAdapterProvider;
 import club.andnext.recyclerview.bridge.BridgeBuilder;
-import club.andnext.recyclerview.bridge.BridgeHolder;
+import club.andnext.recyclerview.bridge.BridgeViewHolder;
 import com.google.android.material.appbar.AppBarLayout;
 import com.haiyunshan.whatsandroid.R;
 import me.everything.android.ui.overscroll.IOverScrollDecor;
 import me.everything.android.ui.overscroll.IOverScrollUpdateListener;
 import me.everything.android.ui.overscroll.VerticalOverScrollBounceEffectDecorator;
 import me.everything.android.ui.overscroll.adapters.IOverScrollDecoratorAdapter;
-import me.everything.android.ui.overscroll.adapters.StaticOverScrollDecorAdapter;
 
 
 /**
@@ -176,7 +175,7 @@ public class TestCoordinatorLayout1Fragment extends Fragment {
     /**
      *
      */
-    private static class DemoViewHolder extends BridgeHolder<String> implements View.OnClickListener {
+    private static class DemoViewHolder extends BridgeViewHolder<String> implements View.OnClickListener {
 
         static final int LAYOUT_RES_ID = android.R.layout.simple_list_item_1;
 

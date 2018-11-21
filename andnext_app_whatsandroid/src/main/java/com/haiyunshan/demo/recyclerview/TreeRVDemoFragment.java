@@ -18,7 +18,7 @@ import club.andnext.overscroll.OverScrollHelper;
 import club.andnext.recyclerview.bridge.BridgeAdapter;
 import club.andnext.recyclerview.bridge.BridgeAdapterProvider;
 import club.andnext.recyclerview.bridge.BridgeBuilder;
-import club.andnext.recyclerview.bridge.BridgeHolder;
+import club.andnext.recyclerview.bridge.BridgeViewHolder;
 import club.andnext.recyclerview.decoration.MarginDividerDecoration;
 import club.andnext.recyclerview.swipe.SwipeActionHelper;
 import club.andnext.recyclerview.swipe.SwipeHolder;
@@ -147,7 +147,7 @@ public class TreeRVDemoFragment extends Fragment {
         }
     }
 
-    private static class FolderViewHolder extends BridgeHolder<FolderHeader> implements View.OnClickListener {
+    private static class FolderViewHolder extends BridgeViewHolder<FolderHeader> implements View.OnClickListener {
 
         static final int LAYOUT_RES_ID = android.R.layout.simple_list_item_1;
 

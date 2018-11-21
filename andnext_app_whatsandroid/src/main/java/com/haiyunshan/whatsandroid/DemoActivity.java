@@ -15,7 +15,7 @@ import club.andnext.overscroll.OverScrollHelper;
 import club.andnext.recyclerview.bridge.BridgeAdapter;
 import club.andnext.recyclerview.bridge.BridgeAdapterProvider;
 import club.andnext.recyclerview.bridge.BridgeBuilder;
-import club.andnext.recyclerview.bridge.BridgeHolder;
+import club.andnext.recyclerview.bridge.BridgeViewHolder;
 import club.andnext.recyclerview.decoration.MarginDividerDecoration;
 import club.andnext.utils.GsonUtils;
 import club.andnext.utils.PackageUtils;
@@ -104,7 +104,7 @@ public class DemoActivity extends AppCompatActivity {
     /**
      *
      */
-    private static class DemoViewHolder extends BridgeHolder<DemoDataset.DemoEntry> implements View.OnClickListener {
+    private static class DemoViewHolder extends BridgeViewHolder<DemoDataset.DemoEntry> implements View.OnClickListener {
 
         static final int LAYOUT_RES_ID = R.layout.layout_demo_list_item;
 

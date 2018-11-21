@@ -43,6 +43,13 @@ public class ParagraphViewHolder extends ComposeViewHolder<ParagraphEntity> {
         super.onBind(item, position);
 
         {
+            editText.setEnabled(callback.isEnable());
+
+            editText.setShowSoftInputOnFocus(callback.isEnable());
+            editText.setTextIsSelectable(callback.isEnable());
+        }
+
+        {
             // set break strategy to request layout
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 editText.setBreakStrategy(Layout.BREAK_STRATEGY_SIMPLE);
@@ -54,6 +61,7 @@ public class ParagraphViewHolder extends ComposeViewHolder<ParagraphEntity> {
         {
             editText.setText(item.getText());
         }
+
     }
 
     @Override

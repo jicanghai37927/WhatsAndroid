@@ -14,6 +14,8 @@ public class DirectoryManager {
 
     public static final String DIR_CAMERA_PHOTO = "Camera/photo";
 
+    public static final String DIR_EXPORT_PICTURE = "Export/Picture";
+
     static DirectoryManager instance;
 
     public static final DirectoryManager getInstance() {

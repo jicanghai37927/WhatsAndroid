@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <paths xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <!-- Environment.getExternalStorageDirectory() -->
+    <!-- Environment#getExternalStorageDirectory() -->
     <external-path name="storage" path="/" />
 
+    <!-- Context#getExternalFilesDir() -->
+    <external-files-path name="Export/Picture" path="Export/Picture" />
 
 </paths>

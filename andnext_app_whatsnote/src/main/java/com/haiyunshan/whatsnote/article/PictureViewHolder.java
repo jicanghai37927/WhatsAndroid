@@ -66,6 +66,11 @@ public class PictureViewHolder extends ComposeViewHolder<PictureEntity> implemen
         super.onBind(item, position);
 
         {
+            editText.setEnabled(callback.isEnable());
+            removeBtn.setVisibility(callback.isEnable()? View.VISIBLE: View.INVISIBLE);
+        }
+
+        {
             // set break strategy to request layout
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 editText.setBreakStrategy(Layout.BREAK_STRATEGY_SIMPLE);

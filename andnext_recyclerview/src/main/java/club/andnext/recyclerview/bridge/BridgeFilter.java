@@ -9,14 +9,14 @@ public abstract class BridgeFilter<T> extends BuilderFilter<T> {
 
     @Override
     public ViewHolderBuilder accept(T obj, List<ViewHolderBuilder> list) {
-        Class<? extends BridgeHolder> tag = this.getHolder(obj);
+        Class<? extends BridgeViewHolder> tag = this.getHolder(obj);
         if (tag == null) {
             return null;
         }
 
         for (ViewHolderBuilder d : list) {
             BridgeBuilder delegate = (BridgeBuilder)d;
-            Class<? extends BridgeHolder> holder = delegate.holderClazz;
+            Class<? extends BridgeViewHolder> holder = delegate.holderClazz;
 
             if (holder == tag) {
                 return delegate;
@@ -31,5 +31,5 @@ public abstract class BridgeFilter<T> extends BuilderFilter<T> {
         return null;
     }
 
-    public abstract Class<? extends BridgeHolder> getHolder(T obj);
+    public abstract Class<? extends BridgeViewHolder> getHolder(T obj);
 }

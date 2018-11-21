@@ -151,7 +151,7 @@ public abstract class RecordListFragment extends Fragment implements View.OnClic
 
             adapter.bind(RecordEntity.class, new BridgeFilter<RecordEntity>() {
                 @Override
-                public Class<? extends BridgeHolder> getHolder(RecordEntity obj) {
+                public Class<? extends BridgeViewHolder> getHolder(RecordEntity obj) {
                     if (obj.isDirectory()) {
                         return FolderViewHolder.class;
                     }
