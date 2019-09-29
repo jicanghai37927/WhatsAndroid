@@ -1,3 +1,6 @@
+# 完整项目代码，参考神马笔记
+[https://github.com/jicanghai37927/WhatsNote](https://github.com/jicanghai37927/WhatsNote)
+
 # WhatsAndroid模块介绍
 
 ## 一、安卓实战手册andnext_app_whatsandroid
